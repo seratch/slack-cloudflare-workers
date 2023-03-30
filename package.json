@@ -1,0 +1,36 @@
+{
+  "name": "slack-cloudflare-workers",
+  "version": "0.0.9",
+  "description": "Slack app development framework for Cloudflare Workers",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "build:clean": "rm -rf ./dist && tsc",
+    "format": "npx prettier --write src/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/seratch/slack-cloudflare-workers.git"
+  },
+  "keywords": [
+    "Slack",
+    "ChatBot",
+    "TypeScript",
+    "Cloudflare",
+    "Cloudflare Workers",
+    "Serverless"
+  ],
+  "author": "Kazuhiro Sera",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/seratch/slack-cloudflare-workers/issues"
+  },
+  "homepage": "https://github.com/seratch/slack-cloudflare-workers#readme",
+  "dependencies": {
+    "@slack/types": "^2.8.0"
+  },
+  "devDependencies": {
+    "prettier": "^2.8.7",
+    "typescript": "^5.0.2"
+  }
+}
