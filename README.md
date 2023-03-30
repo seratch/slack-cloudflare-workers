@@ -2,24 +2,24 @@
 
 [![npm version](https://badge.fury.io/js/slack-cloudflare-workers.svg)](https://badge.fury.io/js/slack-cloudflare-workers) 
 
-The "slack-cloudflare-workers" library is a Slack app development framework for Cloudflare Workers. The framework is highly inspired by Slack's [Bolt framework](https://api.slack.com/tools/bolt), but the design is not exactly the same with [bolt-js](https://github.com/slackapi/bolt-js).
+The **slack-cloudflare-workers** library is a Slack app development framework designed specifically for **Cloudflare Workers**. This framework draws significant inspiration from Slack's [Bolt framework](https://api.slack.com/tools/bolt), but its design does not strictly follow the [bolt-js](https://github.com/slackapi/bolt-js) blueprint.
 
-The following are key differences:
+Key differences include:
 
-* TypeScript focused: better type safety and clearer typings for developers
-* Lazy listener enabled: [bolt-python's lazy listener feature](https://slack.dev/bolt-python/concepts#lazy-listeners) is enabled out of the box
-* Zero additional dependency: no other dependencies apart from TypeScript types
+* _TypeScript focused_: Enhances type safety and clarifies typings for developers
+* _Lazy listener enabled_: [bolt-python's lazy listener feature](https://slack.dev/bolt-python/concepts#lazy-listeners) is provided out of the box
+* _Zero additional dependencies_: No other dependencies required beyond TypeScript types
 
 ### Getting Started
 
-Let's get started with a Cloudflare Workers project template:
+Let's begin by using a Cloudflare Workers project template to kickstart our project:
 
 ```bash
 npm install -g wrangler
 npx wrangler generate my-slack-app
 ```
 
-You will see the following outputs on your terminal window:
+You will see the following outputs displayed in your terminal window:
 
 ```
 $ npx wrangler generate my-slack-app
@@ -43,14 +43,14 @@ To start testing your Worker, run `npm test`
 To publish your Worker to the Internet, run `npm run deploy`
 ```
 
-And then, you can add "slack-cloudflare-workers" to the project:
+Next, you can integrate the slack-cloudflare-workers library to your project by following these steps:
 
 ```bash
 cd my-slack-app
 npm i slack-cloudflare-workers
 ```
 
-The project is now ready for coding. Open `src/index.ts` and modify the source code as below:
+With the project set up, it's time to dive into the code. Open `src/index.ts` and modify the source code as follows:
 
 ```typescript
 import { SlackApp, SlackAppEnv } from "slack-cloudflare-workers";
@@ -107,7 +107,7 @@ export default {
 };
 ```
 
-Add the following lines to `wrangler.toml`:
+Incorporate the following lines to your `wrangler.toml` configuration:
 
 ```toml
 [vars]
@@ -116,7 +116,7 @@ SLACK_BOT_TOKEN=""
 SLACK_LOGGING_LEVEL=""
 ```
 
-Lastly, add a new file named `.dev.vars` with the valid variables:
+Then, create a new file named `.dev.vars` and include the valid variables:
 
 ```
 SLACK_SIGNING_SECRET=....
@@ -124,9 +124,11 @@ SLACK_BOT_TOKEN=xoxb-...
 SLACK_LOGGING_LEVEL=DEBUG
 ```
 
-OK, let's run the app with [ngrok](https://ngrok.com/) proxy.
+Now, it's time to run the app using the [ngrok](https://ngrok.com/) proxy.
 
 ```bash
 npm start
 ngrok http 8787 --subdomain your-domain
 ```
+
+:tada: Congratulations! Your first Slack app built with Cloudflare Workers is now up and running! Add more handlers to the app to help your teammates become even more productive! 
