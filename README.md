@@ -1,4 +1,4 @@
-## Slack Cloudflware Workers
+## Slack Cloudflare Workers
 
 [![npm version](https://badge.fury.io/js/slack-cloudflare-workers.svg)](https://badge.fury.io/js/slack-cloudflare-workers) 
 
