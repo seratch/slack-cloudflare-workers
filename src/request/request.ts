@@ -3,6 +3,7 @@ import {
   BeforeAuthorizeSlackAppContext,
   SlackAppContextWithRespond,
   SlackAppContextWithOptionalRespond,
+  SlackAppContextWithChannelId,
 } from "../context/context";
 import { SlackAppEnv } from "../app-env";
 
@@ -30,6 +31,14 @@ export type SlackRequest<
   E extends SlackAppEnv,
   Payload
 > = SlackMiddlwareRequest<E> & {
+  payload: Payload;
+};
+
+export type SlackRequestWithChannelId<
+  E extends SlackAppEnv,
+  Payload
+> = SlackMiddlwareRequest<E> & {
+  context: SlackAppContextWithChannelId;
   payload: Payload;
 };
 

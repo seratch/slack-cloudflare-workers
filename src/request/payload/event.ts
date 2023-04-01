@@ -79,6 +79,38 @@ export type SlackEvents =
   | WorkflowStepDeletedEvent
   | WorkflowStepExecuteEvent;
 
+// These union types may not be a complete set of events
+export type SlackEventsWithChannelId =
+  | AppMentionEvent
+  | CallRejectedEvent
+  | ChannelArchiveEvent
+  | ChannelCreatedEvent
+  | ChannelDeletedEvent
+  | ChannelLeftEvent
+  | ChannelRenameEvent
+  | ChannelSharedEvent
+  | ChannelUnarchiveEvent
+  | ChannelUnsharedEvent
+  | FileSharedEvent
+  | FileUnsharedEvent
+  | GroupArchiveEvent
+  | GroupCloseEvent
+  | GroupDeletedEvent
+  | GroupLeftEvent
+  | GroupOpenEvent
+  | GroupRenameEvent
+  | GroupUnarchiveEvent
+  | IMCloseEvent
+  | IMCreatedEvent
+  | IMOpenEvent
+  | LinkSharedEvent
+  | MemberJoinedChannelEvent
+  | MemberLeftChannelEvent
+  | PinAddedEvent
+  | PinRemovedEvent
+  | GenericMessageEvent
+  | MessageMetadataEvents;
+
 export interface SlackEvent<Type extends string> {
   type: Type;
   subtype?: string;
@@ -622,14 +654,14 @@ export interface SharedChannelInviteReceivedEvent
 export interface StarAddedEvent extends SlackEvent<"star_added"> {
   type: "star_added";
   user: string;
-  item: any;
+  item: any; // TODO
   event_ts: string;
 }
 
 export interface StarRemovedEvent extends SlackEvent<"star_removed"> {
   type: "star_removed";
   user: string;
-  item: any;
+  item: any; // TODO
   event_ts: string;
 }
 

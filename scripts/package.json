@@ -1,0 +1,11 @@
+{
+    "name": "slack-api-response-generator",
+    "version": "0.1",
+    "description": "",
+    "keywords": [],
+    "author": "",
+    "license": "MIT",
+    "devDependencies": {
+        "quicktype": "^23.0.19"
+    }
+}

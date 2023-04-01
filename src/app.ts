@@ -9,6 +9,7 @@ import {
   SlackMiddlwareRequest,
   SlackRequestWithOptionalRespond,
   SlackRequest,
+  SlackRequestWithChannelId,
 } from "./request/request";
 import { SlashCommand } from "./request/payload/slash-command";
 import { toResponse } from "./response/response";
@@ -16,8 +17,9 @@ import {
   SlackEvent,
   SlackEvents,
   MessageEvents,
+  SlackEventsWithChannelId,
 } from "./request/payload/event";
-import { SlackAPIClient } from "./utility/api-client";
+import { SlackAPIClient } from "./client/api-client";
 import { ResponseUrlSender } from "./utility/response-url-sender";
 import {
   BeforeAuthorizeSlackAppContext,
@@ -670,10 +672,15 @@ export class SlackApp<E extends SlackAppEnv> {
 
 export type StringOrRegExp = string | RegExp;
 
-export type EventRequest<E extends SlackAppEnv, T> = SlackRequest<
-  E,
-  Extract<SlackEvents, { type: T }>
->;
+export type EventRequest<E extends SlackAppEnv, T> = Extract<
+  SlackEventsWithChannelId,
+  { type: T }
+> extends never
+  ? SlackRequest<E, Extract<SlackEvents, { type: T }>>
+  : SlackRequestWithChannelId<
+      E,
+      Extract<SlackEventsWithChannelId, { type: T }>
+    >;
 
 export type MessageEventPattern = string | RegExp | undefined;
 

@@ -2,6 +2,11 @@ export * from "./app";
 export type { SlackAppEnv } from "./app-env";
 export * from "./errors";
 
+export * from "./client/api-client";
+export * from "./client/request";
+export * from "./client/response";
+export * from "./client/generated-response";
+
 export * from "./handler/handler";
 export * from "./handler/message-handler";
 export * from "./handler/options-handler";
@@ -29,6 +34,6 @@ export * from "./request/payload/view-objects";
 
 export * from "./response/response";
 
-export * from "./utility/api-client";
+export * from "./client/api-client";
 export * from "./utility/debug-logging";
 export * from "./utility/response-url-sender";

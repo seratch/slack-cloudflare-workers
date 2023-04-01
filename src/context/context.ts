@@ -1,5 +1,5 @@
 import { AuthorizeResult } from "../authorization/authorize-result";
-import { SlackAPIClient } from "../utility/api-client";
+import { SlackAPIClient } from "../client/api-client";
 import { ResponseUrlParams } from "../utility/response-url-sender";
 
 export interface BeforeAuthorizeSlackAppContext {
@@ -26,7 +26,12 @@ export type SlackAppContext = {
   authorizeResult: AuthorizeResult;
 } & BeforeAuthorizeSlackAppContext;
 
+export type SlackAppContextWithChannelId = {
+  channelId: string;
+} & SlackAppContext;
+
 export type SlackAppContextWithRespond = {
+  channelId: string;
   respond: (params: ResponseUrlParams) => Promise<Response>;
 } & SlackAppContext;
 

@@ -1,8 +1,9 @@
 import { AuthorizeError, SlackAPIError } from "../errors";
-import { SlackAPIClient } from "../utility/api-client";
+import { SlackAPIClient } from "../client/api-client";
 import { SlackAppEnv } from "../app-env";
 import { BeforeAuthorizeSlackMiddlwareRequest } from "../request/request";
 import { AuthorizeResult } from "./authorize-result";
+import { AuthTestResponse } from "../client/generated-response";
 
 // TOOD
 export type Authorize<E extends SlackAppEnv = SlackAppEnv> = (
@@ -13,13 +14,13 @@ export const singleTeamAuthorize: Authorize = async (req) => {
   const botToken = req.env.SLACK_BOT_TOKEN!;
   const client = new SlackAPIClient(botToken);
   try {
-    const response: any = await client.call("auth.test", {});
+    const response: AuthTestResponse = await client.auth.test({});
     return {
       botToken,
       enterpriseId: response.enterprise_id,
       teamId: response.team_id,
-      botId: response.bot_id,
-      botUserId: response.bot_user_id,
+      botId: response.bot_id!,
+      botUserId: response.user_id!,
       userId: response.user_id,
       botScopes: undefined,
       userToken: undefined,

@@ -13,7 +13,7 @@ export default {
   ): Promise<Response> {
     const app = new SlackApp(env)
       .event("app_mention", async (req) => {
-        await req.context.client.call("chat.postMessage", {
+        await req.context.client.chat.postMessage({
           channel: req.context.channelId,
           text: `:wave: <@${req.context.userId}> what's up?`,
         });
@@ -29,7 +29,7 @@ export default {
         "hey-cf-workers",
         async () => {},
         async (req) => {
-          await req.context.client.call("views.open", {
+          await req.context.client.views.open({
             trigger_id: req.payload.trigger_id,
             view: {
               type: "modal",
