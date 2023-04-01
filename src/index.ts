@@ -1,7 +1,11 @@
 export * from "./app";
 export type { SlackAppEnv } from "./app-env";
 export * from "./errors";
-export * from "./handler";
+
+export * from "./handler/handler";
+export * from "./handler/message-handler";
+export * from "./handler/options-handler";
+export * from "./handler/view-handler";
 
 export * from "./authorization/authorize";
 export * from "./authorization/authorize-result";
@@ -13,13 +17,15 @@ export * from "./request/request-body";
 export * from "./request/request-verification";
 export * from "./request/request";
 
-export * from "./request/payload/block-actions";
-export * from "./request/payload/block-suggestions";
-export * from "./request/payload/events";
-export * from "./request/payload/global-shortcuts";
-export * from "./request/payload/message-shortcuts";
-export * from "./request/payload/slash-commands";
-export * from "./request/payload/views";
+export * from "./request/payload/block-action";
+export * from "./request/payload/block-suggestion";
+export * from "./request/payload/event";
+export * from "./request/payload/global-shortcut";
+export * from "./request/payload/message-shortcut";
+export * from "./request/payload/slash-command";
+export * from "./request/payload/view-submission";
+export * from "./request/payload/view-closed";
+export * from "./request/payload/view-objects";
 
 export * from "./response/response";
 

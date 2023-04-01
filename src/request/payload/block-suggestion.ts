@@ -1,5 +1,5 @@
 import { Option } from "@slack/types";
-import { DataSubmissionView } from "./views";
+import { DataSubmissionView } from "./view-objects";
 
 export interface BlockSuggestion {
   type: "block_suggestion";

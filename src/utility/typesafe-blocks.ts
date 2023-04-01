@@ -1,7 +1,6 @@
 import {
   KnownBlock,
   Button,
-  Action,
   Select,
   MultiSelect,
   Datepicker,
@@ -94,7 +93,7 @@ export type TypesafeUsersSelect = BlockElement<"users_select"> & UsersSelect;
 export type TypesafeMultiUsersSelect = BlockElement<"multi_users_select"> &
   MultiUsersSelect;
 
-export type KnownBlockElements =
+export type KnownTypesafeBlockElements =
   | TypesafeImageElement
   | TypesafePlainTextElement
   | TypesafeMrkdwnElement
@@ -121,7 +120,7 @@ export type KnownBlockElements =
   | TypesafeMultiUsersSelect;
 
 export type TypesafeBlockElement<T extends string = BlockElementTypes> =
-  Extract<KnownBlockElements, { type: T }> & {
+  Extract<KnownTypesafeBlockElements, { type: T }> & {
     type: T;
     action_id?: string;
   };

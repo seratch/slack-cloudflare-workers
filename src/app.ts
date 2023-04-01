@@ -1,16 +1,7 @@
 import { SlackAppEnv } from "./app-env";
 import { parseRequestBody } from "./request/request-parser";
 import { verifySlackRequest } from "./request/request-verification";
-import {
-  AckResponse,
-  MessageAckResponse,
-  OptionsAckResponse,
-  SlackHandler,
-  SlackMessageHandler,
-  SlackOptionsHandler,
-  SlackViewHandler,
-  ViewAckResponse,
-} from "./handler";
+import { AckResponse, SlackHandler } from "./handler/handler";
 import { SlackRequestBody } from "./request/request-body";
 import {
   BeforeAuthorizeSlackMiddlwareRequest,
@@ -19,12 +10,15 @@ import {
   SlackRequestWithOptionalRespond,
   SlackRequest,
 } from "./request/request";
-import { SlashCommand } from "./request/payload/slash-commands";
+import { SlashCommand } from "./request/payload/slash-command";
 import { toResponse } from "./response/response";
-import { SlackEvent, SlackEvents } from "./request/payload/events";
+import {
+  SlackEvent,
+  SlackEvents,
+  MessageEvents,
+} from "./request/payload/event";
 import { SlackAPIClient } from "./utility/api-client";
 import { ResponseUrlSender } from "./utility/response-url-sender";
-import { MessageEvents } from "./request/payload/message-events";
 import {
   BeforeAuthorizeSlackAppContext,
   builtBaseContext,
@@ -41,15 +35,25 @@ import {
   urlVerification,
 } from "./middleware/built-in-middleware";
 import { ConfigError } from "./errors";
-import { GlobalShortcut } from "./request/payload/global-shortcuts";
-import { MessageShortcut } from "./request/payload/message-shortcuts";
+import { GlobalShortcut } from "./request/payload/global-shortcut";
+import { MessageShortcut } from "./request/payload/message-shortcut";
 import {
   BlockAction,
   BlockElementAction,
   BlockElementTypes,
-} from "./request/payload/block-actions";
-import { ViewClosed, ViewSubmission } from "./request/payload/views";
-import { BlockSuggestion } from "./request/payload/block-suggestions";
+} from "./request/payload/block-action";
+import { ViewSubmission } from "./request/payload/view-submission";
+import { ViewClosed } from "./request/payload/view-closed";
+import { BlockSuggestion } from "./request/payload/block-suggestion";
+import {
+  OptionsAckResponse,
+  SlackOptionsHandler,
+} from "./handler/options-handler";
+import { SlackViewHandler, ViewAckResponse } from "./handler/view-handler";
+import {
+  MessageAckResponse,
+  SlackMessageHandler,
+} from "./handler/message-handler";
 
 export interface ExecutionContext {
   waitUntil(promise: Promise<any>): void;

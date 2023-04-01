@@ -1,5 +1,5 @@
 import { PlainTextElement, Confirmation, Option } from "@slack/types";
-import { DataSubmissionView, ViewStateValue } from "./views";
+import { DataSubmissionView, ViewStateValue } from "./view-objects";
 
 export interface BlockAction<A extends BlockElementAction> {
   type: "block_actions";

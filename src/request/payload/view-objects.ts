@@ -1,59 +1,5 @@
-import { Block, KnownBlock, PlainTextElement } from "@slack/types";
-
-export type SlackViewActions = ViewSubmission | ViewClosed;
-
-export interface ViewResponseUrl {
-  block_id: string;
-  action_id: string;
-  channel_id: string;
-  response_url: string;
-}
-
-export interface ViewSubmission {
-  type: "view_submission";
-  team: {
-    id: string;
-    domain: string;
-    enterprise_id?: string;
-    enterprise_name?: string;
-  } | null;
-  user: {
-    id: string;
-    name: string;
-    team_id?: string;
-  };
-  view: DataSubmissionView;
-  api_app_id: string;
-  token: string;
-  trigger_id: string;
-  is_enterprise_install?: boolean;
-  enterprise?: {
-    id: string;
-    name: string;
-  };
-  response_urls?: ViewResponseUrl[];
-}
-
-export interface ViewClosed {
-  type: "view_closed";
-  team: {
-    id: string;
-    domain: string;
-    enterprise_id?: string;
-    enterprise_name?: string;
-  } | null;
-  user: {
-    id: string;
-    name: string;
-    team_id?: string;
-  };
-  view: DataSubmissionView;
-  api_app_id: string;
-  token: string;
-  is_cleared: boolean;
-  is_enterprise_install?: boolean;
-  enterprise?: { id: string; name: string };
-}
+import { PlainTextElement } from "@slack/types";
+import { TypesafeBlock } from "../../utility/typesafe-blocks";
 
 export interface ViewStateSelectedOption {
   text: PlainTextElement;
@@ -85,7 +31,7 @@ export interface DataSubmissionView {
   bot_id: string;
   title: PlainTextElement;
   type: string;
-  blocks: (KnownBlock | Block)[];
+  blocks: TypesafeBlock[];
   close: PlainTextElement | null;
   submit: PlainTextElement | null;
   state: {
