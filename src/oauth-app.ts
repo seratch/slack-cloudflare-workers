@@ -145,7 +145,7 @@ export class SlackOAuthApp<E extends SlackOAuthEnv> extends SlackApp<E> {
       // TODO: add callback for this
       return new Response(
         renderErrorPage(this.routes.oauth.start, "code parameter is missing"),
-        { status: 400 }
+        { status: 400, headers: { "Content-Type": "text/html; charset=utf-8" } }
       );
     }
 
@@ -187,6 +187,7 @@ export class SlackOAuthApp<E extends SlackOAuthEnv> extends SlackApp<E> {
       const reason = `installation failure (error: ${e})`;
       return new Response(renderErrorPage(this.routes.oauth.start, reason), {
         status: 400,
+        headers: { "Content-Type": "text/html; charset=utf-8" },
       });
     }
   }
@@ -214,7 +215,7 @@ export class SlackOAuthApp<E extends SlackOAuthEnv> extends SlackApp<E> {
       // TODO: add callback for this
       return new Response(
         renderErrorPage(this.routes.oauth.start, "code parameter is missing"),
-        { status: 400 }
+        { status: 400, headers: { "Content-Type": "text/html; charset=utf-8" } }
       );
     }
 
@@ -233,6 +234,7 @@ export class SlackOAuthApp<E extends SlackOAuthEnv> extends SlackApp<E> {
       const reason = `OpenID Connect failure (error: ${e})`;
       return new Response(renderErrorPage(this.routes.oauth.start, reason), {
         status: 400,
+        headers: { "Content-Type": "text/html; charset=utf-8" },
       });
     }
   }
@@ -246,7 +248,7 @@ export class SlackOAuthApp<E extends SlackOAuthEnv> extends SlackApp<E> {
       // TODO: add callback for this
       return new Response(
         renderErrorPage(this.routes.oauth.start, "invalid state parameter"),
-        { status: 400 }
+        { status: 400, headers: { "Content-Type": "text/html; charset=utf-8" } }
       );
     }
   }
