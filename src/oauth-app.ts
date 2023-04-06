@@ -18,7 +18,6 @@ import { toInstallation } from "./oauth/installation";
 import { AfterInstallation, BeforeInstallation } from "./oauth/callback";
 import { OpenIDConnectCallback } from "./oidc/callback";
 import { OpenIDConnectTokenResponse } from "./client/generated-response";
-import { ConfigError } from "./errors";
 
 export interface SlackOAuthAppOptions<E extends SlackOAuthEnv> {
   env: E;
@@ -44,12 +43,12 @@ export class SlackOAuthApp<E extends SlackOAuthEnv> extends SlackApp<E> {
   public env: E;
   public installationStore: InstallationStore<E>;
   public stateStore: StateStore;
-  public oauth?: {
+  public oauth: {
     stateCookieName?: string;
     beforeInstallation?: BeforeInstallation;
     afterInstallation?: AfterInstallation;
   };
-  public oidc?: {
+  public oidc: {
     stateCookieName?: string;
     callback: OpenIDConnectCallback;
   };
@@ -68,12 +67,18 @@ export class SlackOAuthApp<E extends SlackOAuthEnv> extends SlackApp<E> {
     this.env = options.env;
     this.installationStore = options.installationStore;
     this.stateStore = options.stateStore ?? new NoStorageStateStore();
-    this.oauth = options.oauth;
-    if (this.oauth && !this.oauth.stateCookieName) {
+    this.oauth = options.oauth ?? {};
+    if (!this.oauth.stateCookieName) {
       this.oauth.stateCookieName = "slack-app-oauth-state";
     }
-    this.oidc = options.oidc;
-    if (this.oidc && !this.oidc.stateCookieName) {
+    this.oidc = options.oidc ?? {
+      stateCookieName: "slack-app-oidc-state",
+      callback: async (token, req) => {
+        const body = `It works! (id_token: ${token.id_token})`;
+        return new Response(body);
+      },
+    };
+    if (!this.oidc.stateCookieName) {
       this.oidc.stateCookieName = "slack-app-oidc-state";
     }
     this.routes = options.routes
@@ -118,11 +123,6 @@ export class SlackOAuthApp<E extends SlackOAuthEnv> extends SlackApp<E> {
   }
 
   async handleOAuthStartRequest(request: Request): Promise<Response> {
-    if (!this.oauth) {
-      throw new ConfigError(
-        "To enable Slack's OAuth flow, you need to pass env.oauth settings to the app."
-      );
-    }
     const stateValue = await this.stateStore.issueNewState();
     const authorizeUrl = generateAuthorizeUrl(stateValue, this.env);
     return new Response(renderStartPage(authorizeUrl), {
@@ -136,11 +136,6 @@ export class SlackOAuthApp<E extends SlackOAuthEnv> extends SlackApp<E> {
   }
 
   async handleOAuthCallbackRequest(request: Request): Promise<Response> {
-    if (!this.oauth) {
-      throw new ConfigError(
-        "To enable Slack's OAuth flow, you need to pass env.oauth settings to the app."
-      );
-    }
     // State parameter validation
     await this.#validateStateParameter(request, this.oauth.stateCookieName!);
 
@@ -197,11 +192,6 @@ export class SlackOAuthApp<E extends SlackOAuthEnv> extends SlackApp<E> {
   }
 
   async handleOIDCStartRequest(request: Request): Promise<Response> {
-    if (!this.oidc) {
-      throw new ConfigError(
-        "To enable Sign in with Slack (OpenID Connect), you need to pass env.oidc settings to the app."
-      );
-    }
     const stateValue = await this.stateStore.issueNewState();
     const authorizeUrl = generateOIDCAuthorizeUrl(stateValue, this.env);
     return new Response(renderStartPage(authorizeUrl), {
@@ -215,13 +205,8 @@ export class SlackOAuthApp<E extends SlackOAuthEnv> extends SlackApp<E> {
   }
 
   async handleOIDCCallbackRequest(request: Request): Promise<Response> {
-    if (!this.oidc) {
-      throw new ConfigError(
-        "To enable Sign in with Slack (OpenID Connect), you need to pass env.oidc settings to the app."
-      );
-    }
     // State parameter validation
-    await this.#validateStateParameter(request, this.oidc!.stateCookieName!);
+    await this.#validateStateParameter(request, this.oidc.stateCookieName!);
 
     const { searchParams } = new URL(request.url);
     const code = searchParams.get("code");
