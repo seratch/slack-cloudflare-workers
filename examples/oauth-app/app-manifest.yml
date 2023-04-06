@@ -1,42 +1,37 @@
 display_information:
-  name: cf-worker-sample-app
+  name: cf-workers-oauth
 features:
   bot_user:
-    display_name: cf-worker-sample-app
-    always_online: true
+    display_name: cf-workers-oauth
+    always_online: false
   shortcuts:
-    - name: Hey Cloudflare Wokers!
+    - name: cf-workers-oauth
       type: global
-      callback_id: hey-cf-workers
-      description: test
-    - name: Hey Cloudflare Wokers!
-      type: message
-      callback_id: cf-workers-message
+      callback_id: test
       description: test
   slash_commands:
-    - command: /hello-cf-workers
+    - command: /cf-workers-oauth
       url: https://example.com/slack/events
       description: test
       usage_hint: test
       should_escape: false
 oauth_config:
+  redirect_urls:
+    - https://example.com/slack/oauth_redirect
+    - https://example.com/slack/login/callback
   scopes:
     bot:
       - commands
-      - chat:write.public
       - chat:write
       - app_mentions:read
-      - channels:history
 settings:
   event_subscriptions:
     request_url: https://example.com/slack/events
     bot_events:
       - app_mention
-      - message.channels
   interactivity:
     is_enabled: true
     request_url: https://example.com/slack/events
-    message_menu_options_url: https://example.com/slack/events
   org_deploy_enabled: false
   socket_mode_enabled: false
   token_rotation_enabled: false
