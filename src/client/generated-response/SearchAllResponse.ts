@@ -156,7 +156,7 @@ export interface MessagesMatch {
   attachments?: Attachment[];
   blocks?: Block[];
   channel?: Channel;
-  files?: FileElement[];
+  files?: File[];
   iid?: string;
   is_mpim?: boolean;
   no_reactions?: boolean;
@@ -191,7 +191,7 @@ export interface Attachment {
   fallback?: string;
   fields?: Field[];
   filename?: string;
-  files?: FileElement[];
+  files?: File[];
   footer?: string;
   footer_icon?: string;
   from_url?: string;
@@ -282,7 +282,7 @@ export interface Block {
   external_id?: string;
   fallback?: string;
   fields?: Description[];
-  file?: BlockFile;
+  file?: File;
   file_id?: string;
   function_trigger_id?: string;
   hint?: Description;
@@ -460,18 +460,7 @@ export interface AppIconUrls {
   image_original?: string;
 }
 
-export interface BlockFile {
-  id?: string;
-  thumb_64?: string;
-}
-
-export interface Field {
-  short?: boolean;
-  title?: string;
-  value?: string;
-}
-
-export interface FileElement {
+export interface File {
   alt_txt?: string;
   app_id?: string;
   app_name?: string;
@@ -644,6 +633,12 @@ export interface FileShares {
 export interface Transcription {
   locale?: string;
   status?: string;
+}
+
+export interface Field {
+  short?: boolean;
+  title?: string;
+  value?: string;
 }
 
 export interface Metadata {

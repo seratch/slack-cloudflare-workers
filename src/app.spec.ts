@@ -11,26 +11,31 @@ export default {
     env: Env,
     ctx: ExecutionContext
   ): Promise<Response> {
-    const app = new SlackApp(env)
-      .event("app_mention", async (req) => {
-        await req.context.client.chat.postMessage({
-          channel: req.context.channelId,
-          text: `:wave: <@${req.context.userId}> what's up?`,
+    const app = new SlackApp({ env })
+      // when the pattern matches, the framework automatically acknowledges the request
+      .event("app_mention", async ({ context }) => {
+        // You can do anything time-consuing tasks here!
+        await context.client.chat.postMessage({
+          channel: context.channelId,
+          text: `:wave: <@${context.userId}> what's up?`,
         });
       })
       .command(
         "/hello",
-        async () => "Thanks!",
-        async (req) => {
-          await req.context.respond({ text: "What's up?" });
+        async () => "Thanks!", // complete this within 3 seconds
+        async ({ context }) => {
+          // You can do anything time-consuing tasks here!
+          await context.respond({ text: "What's up?" });
         }
       )
       .shortcut(
         "hey-cf-workers",
-        async () => {},
-        async (req) => {
-          await req.context.client.views.open({
-            trigger_id: req.payload.trigger_id,
+        async () => {}, // complete this within 3 seconds
+        async ({ context, payload }) => {
+          // You can do anything time-consuing tasks here!
+          await context.client.views.open({
+            // trigger_id still needs to be used within 3 seconds
+            trigger_id: payload.trigger_id,
             view: {
               type: "modal",
               callback_id: "modal",
@@ -42,9 +47,17 @@ export default {
           });
         }
       )
-      .viewSubmission("modal", async () => {
-        return { response_action: "clear" };
-      });
+      .viewSubmission(
+        "modal",
+        // respond within 3 seconds to update/close the opening modal
+        async () => {
+          return { response_action: "clear" };
+        },
+        async (req) => {
+          // Except updating the modal view using response_action,
+          // you can asynchronously do any tasks here!
+        }
+      );
     return await app.run(request, ctx);
   },
 };

@@ -351,7 +351,7 @@ export interface Block {
   external_id?: string;
   fallback?: string;
   fields?: Description[];
-  file?: BlockFile;
+  file?: ItemFile;
   file_id?: string;
   function_trigger_id?: string;
   hint?: Description;
@@ -527,11 +527,6 @@ export interface AppIconUrls {
   image_72?: string;
   image_96?: string;
   image_original?: string;
-}
-
-export interface BlockFile {
-  id?: string;
-  thumb_64?: string;
 }
 
 export interface Field {

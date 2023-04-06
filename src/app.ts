@@ -4,7 +4,7 @@ import { verifySlackRequest } from "./request/request-verification";
 import { AckResponse, SlackHandler } from "./handler/handler";
 import { SlackRequestBody } from "./request/request-body";
 import {
-  BeforeAuthorizeSlackMiddlwareRequest,
+  PreAuthorizeSlackMiddlwareRequest,
   SlackRequestWithRespond,
   SlackMiddlwareRequest,
   SlackRequestWithOptionalRespond,
@@ -22,14 +22,14 @@ import {
 import { SlackAPIClient } from "./client/api-client";
 import { ResponseUrlSender } from "./utility/response-url-sender";
 import {
-  BeforeAuthorizeSlackAppContext,
+  PreAuthorizeSlackAppContext,
   builtBaseContext,
   SlackAppContext,
   SlackAppContextWithRespond,
 } from "./context/context";
-import { BeforeAuthorizeMiddleware, Middleware } from "./middleware/middleware";
+import { PreAuthorizeMiddleware, Middleware } from "./middleware/middleware";
 import { isDebugLogEnabled, prettyPrint } from "./utility/debug-logging";
-import { Authorize, singleTeamAuthorize } from "./authorization/authorize";
+import { Authorize } from "./authorization/authorize";
 import { AuthorizeResult } from "./authorization/authorize-result";
 import {
   ignoringSelfEvents,
@@ -56,23 +56,33 @@ import {
   MessageAckResponse,
   SlackMessageHandler,
 } from "./handler/message-handler";
+import { singleTeamAuthorize } from "./authorization/single-team-authorize";
 
 export interface ExecutionContext {
   waitUntil(promise: Promise<any>): void;
   passThroughOnException(): void;
 }
 
+export interface SlackAppOptions<E extends SlackAppEnv> {
+  env: E;
+  authorize?: Authorize<E>;
+  routes?: {
+    events: string;
+  };
+}
+
 export class SlackApp<E extends SlackAppEnv> {
   public env: E;
   public client: SlackAPIClient;
-  public authorize: Authorize;
+  public authorize: Authorize<E>;
+  public routes: { events: string | undefined };
 
-  public beforeAuthorizeMiddleware: BeforeAuthorizeMiddleware<any>[] = [
+  public preAuthorizeMiddleware: PreAuthorizeMiddleware<any>[] = [
     urlVerification,
     sslCheck,
   ];
 
-  public afterAuthorizeMiddleware: Middleware<any>[] = [ignoringSelfEvents];
+  public postAuthorizeMiddleware: Middleware<any>[] = [ignoringSelfEvents];
 
   #slashCommands: ((
     body: SlackRequestBody
@@ -99,22 +109,26 @@ export class SlackApp<E extends SlackAppEnv> {
     body: SlackRequestBody
   ) => SlackViewHandler<E, ViewClosed> | null)[] = [];
 
-  constructor(env: E, authorize: Authorize = singleTeamAuthorize) {
+  constructor(options: SlackAppOptions<E>) {
     if (
-      env.SLACK_BOT_TOKEN === undefined &&
-      authorize === singleTeamAuthorize
+      options.env.SLACK_BOT_TOKEN === undefined &&
+      (options.authorize === undefined ||
+        options.authorize === singleTeamAuthorize)
     ) {
       throw new ConfigError(
         "When you don't pass env.SLACK_BOT_TOKEN, your own authorize function, which supplies a valid token to use, needs to be passed instead."
       );
     }
-    this.env = env;
-    this.client = new SlackAPIClient(env.SLACK_BOT_TOKEN);
-    this.authorize = authorize;
+    this.env = options.env;
+    this.client = new SlackAPIClient(options.env.SLACK_BOT_TOKEN);
+    this.authorize = options.authorize ?? singleTeamAuthorize;
+    this.routes = { events: options.routes?.events };
   }
 
-  beforeAuthorize(middleware: BeforeAuthorizeMiddleware<E>): SlackApp<E> {
-    this.beforeAuthorizeMiddleware.push(middleware);
+  middlewareBeforeAuthorize(
+    middleware: PreAuthorizeMiddleware<E>
+  ): SlackApp<E> {
+    this.preAuthorizeMiddleware.push(middleware);
     return this;
   }
 
@@ -127,7 +141,7 @@ export class SlackApp<E extends SlackAppEnv> {
   }
 
   afterAuthorize(middleware: Middleware<E>): SlackApp<E> {
-    this.afterAuthorizeMiddleware.push(middleware);
+    this.postAuthorizeMiddleware.push(middleware);
     return this;
   }
 
@@ -446,6 +460,20 @@ export class SlackApp<E extends SlackAppEnv> {
   }
 
   async run(request: Request, ctx: ExecutionContext): Promise<Response> {
+    return await this.handleEventRequest(request, ctx);
+  }
+
+  async handleEventRequest(
+    request: Request,
+    ctx: ExecutionContext
+  ): Promise<Response> {
+    if (this.routes.events) {
+      const url = new URL(request.url);
+      if (url.pathname !== this.routes.events) {
+        return new Response("Not found", { status: 404 });
+      }
+    }
+
     // To avoid the following warning by Cloudflware, parse the body as Blob first
     // Called .text() on an HTTP body which does not appear to be text ..
     const blobRequestBody = await request.blob();
@@ -461,8 +489,8 @@ export class SlackApp<E extends SlackAppEnv> {
       const body = await parseRequestBody(request.headers, requestBody);
       const retryNumHeader = request.headers.get("x-slack-retry-num");
       const retryReasonHeader = request.headers.get("x-slack-retry-reason");
-      const context: BeforeAuthorizeSlackAppContext = builtBaseContext(body);
-      const beforeAuthorizeRequest: BeforeAuthorizeSlackMiddlwareRequest<E> = {
+      const context: PreAuthorizeSlackAppContext = builtBaseContext(body);
+      const preAuthorizeRequest: PreAuthorizeSlackMiddlwareRequest<E> = {
         body,
         context,
         env: this.env,
@@ -474,17 +502,17 @@ export class SlackApp<E extends SlackAppEnv> {
       if (isDebugLogEnabled(this.env)) {
         console.log(`*** Received request body***\n ${prettyPrint(body)}`);
       }
-      for (const middlware of this.beforeAuthorizeMiddleware) {
-        const response = await middlware(beforeAuthorizeRequest);
+      for (const middlware of this.preAuthorizeMiddleware) {
+        const response = await middlware(preAuthorizeRequest);
         if (response) {
           return toResponse(response);
         }
       }
       const authorizeResult: AuthorizeResult = await this.authorize(
-        beforeAuthorizeRequest
+        preAuthorizeRequest
       );
       const authorizedContext: SlackAppContext = {
-        ...beforeAuthorizeRequest.context,
+        ...preAuthorizeRequest.context,
         authorizeResult,
         client: new SlackAPIClient(authorizeResult.botToken),
         botToken: authorizeResult.botToken,
@@ -502,10 +530,10 @@ export class SlackApp<E extends SlackAppEnv> {
       }
 
       const baseRequest: SlackMiddlwareRequest<E> = {
-        ...beforeAuthorizeRequest,
+        ...preAuthorizeRequest,
         context: authorizedContext,
       };
-      for (const middlware of this.afterAuthorizeMiddleware) {
+      for (const middlware of this.postAuthorizeMiddleware) {
         const response = await middlware(baseRequest);
         if (response) {
           return toResponse(response);

@@ -1,12 +1,12 @@
-import { BeforeAuthorizeMiddleware, Middleware } from "./middleware";
+import { PreAuthorizeMiddleware, Middleware } from "./middleware";
 
-export const urlVerification: BeforeAuthorizeMiddleware = async (req) => {
+export const urlVerification: PreAuthorizeMiddleware = async (req) => {
   if (req.body.type === "url_verification") {
     return { status: 200, body: req.body.challenge };
   }
 };
 
-export const sslCheck: BeforeAuthorizeMiddleware = async (req) => {
+export const sslCheck: PreAuthorizeMiddleware = async (req) => {
   if (req.body.ssl_check && req.body.ssl_check === "1") {
     return { status: 200, body: "" };
   }

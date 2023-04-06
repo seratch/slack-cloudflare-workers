@@ -11,7 +11,7 @@ export type OAuthV2ExchangeResponse = SlackAPIResponse & {
   enterprise?: Enterprise;
   error?: string;
   expires_in?: number;
-  incoming_webhook: IncomingWebhook;
+  incoming_webhook?: IncomingWebhook;
   is_enterprise_install?: boolean;
   needed?: string;
   ok: boolean;

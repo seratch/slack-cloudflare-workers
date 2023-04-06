@@ -55,7 +55,7 @@ export interface Attachment {
   fallback?: string;
   fields?: Field[];
   filename?: string;
-  files?: FileElement[];
+  files?: File[];
   footer?: string;
   footer_icon?: string;
   from_url?: string;
@@ -146,7 +146,7 @@ export interface Block {
   external_id?: string;
   fallback?: string;
   fields?: Description[];
-  file?: BlockFile;
+  file?: EventPayload;
   file_id?: string;
   function_trigger_id?: string;
   hint?: Description;
@@ -325,10 +325,7 @@ export interface AppIconUrls {
   image_original?: string;
 }
 
-export interface BlockFile {
-  id?: string;
-  thumb_64?: string;
-}
+export interface EventPayload {}
 
 export interface Field {
   short?: boolean;
@@ -336,7 +333,7 @@ export interface Field {
   value?: string;
 }
 
-export interface FileElement {
+export interface File {
   alt_txt?: string;
   app_id?: string;
   app_name?: string;
@@ -570,8 +567,6 @@ export interface MessageMetadata {
   event_payload?: EventPayload;
   event_type?: string;
 }
-
-export interface EventPayload {}
 
 export interface Root {
   bot_id?: string;

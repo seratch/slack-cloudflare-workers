@@ -1,6 +1,6 @@
 import {
   SlackAppContext,
-  BeforeAuthorizeSlackAppContext,
+  PreAuthorizeSlackAppContext,
   SlackAppContextWithRespond,
   SlackAppContextWithOptionalRespond,
   SlackAppContextWithChannelId,
@@ -9,7 +9,7 @@ import { SlackAppEnv } from "../app-env";
 
 export interface SlackMiddlewareRequestBase<E extends SlackAppEnv> {
   env: E;
-  context: BeforeAuthorizeSlackAppContext;
+  context: PreAuthorizeSlackAppContext;
   body: Record<string, any>;
   retryNum?: number;
   retryReason?: string;
@@ -17,9 +17,9 @@ export interface SlackMiddlewareRequestBase<E extends SlackAppEnv> {
   headers: Headers;
 }
 
-export type BeforeAuthorizeSlackMiddlwareRequest<E extends SlackAppEnv> =
+export type PreAuthorizeSlackMiddlwareRequest<E extends SlackAppEnv> =
   SlackMiddlewareRequestBase<E> & {
-    context: BeforeAuthorizeSlackAppContext;
+    context: PreAuthorizeSlackAppContext;
   };
 
 export type SlackMiddlwareRequest<E extends SlackAppEnv> =

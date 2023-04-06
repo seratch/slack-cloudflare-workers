@@ -157,8 +157,6 @@ export { FilesRevokePublicURLResponse } from "./FilesRevokePublicURLResponse";
 export { FilesSharedPublicURLResponse } from "./FilesSharedPublicURLResponse";
 export { FilesUploadResponse } from "./FilesUploadResponse";
 export { MigrationExchangeResponse } from "./MigrationExchangeResponse";
-export { OAuthAccessResponse } from "./OAuthAccessResponse";
-export { OAuthTokenResponse } from "./OAuthTokenResponse";
 export { OAuthV2AccessResponse } from "./OAuthV2AccessResponse";
 export { OAuthV2ExchangeResponse } from "./OAuthV2ExchangeResponse";
 export { OpenIDConnectTokenResponse } from "./OpenIDConnectTokenResponse";

@@ -2,7 +2,7 @@ import { AuthorizeResult } from "../authorization/authorize-result";
 import { SlackAPIClient } from "../client/api-client";
 import { ResponseUrlParams } from "../utility/response-url-sender";
 
-export interface BeforeAuthorizeSlackAppContext {
+export interface PreAuthorizeSlackAppContext {
   isEnterpriseinstall?: boolean;
   enterpriseId?: string;
   teamId?: string;
@@ -24,7 +24,7 @@ export type SlackAppContext = {
   botToken: string;
   userToken?: string;
   authorizeResult: AuthorizeResult;
-} & BeforeAuthorizeSlackAppContext;
+} & PreAuthorizeSlackAppContext;
 
 export type SlackAppContextWithChannelId = {
   channelId: string;
@@ -39,7 +39,7 @@ export type SlackAppContextWithOptionalRespond = {
   respond?: (params: ResponseUrlParams) => Promise<Response>;
 } & SlackAppContext;
 
-export function builtBaseContext(body: any): BeforeAuthorizeSlackAppContext {
+export function builtBaseContext(body: any): PreAuthorizeSlackAppContext {
   return {
     isEnterpriseinstall: extractIsEnterpriseInstall(body),
     enterpriseId: extractEnterpriseId(body),

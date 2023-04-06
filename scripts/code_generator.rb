@@ -29,7 +29,7 @@ class TsWriter
         "export interface #{root_class_name} {",
         "export type #{root_class_name} = SlackAPIResponse & {"
       )
-      source.gsub!("ok?:", "ok: ")
+      source.gsub!(" ok?:", " ok: ")
       source.gsub!(/^    /, '  ')
       source.gsub!('"', "'")
       source.sub!(/^}$/, '};')
@@ -60,6 +60,10 @@ Dir.glob(__dir__ + '/../tmp/java-slack-sdk/json-logs/samples/api/*').sort.each d
     prev_c = nil
     filename = json_path.split('/').last.gsub(/\.json$/, '')
     if filename.include? "admin.analytics.getFile"
+      next
+    elsif filename == "oauth.access"
+      next
+    elsif filename == "oauth.token"
       next
     elsif filename.start_with? "dialog."
       next
