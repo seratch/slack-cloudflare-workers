@@ -33,7 +33,6 @@ import { Authorize } from "./authorization/authorize";
 import { AuthorizeResult } from "./authorization/authorize-result";
 import {
   ignoringSelfEvents,
-  sslCheck,
   urlVerification,
 } from "./middleware/built-in-middleware";
 import { ConfigError } from "./errors";
@@ -79,7 +78,6 @@ export class SlackApp<E extends SlackAppEnv> {
 
   public preAuthorizeMiddleware: PreAuthorizeMiddleware<any>[] = [
     urlVerification,
-    sslCheck,
   ];
 
   public postAuthorizeMiddleware: Middleware<any>[] = [ignoringSelfEvents];
@@ -479,6 +477,15 @@ export class SlackApp<E extends SlackAppEnv> {
     const blobRequestBody = await request.blob();
     // We can safely assume the incoming request body is always text data
     const requestBody = await blobRequestBody.text();
+
+    // For Request URL verification
+    if (requestBody.includes("ssl_check=")) {
+      const params = new URLSearchParams(requestBody);
+      if (params.get("ssl_check") === "1" && params.get("token")) {
+        return new Response("", { status: 200 });
+      }
+    }
+
     if (
       await verifySlackRequest(
         this.env.SLACK_SIGNING_SECRET,
@@ -692,6 +699,9 @@ export class SlackApp<E extends SlackAppEnv> {
           }
         }
       }
+      console.log(
+        `*** No listener found ***\n${prettyPrint(baseRequest.body)}`
+      );
       return new Response("No listener found", { status: 404 });
     }
     return new Response("Invalid signature", { status: 401 });

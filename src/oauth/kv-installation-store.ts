@@ -89,7 +89,7 @@ export class KVInstallationStore<E extends SlackOAuthEnv>
         };
       } catch (e) {
         throw new AuthorizeError(
-          `Failed to authorize (error: ${e}, query: ${query})`
+          `Failed to authorize (error: ${e}, query: ${JSON.stringify(query)})`
         );
       }
     };

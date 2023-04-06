@@ -6,12 +6,6 @@ export const urlVerification: PreAuthorizeMiddleware = async (req) => {
   }
 };
 
-export const sslCheck: PreAuthorizeMiddleware = async (req) => {
-  if (req.body.ssl_check && req.body.ssl_check === "1") {
-    return { status: 200, body: "" };
-  }
-};
-
 const eventTypesToKeep = ["member_joined_channel", "member_left_channel"];
 
 export const ignoringSelfEvents: Middleware = async (req) => {

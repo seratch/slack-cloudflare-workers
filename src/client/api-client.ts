@@ -422,20 +422,23 @@ export class SlackAPIClient {
     params: Record<string, any>
   ): Promise<SlackAPIResponse> {
     const url = `https://www.slack.com/api/${name}`;
-    const token = params.token ?? this.#token;
+    const token = params ? params.token ?? this.#token : this.#token;
     const _params: any = {};
     Object.assign(_params, params);
-    delete _params.token;
+    if (_params && _params.token) {
+      delete _params.token;
+    }
     const headers: Record<string, string> = {
-      "Content-Type": "application/json; charset=utf-8",
+      "Content-Type": "application/x-www-form-urlencoded",
     };
     if (token) {
       headers["Authorization"] = `Bearer ${token}`;
     }
+    const body = new URLSearchParams(_params);
     const response = await fetch(url, {
       method: "POST",
       headers,
-      body: JSON.stringify(_params),
+      body,
     });
     const result: SlackAPIResponse =
       (await response.json()) as SlackAPIResponse;
