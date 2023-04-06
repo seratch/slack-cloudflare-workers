@@ -16,7 +16,8 @@ export class ResponseUrlSender {
       body: JSON.stringify(params),
     });
     const responseBody = await response.text();
-    if (response.status != 200 || responseBody.toLowerCase() !== "ok") {
+    const body = responseBody.toLowerCase();
+    if (response.status != 200 || (body !== "ok" && body !== '{"ok":true}')) {
       throw new ResponseUrlError(response.status, responseBody);
     }
     return response;

@@ -5,19 +5,34 @@ import { InstallationStore } from "./oauth/installation-store";
 import { NoStorageStateStore, StateStore } from "./oauth/state-store";
 import {
   renderCompletionPage,
-  renderErrorPage,
   renderStartPage,
 } from "./oauth/oauth-page-renderer";
-import {
-  generateAuthorizeUrl,
-  generateOIDCAuthorizeUrl,
-} from "./oauth/authorize-url-generator";
+import { generateAuthorizeUrl } from "./oauth/authorize-url-generator";
 import { parse as parseCookie } from "cookie";
 import { SlackAPIClient } from "./client/api-client";
 import { toInstallation } from "./oauth/installation";
-import { AfterInstallation, BeforeInstallation } from "./oauth/callback";
+import {
+  AfterInstallation,
+  BeforeInstallation,
+  OnFailure,
+  OnStateValidationError,
+  defaultOnFailure,
+  defaultOnStateValidationError,
+} from "./oauth/callback";
 import { OpenIDConnectCallback } from "./oidc/callback";
-import { OpenIDConnectTokenResponse } from "./client/generated-response";
+import {
+  OAuthV2AccessResponse,
+  OpenIDConnectTokenResponse,
+} from "./client/generated-response";
+import { generateOIDCAuthorizeUrl } from "./oidc/authorize-url-generator";
+import { prettyPrint } from "./utility/debug-logging";
+import {
+  InstallationError,
+  MissingCode,
+  CompletionPageError,
+  InstallationStoreError,
+  OpenIDConnectError,
+} from "./oauth/error-codes";
 
 export interface SlackOAuthAppOptions<E extends SlackOAuthEnv> {
   env: E;
@@ -27,15 +42,19 @@ export interface SlackOAuthAppOptions<E extends SlackOAuthEnv> {
     stateCookieName?: string;
     beforeInstallation?: BeforeInstallation;
     afterInstallation?: AfterInstallation;
+    onFailure?: OnFailure;
+    onStateValidationError?: OnStateValidationError;
   };
   oidc?: {
     stateCookieName?: string;
     callback: OpenIDConnectCallback;
+    onFailure?: OnFailure;
+    onStateValidationError?: OnStateValidationError;
   };
   routes?: {
     events: string;
     oauth: { start: string; callback: string };
-    oidc?: { start: string; callback: string };
+    oidc: { start: string; callback: string };
   };
 }
 
@@ -47,15 +66,19 @@ export class SlackOAuthApp<E extends SlackOAuthEnv> extends SlackApp<E> {
     stateCookieName?: string;
     beforeInstallation?: BeforeInstallation;
     afterInstallation?: AfterInstallation;
+    onFailure: OnFailure;
+    onStateValidationError: OnStateValidationError;
   };
   public oidc: {
     stateCookieName?: string;
     callback: OpenIDConnectCallback;
+    onFailure: OnFailure;
+    onStateValidationError: OnStateValidationError;
   };
   public routes: {
     events: string;
     oauth: { start: string; callback: string };
-    oidc?: { start: string; callback: string };
+    oidc: { start: string; callback: string };
   };
 
   constructor(options: SlackOAuthAppOptions<E>) {
@@ -67,20 +90,30 @@ export class SlackOAuthApp<E extends SlackOAuthEnv> extends SlackApp<E> {
     this.env = options.env;
     this.installationStore = options.installationStore;
     this.stateStore = options.stateStore ?? new NoStorageStateStore();
-    this.oauth = options.oauth ?? {};
-    if (!this.oauth.stateCookieName) {
-      this.oauth.stateCookieName = "slack-app-oauth-state";
-    }
-    this.oidc = options.oidc ?? {
-      stateCookieName: "slack-app-oidc-state",
+    this.oauth = {
+      stateCookieName:
+        options.oauth?.stateCookieName ?? "slack-app-oauth-state",
+      onFailure: options.oauth?.onFailure ?? defaultOnFailure,
+      onStateValidationError:
+        options.oauth?.onStateValidationError ?? defaultOnStateValidationError,
+    };
+    this.oidc = {
+      stateCookieName: options.oauth?.stateCookieName ?? "slack-app-oidc-state",
+      onFailure: options.oauth?.onFailure ?? defaultOnFailure,
+      onStateValidationError:
+        options.oauth?.onStateValidationError ?? defaultOnStateValidationError,
       callback: async (token, req) => {
-        const body = `It works! (id_token: ${token.id_token})`;
-        return new Response(body);
+        const client = new SlackAPIClient(token.access_token);
+        const userInfo = await client.openid.connect.userInfo();
+        const body = `<html><head><style>body {{ padding: 10px 15px; font-family: verdana; text-align: center; }}</style></head><body><h1>It works!</h1><p>This is the default handler. To change this, pass \`oidc: { callback: async (token, req) => new Response("TODO") }\` to your SlackOAuthApp constructor.</p><pre>${prettyPrint(
+          userInfo
+        )}</pre></body></html>`;
+        return new Response(body, {
+          status: 200,
+          headers: { "Content-Type": "text/html; charset=utf-8" },
+        });
       },
     };
-    if (!this.oidc.stateCookieName) {
-      this.oidc.stateCookieName = "slack-app-oidc-state";
-    }
     this.routes = options.routes
       ? options.routes
       : {
@@ -88,6 +121,10 @@ export class SlackOAuthApp<E extends SlackOAuthEnv> extends SlackApp<E> {
           oauth: {
             start: "/slack/install",
             callback: "/slack/oauth_redirect",
+          },
+          oidc: {
+            start: "/slack/login",
+            callback: "/slack/login/callback",
           },
         };
   }
@@ -137,30 +174,53 @@ export class SlackOAuthApp<E extends SlackOAuthEnv> extends SlackApp<E> {
 
   async handleOAuthCallbackRequest(request: Request): Promise<Response> {
     // State parameter validation
-    await this.#validateStateParameter(request, this.oauth.stateCookieName!);
+    await this.#validateStateParameter(
+      request,
+      this.routes.oauth.start,
+      this.oauth.stateCookieName!
+    );
 
     const { searchParams } = new URL(request.url);
     const code = searchParams.get("code");
     if (!code) {
-      // TODO: add callback for this
-      return new Response(
-        renderErrorPage(this.routes.oauth.start, "code parameter is missing"),
-        { status: 400, headers: { "Content-Type": "text/html; charset=utf-8" } }
+      return await this.oauth.onFailure(
+        this.routes.oauth.start,
+        MissingCode,
+        request
       );
     }
 
+    const client = new SlackAPIClient();
+    let oauthAccess: OAuthV2AccessResponse | undefined;
     try {
       // Execute the installation process
-      const client = new SlackAPIClient();
-      const oauthAccess = await client.oauth.v2.access({
+      oauthAccess = await client.oauth.v2.access({
         client_id: this.env.SLACK_CLIENT_ID,
         client_secret: this.env.SLACK_CLIENT_SECRET,
         code,
       });
+    } catch (e) {
+      console.log(e);
+      return await this.oauth.onFailure(
+        this.routes.oauth.start,
+        InstallationError,
+        request
+      );
+    }
 
+    try {
       // Store the installation data on this app side
       await this.installationStore.save(toInstallation(oauthAccess), request);
+    } catch (e) {
+      console.log(e);
+      return await this.oauth.onFailure(
+        this.routes.oauth.start,
+        InstallationStoreError,
+        request
+      );
+    }
 
+    try {
       // Build the completion page
       const authTest = await client.auth.test({
         token: oauthAccess.access_token,
@@ -182,13 +242,12 @@ export class SlackOAuthApp<E extends SlackOAuthEnv> extends SlackApp<E> {
         }
       );
     } catch (e) {
-      // TODO: add callback for this
       console.log(e);
-      const reason = `installation failure (error: ${e})`;
-      return new Response(renderErrorPage(this.routes.oauth.start, reason), {
-        status: 400,
-        headers: { "Content-Type": "text/html; charset=utf-8" },
-      });
+      return await this.oauth.onFailure(
+        this.routes.oauth.start,
+        CompletionPageError,
+        request
+      );
     }
   }
 
@@ -207,15 +266,19 @@ export class SlackOAuthApp<E extends SlackOAuthEnv> extends SlackApp<E> {
 
   async handleOIDCCallbackRequest(request: Request): Promise<Response> {
     // State parameter validation
-    await this.#validateStateParameter(request, this.oidc.stateCookieName!);
+    await this.#validateStateParameter(
+      request,
+      this.routes.oidc.start,
+      this.oidc.stateCookieName!
+    );
 
     const { searchParams } = new URL(request.url);
     const code = searchParams.get("code");
     if (!code) {
-      // TODO: add callback for this
-      return new Response(
-        renderErrorPage(this.routes.oauth.start, "code parameter is missing"),
-        { status: 400, headers: { "Content-Type": "text/html; charset=utf-8" } }
+      return await this.oidc.onFailure(
+        this.routes.oidc.start,
+        MissingCode,
+        request
       );
     }
 
@@ -225,31 +288,35 @@ export class SlackOAuthApp<E extends SlackOAuthEnv> extends SlackApp<E> {
         await client.openid.connect.token({
           client_id: this.env.SLACK_CLIENT_ID,
           client_secret: this.env.SLACK_CLIENT_SECRET,
+          redirect_uri: this.env.SLACK_OIDC_REDIRECT_URI,
           code,
         });
       return await this.oidc.callback(apiResponse, request);
     } catch (e) {
-      // TODO: add callback for this
       console.log(e);
-      const reason = `OpenID Connect failure (error: ${e})`;
-      return new Response(renderErrorPage(this.routes.oauth.start, reason), {
-        status: 400,
-        headers: { "Content-Type": "text/html; charset=utf-8" },
-      });
+      return await this.oidc.onFailure(
+        this.routes.oidc.start,
+        OpenIDConnectError,
+        request
+      );
     }
   }
 
-  async #validateStateParameter(request: Request, cookieName: string) {
+  async #validateStateParameter(
+    request: Request,
+    startPath: string,
+    cookieName: string
+  ) {
     const { searchParams } = new URL(request.url);
     const queryState = searchParams.get("state");
     const cookie = parseCookie(request.headers.get("Cookie") || "");
     const cookieState = cookie[cookieName];
     if (queryState !== cookieState) {
-      // TODO: add callback for this
-      return new Response(
-        renderErrorPage(this.routes.oauth.start, "invalid state parameter"),
-        { status: 400, headers: { "Content-Type": "text/html; charset=utf-8" } }
-      );
+      if (startPath === this.routes.oauth.start) {
+        return await this.oauth.onStateValidationError(startPath, request);
+      } else if (startPath === this.routes.oidc.start) {
+        return await this.oidc.onStateValidationError(startPath, request);
+      }
     }
   }
 }

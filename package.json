@@ -1,12 +1,12 @@
 {
   "name": "slack-cloudflare-workers",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Slack app development framework for Cloudflare Workers",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
     "build:clean": "rm -rf ./dist && tsc",
-    "format": "npx prettier --write src/"
+    "format": "npx prettier --write src/ examples/simple-app/src/ examples/oauth-app/src/"
   },
   "repository": {
     "type": "git",

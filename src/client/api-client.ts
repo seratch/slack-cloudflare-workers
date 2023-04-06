@@ -428,6 +428,11 @@ export class SlackAPIClient {
     if (_params && _params.token) {
       delete _params.token;
     }
+    for (const [key, value] of Object.entries(_params)) {
+      if (typeof value === "object") {
+        _params[key] = JSON.stringify(value);
+      }
+    }
     const headers: Record<string, string> = {
       "Content-Type": "application/x-www-form-urlencoded",
     };

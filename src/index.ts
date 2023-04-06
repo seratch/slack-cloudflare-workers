@@ -1,11 +1,13 @@
 export * from "./app";
 export * from "./app-env";
-export * from "./errors";
 
 export * from "./client/api-client";
 export * from "./client/request";
 export * from "./client/response";
 export * from "./client/generated-response";
+
+export * from "./errors";
+export * from "./oauth/error-codes";
 
 export * from "./handler/handler";
 export * from "./handler/message-handler";
@@ -32,6 +34,7 @@ export * from "./oauth/oauth-page-renderer";
 export * from "./oauth/state-store";
 
 export * from "./oidc/callback";
+export * from "./oidc/authorize-url-generator";
 
 export * from "./request/request-body";
 export * from "./request/request-verification";

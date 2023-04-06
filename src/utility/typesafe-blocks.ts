@@ -36,7 +36,7 @@ export type TypesafeBlock<T extends string = BlockTypes> = Extract<
 > & {
   type: T;
   block_id?: string;
-  elements: T extends "actions" | "context" ? TypesafeBlockElement[] : never;
+  elements?: T extends "actions" | "context" ? TypesafeBlockElement[] : never;
   accessory?: T extends "section" ? TypesafeBlockElement : never;
   element?: T extends "input" ? TypesafeBlockElement : never;
 };
