@@ -449,7 +449,7 @@ export class SlackAPIClient {
     return result;
   }
 
-  bind<A extends SlackAPIRequest, R extends SlackAPIResponse>(
+  bindApiCall<A extends SlackAPIRequest, R extends SlackAPIResponse>(
     client: SlackAPIClient,
     method: string
   ): SlackAPI<A, R> {
@@ -458,357 +458,357 @@ export class SlackAPIClient {
 
   public readonly admin = {
     apps: {
-      approve: this.bind<AdminAppsApproveRequest, AdminAppsApproveResponse>(
-        this,
-        "admin.apps.approve"
-      ),
+      approve: this.bindApiCall<
+        AdminAppsApproveRequest,
+        AdminAppsApproveResponse
+      >(this, "admin.apps.approve"),
       approved: {
-        list: this.bind<
+        list: this.bindApiCall<
           AdminAppsApprovedListRequest,
           AdminAppsApprovedListResponse
         >(this, "admin.apps.approved.list"),
       },
-      clearResolution: this.bind<
+      clearResolution: this.bindApiCall<
         AdminAppsClearResolutionRequest,
         AdminAppsClearResolutionResponse
       >(this, "admin.apps.clearResolution"),
       requests: {
-        cancel: this.bind<
+        cancel: this.bindApiCall<
           AdminAppsRequestsCancelRequest,
           AdminAppsRequestsCancelResponse
         >(this, "admin.apps.requests.cancel"),
-        list: this.bind<
+        list: this.bindApiCall<
           AdminAppsRequestsListRequest,
           AdminAppsRequestsListResponse
         >(this, "admin.apps.requests.list"),
       },
-      restrict: this.bind<AdminAppsRestrictRequest, AdminAppsRestrictResponse>(
-        this,
-        "admin.apps.restrict"
-      ),
+      restrict: this.bindApiCall<
+        AdminAppsRestrictRequest,
+        AdminAppsRestrictResponse
+      >(this, "admin.apps.restrict"),
       restricted: {
-        list: this.bind<
+        list: this.bindApiCall<
           AdminAppsRestrictedListRequest,
           AdminAppsRestrictedListResponse
         >(this, "admin.apps.restricted.list"),
       },
-      uninstall: this.bind<
+      uninstall: this.bindApiCall<
         AdminAppsUninstallRequest,
         AdminAppsUninstallResponse
       >(this, "admin.apps.uninstall"),
     },
     auth: {
       policy: {
-        assignEntities: this.bind<
+        assignEntities: this.bindApiCall<
           AdminAuthPolicyAssignEntitiesRequest,
           AdminAuthPolicyAssignEntitiesResponse
         >(this, "admin.auth.policy.assignEntities"),
-        getEntities: this.bind<
+        getEntities: this.bindApiCall<
           AdminAuthPolicyGetEntitiesRequest,
           AdminAuthPolicyGetEntitiesResponse
         >(this, "admin.auth.policy.getEntities"),
-        removeEntities: this.bind<
+        removeEntities: this.bindApiCall<
           AdminAuthPolicyRemoveEntitiesRequest,
           AdminAuthPolicyRemoveEntitiesResponse
         >(this, "admin.auth.policy.removeEntities"),
       },
     },
     barriers: {
-      create: this.bind<
+      create: this.bindApiCall<
         AdminBarriersCreateRequest,
         AdminBarriersCreateResponse
       >(this, "admin.barriers.create"),
-      delete: this.bind<
+      delete: this.bindApiCall<
         AdminBarriersDeleteRequest,
         AdminBarriersDeleteResponse
       >(this, "admin.barriers.delete"),
-      list: this.bind<AdminBarriersListRequest, AdminBarriersListResponse>(
-        this,
-        "admin.barriers.list"
-      ),
-      update: this.bind<
+      list: this.bindApiCall<
+        AdminBarriersListRequest,
+        AdminBarriersListResponse
+      >(this, "admin.barriers.list"),
+      update: this.bindApiCall<
         AdminBarriersUpdateRequest,
         AdminBarriersUpdateResponse
       >(this, "admin.barriers.update"),
     },
     conversations: {
-      archive: this.bind<
+      archive: this.bindApiCall<
         AdminConversationsArchiveRequest,
         AdminConversationsArchiveResponse
       >(this, "admin.conversations.archive"),
-      bulkArchive: this.bind<
+      bulkArchive: this.bindApiCall<
         AdminConversationsBulkArchiveRequest,
         AdminConversationsBulkArchiveResponse
       >(this, "admin.conversations.bulkArchive"),
-      bulkDelete: this.bind<
+      bulkDelete: this.bindApiCall<
         AdminConversationsBulkDeleteRequest,
         AdminConversationsBulkDeleteResponse
       >(this, "admin.conversations.bulkDelete"),
-      bulkMove: this.bind<
+      bulkMove: this.bindApiCall<
         AdminConversationsBulkMoveRequest,
         AdminConversationsBulkMoveResponse
       >(this, "admin.conversations.bulkMove"),
-      convertToPrivate: this.bind<
+      convertToPrivate: this.bindApiCall<
         AdminConversationsConvertToPrivateRequest,
         AdminConversationsConvertToPrivateResponse
       >(this, "admin.conversations.convertToPrivate"),
-      create: this.bind<
+      create: this.bindApiCall<
         AdminConversationsCreateRequest,
         AdminConversationsCreateResponse
       >(this, "admin.conversations.create"),
-      delete: this.bind<
+      delete: this.bindApiCall<
         AdminConversationsDeleteRequest,
         AdminConversationsDeleteResponse
       >(this, "admin.conversations.delete"),
-      disconnectShared: this.bind<
+      disconnectShared: this.bindApiCall<
         AdminConversationsDisconnectSharedRequest,
         AdminConversationsDisconnectSharedResponse
       >(this, "admin.conversations.disconnectShared"),
       ekm: {
-        listOriginalConnectedChannelInfo: this.bind<
+        listOriginalConnectedChannelInfo: this.bindApiCall<
           AdminConversationsEKMListOriginalConnectedChannelInfoRequest,
           AdminConversationsEkmListOriginalConnectedChannelInfoResponse
         >(this, "admin.conversations.ekm.listOriginalConnectedChannelInfo"),
       },
-      getConversationPrefs: this.bind<
+      getConversationPrefs: this.bindApiCall<
         AdminConversationsGetConversationPrefsRequest,
         AdminConversationsGetConversationPrefsResponse
       >(this, "admin.conversations.getConversationPrefs"),
-      getTeams: this.bind<
+      getTeams: this.bindApiCall<
         AdminConversationsGetTeamsRequest,
         AdminConversationsGetTeamsResponse
       >(this, "admin.conversations.getTeams"),
-      invite: this.bind<
+      invite: this.bindApiCall<
         AdminConversationsInviteRequest,
         AdminConversationsInviteResponse
       >(this, "admin.conversations.invite"),
-      rename: this.bind<
+      rename: this.bindApiCall<
         AdminConversationsRenameRequest,
         AdminConversationsRenameResponse
       >(this, "admin.conversations.rename"),
       restrictAccess: {
-        addGroup: this.bind<
+        addGroup: this.bindApiCall<
           AdminConversationsRestrictAccessAddGroupRequest,
           AdminConversationsRestrictAccessAddGroupResponse
         >(this, "admin.conversations.restrictAccess.addGroup"),
-        listGroups: this.bind<
+        listGroups: this.bindApiCall<
           AdminConversationsRestrictAccessListGroupsRequest,
           AdminConversationsRestrictAccessListGroupsResponse
         >(this, "admin.conversations.restrictAccess.listGroups"),
-        removeGroup: this.bind<
+        removeGroup: this.bindApiCall<
           AdminConversationsRestrictAccessRemoveGroupRequest,
           AdminConversationsRestrictAccessRemoveGroupResponse
         >(this, "admin.conversations.restrictAccess.removeGroup"),
       },
-      getCustomRetention: this.bind<
+      getCustomRetention: this.bindApiCall<
         AdminConversationsGetCustomRetentionRequest,
         AdminConversationsGetCustomRetentionResponse
       >(this, "admin.conversations.getCustomRetention"),
-      setCustomRetention: this.bind<
+      setCustomRetention: this.bindApiCall<
         AdminConversationsSetCustomRetentionRequest,
         AdminConversationsSetCustomRetentionResponse
       >(this, "admin.conversations.setCustomRetention"),
-      removeCustomRetention: this.bind<
+      removeCustomRetention: this.bindApiCall<
         AdminConversationsRemoveCustomRetentionRequest,
         AdminConversationsRemoveCustomRetentionResponse
       >(this, "admin.conversations.removeCustomRetention"),
-      search: this.bind<
+      search: this.bindApiCall<
         AdminConversationsSearchRequest,
         AdminConversationsSearchResponse
       >(this, "admin.conversations.search"),
-      setConversationPrefs: this.bind<
+      setConversationPrefs: this.bindApiCall<
         AdminConversationsSetConversationPrefsRequest,
         AdminConversationsSetConversationPrefsResponse
       >(this, "admin.conversations.setConversationPrefs"),
-      setTeams: this.bind<
+      setTeams: this.bindApiCall<
         AdminConversationsSetTeamsRequest,
         AdminConversationsSetTeamsResponse
       >(this, "admin.conversations.setTeams"),
-      unarchive: this.bind<
+      unarchive: this.bindApiCall<
         AdminConversationsUnarchiveRequest,
         AdminConversationsUnarchiveResponse
       >(this, "admin.conversations.unarchive"),
     },
     emoji: {
-      add: this.bind<AdminEmojiAddRequest, AdminEmojiAddResponse>(
+      add: this.bindApiCall<AdminEmojiAddRequest, AdminEmojiAddResponse>(
         this,
         "admin.emoji.add"
       ),
-      addAlias: this.bind<
+      addAlias: this.bindApiCall<
         AdminEmojiAddAliasRequest,
         AdminEmojiAddAliasResponse
       >(this, "admin.emoji.addAlias"),
-      list: this.bind<AdminEmojiListRequest, AdminEmojiListResponse>(
+      list: this.bindApiCall<AdminEmojiListRequest, AdminEmojiListResponse>(
         this,
         "admin.emoji.list"
       ),
-      remove: this.bind<AdminEmojiRemoveRequest, AdminEmojiRemoveResponse>(
-        this,
-        "admin.emoji.remove"
-      ),
-      rename: this.bind<AdminEmojiRenameRequest, AdminEmojiRenameResponse>(
-        this,
-        "admin.emoji.rename"
-      ),
+      remove: this.bindApiCall<
+        AdminEmojiRemoveRequest,
+        AdminEmojiRemoveResponse
+      >(this, "admin.emoji.remove"),
+      rename: this.bindApiCall<
+        AdminEmojiRenameRequest,
+        AdminEmojiRenameResponse
+      >(this, "admin.emoji.rename"),
     },
     inviteRequests: {
-      approve: this.bind<
+      approve: this.bindApiCall<
         AdminInviteRequestsApproveRequest,
         AdminInviteRequestsApproveResponse
       >(this, "admin.inviteRequests.approve"),
       approved: {
-        list: this.bind<
+        list: this.bindApiCall<
           AdminInviteRequestsApprovedListRequest,
           AdminInviteRequestsApprovedListResponse
         >(this, "admin.inviteRequests.approved.list"),
       },
       denied: {
-        list: this.bind<
+        list: this.bindApiCall<
           AdminInviteRequestsDeniedListRequest,
           AdminInviteRequestsDeniedListResponse
         >(this, "admin.inviteRequests.denied.list"),
       },
-      deny: this.bind<
+      deny: this.bindApiCall<
         AdminInviteRequestsDenyRequest,
         AdminInviteRequestsDenyResponse
       >(this, "admin.inviteRequests.deny"),
-      list: this.bind<
+      list: this.bindApiCall<
         AdminInviteRequestsListRequest,
         AdminInviteRequestsListResponse
       >(this, "admin.inviteRequests.list"),
     },
     teams: {
       admins: {
-        list: this.bind<
+        list: this.bindApiCall<
           AdminTeamsAdminsListRequest,
           AdminTeamsAdminsListResponse
         >(this, "admin.teams.admins.list"),
       },
-      create: this.bind<AdminTeamsCreateRequest, AdminTeamsCreateResponse>(
-        this,
-        "admin.teams.create"
-      ),
-      list: this.bind<AdminTeamsListRequest, AdminTeamsListResponse>(
+      create: this.bindApiCall<
+        AdminTeamsCreateRequest,
+        AdminTeamsCreateResponse
+      >(this, "admin.teams.create"),
+      list: this.bindApiCall<AdminTeamsListRequest, AdminTeamsListResponse>(
         this,
         "admin.teams.list"
       ),
       owners: {
-        list: this.bind<
+        list: this.bindApiCall<
           AdminTeamsOwnersListRequest,
           AdminTeamsOwnersListResponse
         >(this, "admin.teams.owners.list"),
       },
       settings: {
-        info: this.bind<
+        info: this.bindApiCall<
           AdminTeamsSettingsInfoRequest,
           AdminTeamsSettingsInfoResponse
         >(this, "admin.teams.settings.info"),
-        setDefaultChannels: this.bind<
+        setDefaultChannels: this.bindApiCall<
           AdminTeamsSettingsSetDefaultChannelsRequest,
           AdminTeamsSettingsSetDefaultChannelsResponse
         >(this, "admin.teams.settings.setDefaultChannels"),
-        setDescription: this.bind<
+        setDescription: this.bindApiCall<
           AdminTeamsSettingsSetDescriptionRequest,
           AdminTeamsSettingsSetDescriptionResponse
         >(this, "admin.teams.settings.setDescription"),
-        setDiscoverability: this.bind<
+        setDiscoverability: this.bindApiCall<
           AdminTeamsSettingsSetDiscoverabilityRequest,
           AdminTeamsSettingsSetDiscoverabilityResponse
         >(this, "admin.teams.settings.setDiscoverability"),
-        setIcon: this.bind<
+        setIcon: this.bindApiCall<
           AdminTeamsSettingsSetIconRequest,
           AdminTeamsSettingsSetIconResponse
         >(this, "admin.teams.settings.setIcon"),
-        setName: this.bind<
+        setName: this.bindApiCall<
           AdminTeamsSettingsSetNameRequest,
           AdminTeamsSettingsSetNameResponse
         >(this, "admin.teams.settings.setName"),
       },
     },
     usergroups: {
-      addChannels: this.bind<
+      addChannels: this.bindApiCall<
         AdminUsergroupsAddChannelsRequest,
         AdminUsergroupsAddChannelsResponse
       >(this, "admin.usergroups.addChannels"),
-      addTeams: this.bind<
+      addTeams: this.bindApiCall<
         AdminUsergroupsAddTeamsRequest,
         AdminUsergroupsAddTeamsResponse
       >(this, "admin.usergroups.addTeams"),
-      listChannels: this.bind<
+      listChannels: this.bindApiCall<
         AdminUsergroupsListChannelsRequest,
         AdminUsergroupsListChannelsResponse
       >(this, "admin.usergroups.listChannels"),
-      removeChannels: this.bind<
+      removeChannels: this.bindApiCall<
         AdminUsergroupsRemoveChannelsRequest,
         AdminUsergroupsRemoveChannelsResponse
       >(this, "admin.usergroups.removeChannels"),
     },
     users: {
-      assign: this.bind<AdminUsersAssignRequest, AdminUsersAssignResponse>(
-        this,
-        "admin.users.assign"
-      ),
-      invite: this.bind<AdminUsersInviteRequest, AdminUsersInviteResponse>(
-        this,
-        "admin.users.invite"
-      ),
-      list: this.bind<AdminUsersListRequest, AdminUsersListResponse>(
+      assign: this.bindApiCall<
+        AdminUsersAssignRequest,
+        AdminUsersAssignResponse
+      >(this, "admin.users.assign"),
+      invite: this.bindApiCall<
+        AdminUsersInviteRequest,
+        AdminUsersInviteResponse
+      >(this, "admin.users.invite"),
+      list: this.bindApiCall<AdminUsersListRequest, AdminUsersListResponse>(
         this,
         "admin.users.list"
       ),
-      remove: this.bind<AdminUsersRemoveRequest, AdminUsersRemoveResponse>(
-        this,
-        "admin.users.remove"
-      ),
+      remove: this.bindApiCall<
+        AdminUsersRemoveRequest,
+        AdminUsersRemoveResponse
+      >(this, "admin.users.remove"),
       session: {
-        list: this.bind<
+        list: this.bindApiCall<
           AdminUsersSessionListRequest,
           AdminUsersSessionListResponse
         >(this, "admin.users.session.list"),
-        reset: this.bind<
+        reset: this.bindApiCall<
           AdminUsersSessionResetRequest,
           AdminUsersSessionResetResponse
         >(this, "admin.users.session.reset"),
-        resetBulk: this.bind<
+        resetBulk: this.bindApiCall<
           AdminUsersSessionResetBulkRequest,
           AdminUsersSessionResetBulkResponse
         >(this, "admin.users.session.resetBulk"),
-        invalidate: this.bind<
+        invalidate: this.bindApiCall<
           AdminUsersSessionInvalidateRequest,
           AdminUsersSessionInvalidateResponse
         >(this, "admin.users.session.invalidate"),
-        getSettings: this.bind<
+        getSettings: this.bindApiCall<
           AdminUsersSessionGetSettingsRequest,
           AdminUsersSessionGetSettingsResponse
         >(this, "admin.users.session.getSettings"),
-        setSettings: this.bind<
+        setSettings: this.bindApiCall<
           AdminUsersSessionSetSettingsRequest,
           AdminUsersSessionSetSettingsResponse
         >(this, "admin.users.session.setSettings"),
-        clearSettings: this.bind<
+        clearSettings: this.bindApiCall<
           AdminUsersSessionClearSettingsRequest,
           AdminUsersSessionClearSettingsResponse
         >(this, "admin.users.session.clearSettings"),
       },
       unsupportedVersions: {
-        export: this.bind<
+        export: this.bindApiCall<
           AdminUsersUnsupportedVersionsExportRequest,
           AdminUsersUnsupportedVersionsExportResponse
         >(this, "admin.users.unsupportedVersions.export"),
       },
-      setAdmin: this.bind<
+      setAdmin: this.bindApiCall<
         AdminUsersSetAdminRequest,
         AdminUsersSetAdminResponse
       >(this, "admin.users.setAdmin"),
-      setExpiration: this.bind<
+      setExpiration: this.bindApiCall<
         AdminUsersSetExpirationRequest,
         AdminUsersSetExpirationResponse
       >(this, "admin.users.setExpiration"),
-      setOwner: this.bind<
+      setOwner: this.bindApiCall<
         AdminUsersSetOwnerRequest,
         AdminUsersSetOwnerResponse
       >(this, "admin.users.setOwner"),
-      setRegular: this.bind<
+      setRegular: this.bindApiCall<
         AdminUsersSetRegularRequest,
         AdminUsersSetRegularResponse
       >(this, "admin.users.setRegular"),
@@ -816,316 +816,334 @@ export class SlackAPIClient {
   };
 
   public readonly api = {
-    test: this.bind<APITestRequest, ApiTestResponse>(this, "api.test"),
+    test: this.bindApiCall<APITestRequest, ApiTestResponse>(this, "api.test"),
   };
 
   public readonly apps = {
     connections: {
-      open: this.bind<AppsConnectionsOpenRequest, AppsConnectionsOpenResponse>(
-        this,
-        "apps.connections.open"
-      ),
+      open: this.bindApiCall<
+        AppsConnectionsOpenRequest,
+        AppsConnectionsOpenResponse
+      >(this, "apps.connections.open"),
     },
     event: {
       authorizations: {
-        list: this.bind<
+        list: this.bindApiCall<
           AppsEventAuthorizationsListRequest,
           AppsEventAuthorizationsListResponse
         >(this, "apps.event.authorizations.list"),
       },
     },
-    uninstall: this.bind<AppsUninstallRequest, AppsUninstallResponse>(
+    uninstall: this.bindApiCall<AppsUninstallRequest, AppsUninstallResponse>(
       this,
       "apps.uninstall"
     ),
   };
 
   public readonly auth = {
-    revoke: this.bind<AuthRevokeRequest, AuthRevokeResponse>(
+    revoke: this.bindApiCall<AuthRevokeRequest, AuthRevokeResponse>(
       this,
       "auth.revoke"
     ),
     teams: {
-      list: this.bind<AuthTeamsListRequest, AuthTeamsListResponse>(
+      list: this.bindApiCall<AuthTeamsListRequest, AuthTeamsListResponse>(
         this,
         "auth.teams.list"
       ),
     },
-    test: this.bind<AuthTestRequest, AuthTestResponse>(this, "auth.test"),
+    test: this.bindApiCall<AuthTestRequest, AuthTestResponse>(
+      this,
+      "auth.test"
+    ),
   };
 
   public readonly bots = {
-    info: this.bind<BotsInfoRequest, BotsInfoResponse>(this, "bots.info"),
+    info: this.bindApiCall<BotsInfoRequest, BotsInfoResponse>(
+      this,
+      "bots.info"
+    ),
   };
 
   public readonly bookmarks = {
-    add: this.bind<BookmarksAddRequest, BookmarksAddResponse>(
+    add: this.bindApiCall<BookmarksAddRequest, BookmarksAddResponse>(
       this,
       "bookmarks.add"
     ),
-    edit: this.bind<BookmarksEditRequest, BookmarksEditResponse>(
+    edit: this.bindApiCall<BookmarksEditRequest, BookmarksEditResponse>(
       this,
       "bookmarks.edit"
     ),
-    list: this.bind<BookmarksListRequest, BookmarksListResponse>(
+    list: this.bindApiCall<BookmarksListRequest, BookmarksListResponse>(
       this,
       "bookmarks.list"
     ),
-    remove: this.bind<BookmarksRemoveRequest, BookmarksRemoveResponse>(
+    remove: this.bindApiCall<BookmarksRemoveRequest, BookmarksRemoveResponse>(
       this,
       "bookmarks.remove"
     ),
   };
 
   public readonly chat = {
-    delete: this.bind<ChatDeleteRequest, ChatDeleteResponse>(
+    delete: this.bindApiCall<ChatDeleteRequest, ChatDeleteResponse>(
       this,
       "chat.delete"
     ),
-    deleteScheduledMessage: this.bind<
+    deleteScheduledMessage: this.bindApiCall<
       ChatDeleteScheduledMessageRequest,
       ChatDeleteScheduledMessageResponse
     >(this, "chat.deleteScheduledMessage"),
-    getPermalink: this.bind<ChatGetPermalinkRequest, ChatGetPermalinkResponse>(
-      this,
-      "chat.getPermalink"
-    ),
-    meMessage: this.bind<ChatMeMessageRequest, ChatMeMessageResponse>(
+    getPermalink: this.bindApiCall<
+      ChatGetPermalinkRequest,
+      ChatGetPermalinkResponse
+    >(this, "chat.getPermalink"),
+    meMessage: this.bindApiCall<ChatMeMessageRequest, ChatMeMessageResponse>(
       this,
       "chat.meMessage"
     ),
-    postEphemeral: this.bind<
+    postEphemeral: this.bindApiCall<
       ChatPostEphemeralRequest,
       ChatPostEphemeralResponse
     >(this, "chat.postEphemeral"),
-    postMessage: this.bind<ChatPostMessageRequest, ChatPostMessageResponse>(
-      this,
-      "chat.postMessage"
-    ),
-    scheduleMessage: this.bind<
+    postMessage: this.bindApiCall<
+      ChatPostMessageRequest,
+      ChatPostMessageResponse
+    >(this, "chat.postMessage"),
+    scheduleMessage: this.bindApiCall<
       ChatScheduleMessageRequest,
       ChatScheduleMessageResponse
     >(this, "chat.scheduleMessage"),
     scheduledMessages: {
-      list: this.bind<
+      list: this.bindApiCall<
         ChatScheduledMessagesListRequest,
         ChatScheduledMessagesListResponse
       >(this, "chat.scheduledMessages.list"),
     },
-    unfurl: this.bind<ChatUnfurlRequest, ChatUnfurlResponse>(
+    unfurl: this.bindApiCall<ChatUnfurlRequest, ChatUnfurlResponse>(
       this,
       "chat.unfurl"
     ),
-    update: this.bind<ChatUpdateRequest, ChatUpdateResponse>(
+    update: this.bindApiCall<ChatUpdateRequest, ChatUpdateResponse>(
       this,
       "chat.update"
     ),
   };
 
   public readonly conversations = {
-    acceptSharedInvite: this.bind<
+    acceptSharedInvite: this.bindApiCall<
       ConversationsAcceptSharedInviteRequest,
       ConversationsAcceptSharedInviteResponse
     >(this, "conversations.acceptSharedInvite"),
-    approveSharedInvite: this.bind<
+    approveSharedInvite: this.bindApiCall<
       ConversationsApproveSharedInviteRequest,
       ConversationsApproveSharedInviteResponse
     >(this, "conversations.approveSharedInvite"),
-    archive: this.bind<
+    archive: this.bindApiCall<
       ConversationsArchiveRequest,
       ConversationsArchiveResponse
     >(this, "conversations.archive"),
-    close: this.bind<ConversationsCloseRequest, ConversationsCloseResponse>(
-      this,
-      "conversations.close"
-    ),
-    create: this.bind<ConversationsCreateRequest, ConversationsCreateResponse>(
-      this,
-      "conversations.create"
-    ),
-    declineSharedInvite: this.bind<
+    close: this.bindApiCall<
+      ConversationsCloseRequest,
+      ConversationsCloseResponse
+    >(this, "conversations.close"),
+    create: this.bindApiCall<
+      ConversationsCreateRequest,
+      ConversationsCreateResponse
+    >(this, "conversations.create"),
+    declineSharedInvite: this.bindApiCall<
       ConversationsDeclineSharedInviteRequest,
       ConversationsDeclineSharedInviteResponse
     >(this, "conversations.declineSharedInvite"),
-    history: this.bind<
+    history: this.bindApiCall<
       ConversationsHistoryRequest,
       ConversationsHistoryResponse
     >(this, "conversations.history"),
-    info: this.bind<ConversationsInfoRequest, ConversationsInfoResponse>(
+    info: this.bindApiCall<ConversationsInfoRequest, ConversationsInfoResponse>(
       this,
       "conversations.info"
     ),
-    invite: this.bind<ConversationsInviteRequest, ConversationsInviteResponse>(
-      this,
-      "conversations.invite"
-    ),
-    inviteShared: this.bind<
+    invite: this.bindApiCall<
+      ConversationsInviteRequest,
+      ConversationsInviteResponse
+    >(this, "conversations.invite"),
+    inviteShared: this.bindApiCall<
       ConversationsInviteSharedRequest,
       ConversationsInviteSharedResponse
     >(this, "conversations.inviteShared"),
-    join: this.bind<ConversationsJoinRequest, ConversationsJoinResponse>(
+    join: this.bindApiCall<ConversationsJoinRequest, ConversationsJoinResponse>(
       this,
       "conversations.join"
     ),
-    kick: this.bind<ConversationsKickRequest, ConversationsKickResponse>(
+    kick: this.bindApiCall<ConversationsKickRequest, ConversationsKickResponse>(
       this,
       "conversations.kick"
     ),
-    leave: this.bind<ConversationsLeaveRequest, ConversationsLeaveResponse>(
-      this,
-      "conversations.leave"
-    ),
-    list: this.bind<ConversationsListRequest, ConversationsListResponse>(
+    leave: this.bindApiCall<
+      ConversationsLeaveRequest,
+      ConversationsLeaveResponse
+    >(this, "conversations.leave"),
+    list: this.bindApiCall<ConversationsListRequest, ConversationsListResponse>(
       this,
       "conversations.list"
     ),
-    listConnectInvites: this.bind<
+    listConnectInvites: this.bindApiCall<
       ConversationsListConnectInvitesRequest,
       ConversationsListConnectInvitesResponse
     >(this, "conversations.listConnectInvites"),
-    mark: this.bind<ConversationsMarkRequest, ConversationsMarkResponse>(
+    mark: this.bindApiCall<ConversationsMarkRequest, ConversationsMarkResponse>(
       this,
       "conversations.mark"
     ),
-    members: this.bind<
+    members: this.bindApiCall<
       ConversationsMembersRequest,
       ConversationsMembersResponse
     >(this, "conversations.members"),
-    open: this.bind<ConversationsOpenRequest, ConversationsOpenResponse>(
+    open: this.bindApiCall<ConversationsOpenRequest, ConversationsOpenResponse>(
       this,
       "conversations.open"
     ),
-    rename: this.bind<ConversationsRenameRequest, ConversationsRenameResponse>(
-      this,
-      "conversations.rename"
-    ),
-    replies: this.bind<
+    rename: this.bindApiCall<
+      ConversationsRenameRequest,
+      ConversationsRenameResponse
+    >(this, "conversations.rename"),
+    replies: this.bindApiCall<
       ConversationsRepliesRequest,
       ConversationsRepliesResponse
     >(this, "conversations.replies"),
-    setPurpose: this.bind<
+    setPurpose: this.bindApiCall<
       ConversationsSetPurposeRequest,
       ConversationsSetPurposeResponse
     >(this, "conversations.setPurpose"),
-    setTopic: this.bind<
+    setTopic: this.bindApiCall<
       ConversationsSetTopicRequest,
       ConversationsSetTopicResponse
     >(this, "conversations.setTopic"),
-    unarchive: this.bind<
+    unarchive: this.bindApiCall<
       ConversationsUnarchiveRequest,
       ConversationsUnarchiveResponse
     >(this, "conversations.unarchive"),
   };
 
   public readonly dnd = {
-    endDnd: this.bind<DndEndDndRequest, DndEndDndResponse>(this, "dnd.endDnd"),
-    endSnooze: this.bind<DndEndSnoozeRequest, DndEndSnoozeResponse>(
+    endDnd: this.bindApiCall<DndEndDndRequest, DndEndDndResponse>(
+      this,
+      "dnd.endDnd"
+    ),
+    endSnooze: this.bindApiCall<DndEndSnoozeRequest, DndEndSnoozeResponse>(
       this,
       "dnd.endSnooze"
     ),
-    info: this.bind<DndInfoRequest, DndInfoResponse>(this, "dnd.info"),
-    setSnooze: this.bind<DndSetSnoozeRequest, DndSetSnoozeResponse>(
+    info: this.bindApiCall<DndInfoRequest, DndInfoResponse>(this, "dnd.info"),
+    setSnooze: this.bindApiCall<DndSetSnoozeRequest, DndSetSnoozeResponse>(
       this,
       "dnd.setSnooze"
     ),
-    teamInfo: this.bind<DndTeamInfoRequest, DndTeamInfoResponse>(
+    teamInfo: this.bindApiCall<DndTeamInfoRequest, DndTeamInfoResponse>(
       this,
       "dnd.teamInfo"
     ),
   };
 
   public readonly emoji = {
-    list: this.bind<EmojiListRequest, EmojiListResponse>(this, "emoji.list"),
+    list: this.bindApiCall<EmojiListRequest, EmojiListResponse>(
+      this,
+      "emoji.list"
+    ),
   };
 
   public readonly files = {
-    delete: this.bind<FilesDeleteRequest, FilesDeleteResponse>(
+    delete: this.bindApiCall<FilesDeleteRequest, FilesDeleteResponse>(
       this,
       "files.delete"
     ),
-    info: this.bind<FilesInfoRequest, FilesInfoResponse>(this, "files.info"),
-    list: this.bind<FilesListRequest, FilesListResponse>(this, "files.list"),
-    revokePublicURL: this.bind<
+    info: this.bindApiCall<FilesInfoRequest, FilesInfoResponse>(
+      this,
+      "files.info"
+    ),
+    list: this.bindApiCall<FilesListRequest, FilesListResponse>(
+      this,
+      "files.list"
+    ),
+    revokePublicURL: this.bindApiCall<
       FilesRevokePublicURLRequest,
       FilesRevokePublicURLResponse
     >(this, "files.revokePublicURL"),
-    sharedPublicURL: this.bind<
+    sharedPublicURL: this.bindApiCall<
       FilesSharedPublicURLRequest,
       FilesSharedPublicURLResponse
     >(this, "files.sharedPublicURL"),
-    upload: this.bind<FilesUploadRequest, FilesUploadResponse>(
+    upload: this.bindApiCall<FilesUploadRequest, FilesUploadResponse>(
       this,
       "files.upload"
     ),
-    getUploadURLExternal: this.bind<
+    getUploadURLExternal: this.bindApiCall<
       FilesGetUploadURLExternalRequest,
       FilesGetUploadURLExternalResponse
     >(this, "files.getUploadURLExternal"),
-    completeUploadExternal: this.bind<
+    completeUploadExternal: this.bindApiCall<
       FilesCompleteUploadExternalRequest,
       FilesCompleteUploadExternalResponse
     >(this, "files.completeUploadExternal"),
     comments: {
-      delete: this.bind<
+      delete: this.bindApiCall<
         FilesCommentsDeleteRequest,
         FilesCommentsDeleteResponse
       >(this, "files.comments.delete"),
     },
     remote: {
-      info: this.bind<FilesRemoteInfoRequest, FilesRemoteInfoResponse>(
+      info: this.bindApiCall<FilesRemoteInfoRequest, FilesRemoteInfoResponse>(
         this,
         "files.remote.info"
       ),
-      list: this.bind<FilesRemoteListRequest, FilesRemoteListResponse>(
+      list: this.bindApiCall<FilesRemoteListRequest, FilesRemoteListResponse>(
         this,
         "files.remote.list"
       ),
-      add: this.bind<FilesRemoteAddRequest, FilesRemoteAddResponse>(
+      add: this.bindApiCall<FilesRemoteAddRequest, FilesRemoteAddResponse>(
         this,
         "files.remote.add"
       ),
-      update: this.bind<FilesRemoteUpdateRequest, FilesRemoteUpdateResponse>(
-        this,
-        "files.remote.update"
-      ),
-      remove: this.bind<FilesRemoteRemoveRequest, FilesRemoteRemoveResponse>(
-        this,
-        "files.remote.remove"
-      ),
-      share: this.bind<FilesRemoteShareRequest, FilesRemoteShareResponse>(
-        this,
-        "files.remote.share"
-      ),
+      update: this.bindApiCall<
+        FilesRemoteUpdateRequest,
+        FilesRemoteUpdateResponse
+      >(this, "files.remote.update"),
+      remove: this.bindApiCall<
+        FilesRemoteRemoveRequest,
+        FilesRemoteRemoveResponse
+      >(this, "files.remote.remove"),
+      share: this.bindApiCall<
+        FilesRemoteShareRequest,
+        FilesRemoteShareResponse
+      >(this, "files.remote.share"),
     },
   };
 
   public readonly migration = {
-    exchange: this.bind<MigrationExchangeRequest, MigrationExchangeResponse>(
-      this,
-      "migration.exchange"
-    ),
+    exchange: this.bindApiCall<
+      MigrationExchangeRequest,
+      MigrationExchangeResponse
+    >(this, "migration.exchange"),
   };
 
   public readonly oauth = {
     v2: {
-      access: this.bind<OAuthV2AccessRequest, OAuthV2AccessResponse>(
+      access: this.bindApiCall<OAuthV2AccessRequest, OAuthV2AccessResponse>(
         this,
         "oauth.v2.access"
       ),
-      exchange: this.bind<OAuthV2ExchangeRequest, OAuthV2ExchangeResponse>(
-        this,
-        "oauth.v2.exchange"
-      ),
+      exchange: this.bindApiCall<
+        OAuthV2ExchangeRequest,
+        OAuthV2ExchangeResponse
+      >(this, "oauth.v2.exchange"),
     },
   };
 
   public readonly openid = {
     connect: {
-      token: this.bind<OpenIDConnectTokenRequest, OpenIDConnectTokenResponse>(
-        this,
-        "openid.connect.token"
-      ),
-      userInfo: this.bind<
+      token: this.bindApiCall<
+        OpenIDConnectTokenRequest,
+        OpenIDConnectTokenResponse
+      >(this, "openid.connect.token"),
+      userInfo: this.bindApiCall<
         OpenIDConnectUserInfoRequest,
         OpenIDConnectUserInfoResponse
       >(this, "openid.connect.userInfo"),
@@ -1133,113 +1151,128 @@ export class SlackAPIClient {
   };
 
   public readonly pins = {
-    add: this.bind<PinsAddRequest, PinsAddResponse>(this, "pins.add"),
-    list: this.bind<PinsListRequest, PinsListResponse>(this, "pins.list"),
-    remove: this.bind<PinsRemoveRequest, PinsRemoveResponse>(
+    add: this.bindApiCall<PinsAddRequest, PinsAddResponse>(this, "pins.add"),
+    list: this.bindApiCall<PinsListRequest, PinsListResponse>(
+      this,
+      "pins.list"
+    ),
+    remove: this.bindApiCall<PinsRemoveRequest, PinsRemoveResponse>(
       this,
       "pins.remove"
     ),
   };
 
   public readonly reactions = {
-    add: this.bind<ReactionsAddRequest, ReactionsAddResponse>(
+    add: this.bindApiCall<ReactionsAddRequest, ReactionsAddResponse>(
       this,
       "reactions.add"
     ),
-    get: this.bind<ReactionsGetRequest, ReactionsGetResponse>(
+    get: this.bindApiCall<ReactionsGetRequest, ReactionsGetResponse>(
       this,
       "reactions.get"
     ),
-    list: this.bind<ReactionsListRequest, ReactionsListResponse>(
+    list: this.bindApiCall<ReactionsListRequest, ReactionsListResponse>(
       this,
       "reactions.list"
     ),
-    remove: this.bind<ReactionsRemoveRequest, ReactionsRemoveResponse>(
+    remove: this.bindApiCall<ReactionsRemoveRequest, ReactionsRemoveResponse>(
       this,
       "reactions.remove"
     ),
   };
 
   public readonly reminders = {
-    add: this.bind<RemindersAddRequest, RemindersAddResponse>(
+    add: this.bindApiCall<RemindersAddRequest, RemindersAddResponse>(
       this,
       "reminders.add"
     ),
-    complete: this.bind<RemindersCompleteRequest, RemindersCompleteResponse>(
-      this,
-      "reminders.complete"
-    ),
-    delete: this.bind<RemindersDeleteRequest, RemindersDeleteResponse>(
+    complete: this.bindApiCall<
+      RemindersCompleteRequest,
+      RemindersCompleteResponse
+    >(this, "reminders.complete"),
+    delete: this.bindApiCall<RemindersDeleteRequest, RemindersDeleteResponse>(
       this,
       "reminders.delete"
     ),
-    info: this.bind<RemindersInfoRequest, RemindersInfoResponse>(
+    info: this.bindApiCall<RemindersInfoRequest, RemindersInfoResponse>(
       this,
       "reminders.info"
     ),
-    list: this.bind<RemindersListRequest, RemindersListResponse>(
+    list: this.bindApiCall<RemindersListRequest, RemindersListResponse>(
       this,
       "reminders.list"
     ),
   };
 
   public readonly rtm = {
-    connect: this.bind<RTMConnectRequest, RtmConnectResponse>(
+    connect: this.bindApiCall<RTMConnectRequest, RtmConnectResponse>(
       this,
       "rtm.connect"
     ),
-    start: this.bind<RTMStartRequest, RtmStartResponse>(this, "rtm.start"),
+    start: this.bindApiCall<RTMStartRequest, RtmStartResponse>(
+      this,
+      "rtm.start"
+    ),
   };
 
   public readonly search = {
-    all: this.bind<SearchAllRequest, SearchAllResponse>(this, "search.all"),
-    files: this.bind<SearchFilesRequest, SearchFilesResponse>(
+    all: this.bindApiCall<SearchAllRequest, SearchAllResponse>(
+      this,
+      "search.all"
+    ),
+    files: this.bindApiCall<SearchFilesRequest, SearchFilesResponse>(
       this,
       "search.files"
     ),
-    messages: this.bind<SearchMessagesRequest, SearchMessagesResponse>(
+    messages: this.bindApiCall<SearchMessagesRequest, SearchMessagesResponse>(
       this,
       "search.messages"
     ),
   };
 
   public readonly stars = {
-    add: this.bind<StarsAddRequest, StarsAddResponse>(this, "stars.add"),
-    list: this.bind<StarsListRequest, StarsListResponse>(this, "stars.list"),
-    remove: this.bind<StarsRemoveRequest, StarsRemoveResponse>(
+    add: this.bindApiCall<StarsAddRequest, StarsAddResponse>(this, "stars.add"),
+    list: this.bindApiCall<StarsListRequest, StarsListResponse>(
+      this,
+      "stars.list"
+    ),
+    remove: this.bindApiCall<StarsRemoveRequest, StarsRemoveResponse>(
       this,
       "stars.remove"
     ),
   };
 
   public readonly team = {
-    accessLogs: this.bind<TeamAccessLogsRequest, TeamAccessLogsResponse>(
+    accessLogs: this.bindApiCall<TeamAccessLogsRequest, TeamAccessLogsResponse>(
       this,
       "team.accessLogs"
     ),
-    billableInfo: this.bind<TeamBillableInfoRequest, TeamBillableInfoResponse>(
-      this,
-      "team.billableInfo"
-    ),
+    billableInfo: this.bindApiCall<
+      TeamBillableInfoRequest,
+      TeamBillableInfoResponse
+    >(this, "team.billableInfo"),
     billing: {
-      info: this.bind<TeamBillingInfoRequest, TeamBillingInfoResponse>(
+      info: this.bindApiCall<TeamBillingInfoRequest, TeamBillingInfoResponse>(
         this,
         "team.billing.info"
       ),
     },
-    info: this.bind<TeamInfoRequest, TeamInfoResponse>(this, "team.info"),
-    integrationLogs: this.bind<
+    info: this.bindApiCall<TeamInfoRequest, TeamInfoResponse>(
+      this,
+      "team.info"
+    ),
+    integrationLogs: this.bindApiCall<
       TeamIntegrationLogsRequest,
       TeamIntegrationLogsResponse
     >(this, "team.integrationLogs"),
     preferences: {
-      list: this.bind<TeamPreferencesListRequest, TeamPreferencesListResponse>(
-        this,
-        "team.preferences.list"
-      ),
+      list: this.bindApiCall<
+        TeamPreferencesListRequest,
+        TeamPreferencesListResponse
+      >(this, "team.preferences.list"),
     },
     profile: {
-      get: this.bind<TeamProfileGetRequest, TeamProfileGetResponse>(
+      get: this.bindApiCall<TeamProfileGetRequest, TeamProfileGetResponse>(
         this,
         "team.profile.get"
       ),
@@ -1247,32 +1280,32 @@ export class SlackAPIClient {
   };
 
   public readonly usergroups = {
-    create: this.bind<UsergroupsCreateRequest, UsergroupsCreateResponse>(
+    create: this.bindApiCall<UsergroupsCreateRequest, UsergroupsCreateResponse>(
       this,
       "usergroups.create"
     ),
-    disable: this.bind<UsergroupsDisableRequest, UsergroupsDisableResponse>(
-      this,
-      "usergroups.disable"
-    ),
-    enable: this.bind<UsergroupsEnableRequest, UsergroupsEnableResponse>(
+    disable: this.bindApiCall<
+      UsergroupsDisableRequest,
+      UsergroupsDisableResponse
+    >(this, "usergroups.disable"),
+    enable: this.bindApiCall<UsergroupsEnableRequest, UsergroupsEnableResponse>(
       this,
       "usergroups.enable"
     ),
-    list: this.bind<UsergroupsListRequest, UsergroupsListResponse>(
+    list: this.bindApiCall<UsergroupsListRequest, UsergroupsListResponse>(
       this,
       "usergroups.list"
     ),
-    update: this.bind<UsergroupsUpdateRequest, UsergroupsUpdateResponse>(
+    update: this.bindApiCall<UsergroupsUpdateRequest, UsergroupsUpdateResponse>(
       this,
       "usergroups.update"
     ),
     users: {
-      list: this.bind<UsergroupsUsersListRequest, UsergroupsUsersListResponse>(
-        this,
-        "usergroups.users.list"
-      ),
-      update: this.bind<
+      list: this.bindApiCall<
+        UsergroupsUsersListRequest,
+        UsergroupsUsersListResponse
+      >(this, "usergroups.users.list"),
+      update: this.bindApiCall<
         UsergroupsUsersUpdateRequest,
         UsergroupsUsersUpdateResponse
       >(this, "usergroups.users.update"),
@@ -1280,42 +1313,48 @@ export class SlackAPIClient {
   };
 
   public readonly users = {
-    conversations: this.bind<
+    conversations: this.bindApiCall<
       UsersConversationsRequest,
       UsersConversationsResponse
     >(this, "users.conversations"),
-    deletePhoto: this.bind<UsersDeletePhotoRequest, UsersDeletePhotoResponse>(
-      this,
-      "users.deletePhoto"
-    ),
-    getPresence: this.bind<UsersGetPresenceRequest, UsersGetPresenceResponse>(
-      this,
-      "users.getPresence"
-    ),
-    identity: this.bind<UsersIdentityRequest, UsersIdentityResponse>(
+    deletePhoto: this.bindApiCall<
+      UsersDeletePhotoRequest,
+      UsersDeletePhotoResponse
+    >(this, "users.deletePhoto"),
+    getPresence: this.bindApiCall<
+      UsersGetPresenceRequest,
+      UsersGetPresenceResponse
+    >(this, "users.getPresence"),
+    identity: this.bindApiCall<UsersIdentityRequest, UsersIdentityResponse>(
       this,
       "users.identity"
     ),
-    info: this.bind<UsersInfoRequest, UsersInfoResponse>(this, "users.info"),
-    list: this.bind<UsersListRequest, UsersListResponse>(this, "users.list"),
-    lookupByEmail: this.bind<
+    info: this.bindApiCall<UsersInfoRequest, UsersInfoResponse>(
+      this,
+      "users.info"
+    ),
+    list: this.bindApiCall<UsersListRequest, UsersListResponse>(
+      this,
+      "users.list"
+    ),
+    lookupByEmail: this.bindApiCall<
       UsersLookupByEmailRequest,
       UsersLookupByEmailResponse
     >(this, "users.lookupByEmail"),
-    setPhoto: this.bind<UsersSetPhotoRequest, UsersSetPhotoResponse>(
+    setPhoto: this.bindApiCall<UsersSetPhotoRequest, UsersSetPhotoResponse>(
       this,
       "users.setPhoto"
     ),
-    setPresence: this.bind<UsersSetPresenceRequest, UsersSetPresenceResponse>(
-      this,
-      "users.setPresence"
-    ),
+    setPresence: this.bindApiCall<
+      UsersSetPresenceRequest,
+      UsersSetPresenceResponse
+    >(this, "users.setPresence"),
     profile: {
-      get: this.bind<UsersProfileGetRequest, UsersProfileGetResponse>(
+      get: this.bindApiCall<UsersProfileGetRequest, UsersProfileGetResponse>(
         this,
         "users.profile.get"
       ),
-      set: this.bind<UsersProfileSetRequest, UsersProfileSetResponse>(
+      set: this.bindApiCall<UsersProfileSetRequest, UsersProfileSetResponse>(
         this,
         "users.profile.set"
       ),
@@ -1323,13 +1362,19 @@ export class SlackAPIClient {
   };
 
   public readonly views = {
-    open: this.bind<ViewsOpenRequest, ViewsOpenResponse>(this, "views.open"),
-    publish: this.bind<ViewsPublishRequest, ViewsPublishResponse>(
+    open: this.bindApiCall<ViewsOpenRequest, ViewsOpenResponse>(
+      this,
+      "views.open"
+    ),
+    publish: this.bindApiCall<ViewsPublishRequest, ViewsPublishResponse>(
       this,
       "views.publish"
     ),
-    push: this.bind<ViewsPushRequest, ViewsPushResponse>(this, "views.push"),
-    update: this.bind<ViewsUpdateRequest, ViewsUpdateResponse>(
+    push: this.bindApiCall<ViewsPushRequest, ViewsPushResponse>(
+      this,
+      "views.push"
+    ),
+    update: this.bindApiCall<ViewsUpdateRequest, ViewsUpdateResponse>(
       this,
       "views.update"
     ),
