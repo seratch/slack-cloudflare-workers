@@ -3,7 +3,7 @@ export type KV = {
 
   put(key: string, value: string): Promise<void>;
 
-  putWithExpiration(
+  put(
     key: string,
     value: string,
     options: {

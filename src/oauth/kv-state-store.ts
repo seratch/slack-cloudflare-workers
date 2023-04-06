@@ -10,9 +10,7 @@ export class KVStateStore implements StateStore {
 
   async issueNewState(): Promise<string> {
     const state = crypto.randomUUID();
-    await this.#storage.putWithExpiration(state, "valid", {
-      expirationTtl: 300,
-    });
+    await this.#storage.put(state, "valid", { expirationTtl: 300 });
     return state;
   }
 
