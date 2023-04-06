@@ -421,10 +421,10 @@ export class SlackAPIClient {
     name: string,
     params: Record<string, any>
   ): Promise<SlackAPIResponse> {
-    return this._call(name, params);
+    return await this.#call(name, params);
   }
 
-  private async _call(
+  async #call(
     name: string,
     params: SlackAPIRequest
   ): Promise<SlackAPIResponse> {

@@ -230,7 +230,7 @@ export class SlackOAuthApp<E extends SlackOAuthEnv> extends SlackApp<E> {
     } catch (e) {
       // TODO: add callback for this
       console.log(e);
-      const reason = `installation failure (error: ${e})`;
+      const reason = `OpenID Connect failure (error: ${e})`;
       return new Response(renderErrorPage(this.routes.oauth.start, reason), {
         status: 400,
       });
