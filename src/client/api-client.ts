@@ -421,13 +421,6 @@ export class SlackAPIClient {
     name: string,
     params: Record<string, any>
   ): Promise<SlackAPIResponse> {
-    return await this.callWithType(name, params);
-  }
-
-  async callWithType(
-    name: string,
-    params: SlackAPIRequest
-  ): Promise<SlackAPIResponse> {
     const url = `https://www.slack.com/api/${name}`;
     const token = params.token ?? this.#token;
     const _params: any = {};
@@ -450,10 +443,10 @@ export class SlackAPIClient {
   }
 
   bindApiCall<A extends SlackAPIRequest, R extends SlackAPIResponse>(
-    client: SlackAPIClient,
+    self: SlackAPIClient,
     method: string
   ): SlackAPI<A, R> {
-    return client.call.bind(self, method) as SlackAPI<A, R>;
+    return self.call.bind(self, method) as SlackAPI<A, R>;
   }
 
   public readonly admin = {
