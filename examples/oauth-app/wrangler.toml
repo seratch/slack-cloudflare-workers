@@ -7,9 +7,11 @@ kv_namespaces = [
 ]
 
 [vars]
+SLACK_LOGGING_LEVEL="DEBUG"
 SLACK_SIGNING_SECRET=""
 SLACK_CLIENT_ID=""
 SLACK_CLIENT_SECRET=""
+SLACK_REDIRECT_URI=""
 SLACK_BOT_SCOPES="commands,chat:write,app_mentions:read"
 SLACK_OIDC_SCOPES="openid,email,profile"
 SLACK_OIDC_REDIRECT_URI=""

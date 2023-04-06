@@ -3,3 +3,4 @@ scripts/
 tsconfig.json
 .prettierrc.json
 examples/
+src/

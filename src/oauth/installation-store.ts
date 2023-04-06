@@ -10,7 +10,7 @@ export interface InstallationStoreQuery {
 }
 
 export interface InstallationStore<E extends SlackOAuthEnv> {
-  save(installation: Installation, request: Request): Promise<void>;
+  save(installation: Installation, request: Request | undefined): Promise<void>;
 
   findBotInstallation(
     query: InstallationStoreQuery

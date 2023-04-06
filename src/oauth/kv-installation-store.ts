@@ -1,4 +1,4 @@
-import { AuthorizeError } from "../errors";
+import { AuthorizeError, TokenRotationError } from "../errors";
 import { SlackAPIClient } from "../client/api-client";
 import { AuthTestResponse } from "../client/generated-response";
 import { Installation } from "./installation";
@@ -9,19 +9,25 @@ import {
 } from "./installation-store";
 import { Authorize } from "../authorization/authorize";
 import { KV } from "../utility/kv";
+import { TokenRotator } from "../client/token-rotator";
 
 export class KVInstallationStore<E extends SlackOAuthEnv>
   implements InstallationStore<E>
 {
   #env: E;
   #storage: KV;
+  #tokenRotator: TokenRotator;
 
   constructor(env: E, namespace: KV) {
     this.#env = env;
     this.#storage = namespace;
+    this.#tokenRotator = new TokenRotator(env);
   }
 
-  async save(installation: Installation, request: Request) {
+  async save(
+    installation: Installation,
+    request: Request | undefined = undefined
+  ) {
     await this.#storage.put(
       toBotInstallationKey(this.#env.SLACK_CLIENT_ID, installation),
       JSON.stringify(installation)
@@ -66,13 +72,22 @@ export class KVInstallationStore<E extends SlackOAuthEnv>
       };
       try {
         const bot = await this.findBotInstallation(query);
-        // TODO: token rotation
+        if (bot && bot.bot_refresh_token) {
+          const maybeRefreshed = await this.#tokenRotator.performRotation(bot);
+          if (maybeRefreshed) {
+            await this.save(maybeRefreshed);
+          }
+        }
 
-        const botAuthTest: AuthTestResponse = await new SlackAPIClient(
-          bot?.bot_token
-        ).auth.test();
+        const botClient = new SlackAPIClient(bot?.bot_token, this.#env);
+        const botAuthTest: AuthTestResponse = await botClient.auth.test();
         const user = await this.findUserInstallation(query);
-        // TODO: token rotation
+        if (user && user.user_refresh_token) {
+          const maybeRefreshed = await this.#tokenRotator.performRotation(user);
+          if (maybeRefreshed) {
+            await this.save(maybeRefreshed);
+          }
+        }
 
         return {
           enterpriseId: bot?.enterprise_id,

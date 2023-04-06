@@ -22,6 +22,13 @@ export class SlackAPIError extends Error {
   }
 }
 
+export class TokenRotationError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "TokenRotationError";
+  }
+}
+
 export class ResponseUrlError extends Error {
   constructor(status: number, body: string) {
     const message = `Failed to send a message using response_url (status: ${status}, body: ${body})`;

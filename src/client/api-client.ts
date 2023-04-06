@@ -402,6 +402,8 @@ import {
 } from "./generated-response";
 
 import { SlackAPIResponse } from "./response";
+import { SlackLoggingLevel } from "../app-env";
+import { isDebugLogEnabled } from "../utility/debug-logging";
 
 export interface SlackAPI<
   Req extends SlackAPIRequest,
@@ -412,9 +414,14 @@ export interface SlackAPI<
 
 export class SlackAPIClient {
   #token: string | undefined;
+  #env: SlackLoggingLevel;
 
-  constructor(token: string | undefined = undefined) {
+  constructor(
+    token: string | undefined = undefined,
+    env: SlackLoggingLevel = { SLACK_LOGGING_LEVEL: "INFO" }
+  ) {
     this.#token = token;
+    this.#env = env;
   }
 
   async call(
@@ -440,6 +447,9 @@ export class SlackAPIClient {
       headers["Authorization"] = `Bearer ${token}`;
     }
     const body = new URLSearchParams(_params);
+    if (isDebugLogEnabled(this.#env)) {
+      console.log(`Slack API request (${name}): ${body}`);
+    }
     const response = await fetch(url, {
       method: "POST",
       headers,
@@ -447,6 +457,9 @@ export class SlackAPIClient {
     });
     const result: SlackAPIResponse =
       (await response.json()) as SlackAPIResponse;
+    if (isDebugLogEnabled(this.#env)) {
+      console.log(`Slack API response (${name}): ${JSON.stringify(result)}}`);
+    }
     if (result.error) {
       throw new SlackAPIError(name, result.error, result);
     }

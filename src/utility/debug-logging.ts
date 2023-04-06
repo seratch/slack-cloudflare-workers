@@ -1,6 +1,6 @@
-import { SlackAppEnv } from "../app-env";
+import { SlackLoggingLevel } from "../app-env";
 
-export function isDebugLogEnabled(env: SlackAppEnv): boolean {
+export function isDebugLogEnabled(env: SlackLoggingLevel): boolean {
   return (
     env.SLACK_LOGGING_LEVEL !== undefined &&
     env.SLACK_LOGGING_LEVEL !== null &&

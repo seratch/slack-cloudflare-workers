@@ -1,8 +1,11 @@
-export interface SlackAppEnv {
-  SLACK_SIGNING_SECRET: string;
-  SLACK_BOT_TOKEN?: string;
+export interface SlackLoggingLevel {
   SLACK_LOGGING_LEVEL?: "DEBUG" | "INFO" | "WARN" | "ERROR";
 }
+
+export type SlackAppEnv = SlackLoggingLevel & {
+  SLACK_SIGNING_SECRET: string;
+  SLACK_BOT_TOKEN?: string;
+};
 
 export type SlackOAuthEnv = SlackAppEnv & {
   SLACK_CLIENT_ID: string;

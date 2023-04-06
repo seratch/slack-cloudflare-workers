@@ -3,5 +3,6 @@ main = "src/index.ts"
 compatibility_date = "2023-04-06"
 
 [vars]
+SLACK_LOGGING_LEVEL="DEBUG"
 SLACK_SIGNING_SECRET=""
 SLACK_BOT_TOKEN=""

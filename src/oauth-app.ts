@@ -103,7 +103,7 @@ export class SlackOAuthApp<E extends SlackOAuthEnv> extends SlackApp<E> {
       onStateValidationError:
         options.oauth?.onStateValidationError ?? defaultOnStateValidationError,
       callback: async (token, req) => {
-        const client = new SlackAPIClient(token.access_token);
+        const client = new SlackAPIClient(token.access_token, this.env);
         const userInfo = await client.openid.connect.userInfo();
         const body = `<html><head><style>body {{ padding: 10px 15px; font-family: verdana; text-align: center; }}</style></head><body><h1>It works!</h1><p>This is the default handler. To change this, pass \`oidc: { callback: async (token, req) => new Response("TODO") }\` to your SlackOAuthApp constructor.</p><pre>${prettyPrint(
           userInfo
@@ -190,7 +190,7 @@ export class SlackOAuthApp<E extends SlackOAuthEnv> extends SlackApp<E> {
       );
     }
 
-    const client = new SlackAPIClient();
+    const client = new SlackAPIClient(undefined, this.env);
     let oauthAccess: OAuthV2AccessResponse | undefined;
     try {
       // Execute the installation process
@@ -283,7 +283,7 @@ export class SlackOAuthApp<E extends SlackOAuthEnv> extends SlackApp<E> {
     }
 
     try {
-      const client = new SlackAPIClient();
+      const client = new SlackAPIClient(undefined, this.env);
       const apiResponse: OpenIDConnectTokenResponse =
         await client.openid.connect.token({
           client_id: this.env.SLACK_CLIENT_ID,

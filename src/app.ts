@@ -118,7 +118,7 @@ export class SlackApp<E extends SlackAppEnv> {
       );
     }
     this.env = options.env;
-    this.client = new SlackAPIClient(options.env.SLACK_BOT_TOKEN);
+    this.client = new SlackAPIClient(options.env.SLACK_BOT_TOKEN, this.env);
     this.authorize = options.authorize ?? singleTeamAuthorize;
     this.routes = { events: options.routes?.events };
   }
@@ -521,7 +521,7 @@ export class SlackApp<E extends SlackAppEnv> {
       const authorizedContext: SlackAppContext = {
         ...preAuthorizeRequest.context,
         authorizeResult,
-        client: new SlackAPIClient(authorizeResult.botToken),
+        client: new SlackAPIClient(authorizeResult.botToken, this.env),
         botToken: authorizeResult.botToken,
         botId: authorizeResult.botId,
         botUserId: authorizeResult.botUserId,
