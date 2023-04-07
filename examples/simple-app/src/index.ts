@@ -1,4 +1,4 @@
-import { SlackApp, SlackAppEnv, ExecutionContext } from "../../../src/index";
+import { SlackApp, SlackAppEnv } from "../../../src/index";
 
 export default {
   async fetch(
@@ -76,20 +76,6 @@ export default {
         async () => {}, // complete this within 3 seconds
         async ({ context, payload }) => {
           // You can do anything time-consuing tasks here!
-          console.log(
-            JSON.stringify(
-              {
-                type: "modal",
-                callback_id: "modal",
-                title: { type: "plain_text", text: "My App" },
-                submit: { type: "plain_text", text: "Submit" },
-                close: { type: "plain_text", text: "Cancel" },
-                blocks: [],
-              },
-              null,
-              2
-            )
-          );
           await context.client.views.open({
             // trigger_id still needs to be used within 3 seconds
             trigger_id: payload.trigger_id,

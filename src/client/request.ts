@@ -147,6 +147,10 @@ export interface AdminConversationsConvertToPrivateRequest
   extends SlackAPIRequest {
   channel_id: string;
 }
+export interface AdminConversationsConvertToPublicRequest
+  extends SlackAPIRequest {
+  channel_id: string;
+}
 export interface AdminConversationsCreateRequest extends SlackAPIRequest {
   is_private: boolean;
   name: string;
@@ -215,6 +219,13 @@ export interface AdminConversationsRemoveCustomRetentionRequest
   extends SlackAPIRequest {
   channel_id: string;
 }
+export interface AdminConversationsLookupRequest
+  extends SlackAPIRequest,
+    CursorPaginationEnabled {
+  last_message_activity_before: number;
+  team_ids: string[];
+  max_member_count?: number;
+}
 export interface AdminConversationsSearchRequest
   extends SlackAPIRequest,
     CursorPaginationEnabled {
@@ -278,6 +289,23 @@ export interface AdminInviteRequestsListRequest
   extends SlackAPIRequest,
     CursorPaginationEnabled {
   team_id: string;
+}
+export interface AdminRolesAddAssignmentsRequest extends SlackAPIRequest {
+  role_id: string;
+  entity_ids: string[];
+  user_ids: string[];
+}
+export interface AdminRolesListAssignmentsRequest
+  extends SlackAPIRequest,
+    CursorPaginationEnabled {
+  entity_ids?: string[];
+  role_ids?: string[];
+  sort_dir?: string;
+}
+export interface AdminRolesRemoveAssignmentsRequest extends SlackAPIRequest {
+  role_id: string;
+  entity_ids: string[];
+  user_ids: string[];
 }
 export interface AdminTeamsAdminsListRequest
   extends SlackAPIRequest,

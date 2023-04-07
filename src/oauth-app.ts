@@ -1,4 +1,4 @@
-import { ExecutionContext } from "./app";
+import { ExecutionContext } from "./execution-context";
 import { SlackApp } from "./app";
 import { SlackOAuthEnv } from "./app-env";
 import { InstallationStore } from "./oauth/installation-store";
@@ -19,13 +19,15 @@ import {
   defaultOnFailure,
   defaultOnStateValidationError,
 } from "./oauth/callback";
-import { OpenIDConnectCallback } from "./oidc/callback";
+import {
+  OpenIDConnectCallback,
+  defaultOpenIDConnectCallback,
+} from "./oidc/callback";
 import {
   OAuthV2AccessResponse,
   OpenIDConnectTokenResponse,
 } from "./client/generated-response";
 import { generateOIDCAuthorizeUrl } from "./oidc/authorize-url-generator";
-import { prettyPrint } from "./utility/debug-logging";
 import {
   InstallationError,
   MissingCode,
@@ -102,17 +104,7 @@ export class SlackOAuthApp<E extends SlackOAuthEnv> extends SlackApp<E> {
       onFailure: options.oauth?.onFailure ?? defaultOnFailure,
       onStateValidationError:
         options.oauth?.onStateValidationError ?? defaultOnStateValidationError,
-      callback: async (token, req) => {
-        const client = new SlackAPIClient(token.access_token, this.env);
-        const userInfo = await client.openid.connect.userInfo();
-        const body = `<html><head><style>body {{ padding: 10px 15px; font-family: verdana; text-align: center; }}</style></head><body><h1>It works!</h1><p>This is the default handler. To change this, pass \`oidc: { callback: async (token, req) => new Response("TODO") }\` to your SlackOAuthApp constructor.</p><pre>${prettyPrint(
-          userInfo
-        )}</pre></body></html>`;
-        return new Response(body, {
-          status: 200,
-          headers: { "Content-Type": "text/html; charset=utf-8" },
-        });
-      },
+      callback: defaultOpenIDConnectCallback(this.env),
     };
     this.routes = options.routes
       ? options.routes

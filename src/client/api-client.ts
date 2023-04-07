@@ -21,6 +21,7 @@ import {
   AdminConversationsBulkDeleteRequest,
   AdminConversationsBulkMoveRequest,
   AdminConversationsConvertToPrivateRequest,
+  AdminConversationsConvertToPublicRequest,
   AdminConversationsCreateRequest,
   AdminConversationsDeleteRequest,
   AdminConversationsDisconnectSharedRequest,
@@ -29,6 +30,7 @@ import {
   AdminConversationsGetCustomRetentionRequest,
   AdminConversationsGetTeamsRequest,
   AdminConversationsInviteRequest,
+  AdminConversationsLookupRequest,
   AdminConversationsRemoveCustomRetentionRequest,
   AdminConversationsRenameRequest,
   AdminConversationsRestrictAccessAddGroupRequest,
@@ -49,6 +51,9 @@ import {
   AdminInviteRequestsDeniedListRequest,
   AdminInviteRequestsDenyRequest,
   AdminInviteRequestsListRequest,
+  AdminRolesAddAssignmentsRequest,
+  AdminRolesListAssignmentsRequest,
+  AdminRolesRemoveAssignmentsRequest,
   AdminTeamsAdminsListRequest,
   AdminTeamsCreateRequest,
   AdminTeamsListRequest,
@@ -399,6 +404,11 @@ import {
   ViewsPublishResponse,
   ViewsPushResponse,
   ViewsUpdateResponse,
+  AdminConversationsConvertToPublicResponse,
+  AdminConversationsLookupResponse,
+  AdminRolesAddAssignmentsResponse,
+  AdminRolesListAssignmentsResponse,
+  AdminRolesRemoveAssignmentsResponse,
 } from "./generated-response";
 
 import { SlackAPIResponse } from "./response";
@@ -569,6 +579,10 @@ export class SlackAPIClient {
         AdminConversationsConvertToPrivateRequest,
         AdminConversationsConvertToPrivateResponse
       >(this, "admin.conversations.convertToPrivate"),
+      convertToPublic: this.bindApiCall<
+        AdminConversationsConvertToPublicRequest,
+        AdminConversationsConvertToPublicResponse
+      >(this, "admin.conversations.convertToPublic"),
       create: this.bindApiCall<
         AdminConversationsCreateRequest,
         AdminConversationsCreateResponse
@@ -629,10 +643,10 @@ export class SlackAPIClient {
         AdminConversationsRemoveCustomRetentionRequest,
         AdminConversationsRemoveCustomRetentionResponse
       >(this, "admin.conversations.removeCustomRetention"),
-      search: this.bindApiCall<
-        AdminConversationsSearchRequest,
-        AdminConversationsSearchResponse
-      >(this, "admin.conversations.search"),
+      lookup: this.bindApiCall<
+        AdminConversationsLookupRequest,
+        AdminConversationsLookupResponse
+      >(this, "admin.conversations.lookup"),
       setConversationPrefs: this.bindApiCall<
         AdminConversationsSetConversationPrefsRequest,
         AdminConversationsSetConversationPrefsResponse
@@ -693,6 +707,20 @@ export class SlackAPIClient {
         AdminInviteRequestsListRequest,
         AdminInviteRequestsListResponse
       >(this, "admin.inviteRequests.list"),
+    },
+    roles: {
+      addAssignments: this.bindApiCall<
+        AdminRolesAddAssignmentsRequest,
+        AdminRolesAddAssignmentsResponse
+      >(this, "admin.roles.addAssignments"),
+      listAssignments: this.bindApiCall<
+        AdminRolesListAssignmentsRequest,
+        AdminRolesListAssignmentsResponse
+      >(this, "admin.roles.listAssignments"),
+      removeAssignments: this.bindApiCall<
+        AdminRolesRemoveAssignmentsRequest,
+        AdminRolesRemoveAssignmentsResponse
+      >(this, "admin.roles.removeAssignments"),
     },
     teams: {
       admins: {

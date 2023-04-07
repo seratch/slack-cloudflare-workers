@@ -32,7 +32,7 @@ export type SlackOptionsResponse = SlackResponse & {
   body: OptionsResponses;
 };
 
-export function toResponse(
+export function toCompleteResponse(
   slackResponse:
     | SlackResponse
     | MessageResponse

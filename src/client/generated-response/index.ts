@@ -18,6 +18,7 @@ export { AdminConversationsBulkArchiveResponse } from "./AdminConversationsBulkA
 export { AdminConversationsBulkDeleteResponse } from "./AdminConversationsBulkDeleteResponse";
 export { AdminConversationsBulkMoveResponse } from "./AdminConversationsBulkMoveResponse";
 export { AdminConversationsConvertToPrivateResponse } from "./AdminConversationsConvertToPrivateResponse";
+export { AdminConversationsConvertToPublicResponse } from "./AdminConversationsConvertToPublicResponse";
 export { AdminConversationsCreateResponse } from "./AdminConversationsCreateResponse";
 export { AdminConversationsDeleteResponse } from "./AdminConversationsDeleteResponse";
 export { AdminConversationsDisconnectSharedResponse } from "./AdminConversationsDisconnectSharedResponse";
@@ -26,6 +27,7 @@ export { AdminConversationsGetConversationPrefsResponse } from "./AdminConversat
 export { AdminConversationsGetCustomRetentionResponse } from "./AdminConversationsGetCustomRetentionResponse";
 export { AdminConversationsGetTeamsResponse } from "./AdminConversationsGetTeamsResponse";
 export { AdminConversationsInviteResponse } from "./AdminConversationsInviteResponse";
+export { AdminConversationsLookupResponse } from "./AdminConversationsLookupResponse";
 export { AdminConversationsRemoveCustomRetentionResponse } from "./AdminConversationsRemoveCustomRetentionResponse";
 export { AdminConversationsRenameResponse } from "./AdminConversationsRenameResponse";
 export { AdminConversationsRestrictAccessAddGroupResponse } from "./AdminConversationsRestrictAccessAddGroupResponse";
