@@ -5,6 +5,7 @@ import {
   KV,
   KVStateStore,
   SlackOAuthAndOIDCEnv,
+  defaultOpenIDConnectCallback,
 } from "../../../src/index";
 
 export interface Env extends SlackOAuthAndOIDCEnv {
@@ -22,7 +23,12 @@ export default {
       env,
       installationStore: new KVInstallationStore(env, env.INSTALLATIONS),
       stateStore: new KVStateStore(env.OAUTH_STATES),
-      // oidc: { callback: async (token, req) => new Response("TODO") }
+      oidc: {
+        callback: async (token, req) => {
+          const handler = defaultOpenIDConnectCallback(env);
+          return await handler(token, req);
+        },
+      },
     }).event("app_mention", async ({ context }) => {
       await context.client.chat.postMessage({
         channel: context.channelId,

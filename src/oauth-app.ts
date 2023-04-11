@@ -56,7 +56,7 @@ export interface SlackOAuthAppOptions<E extends SlackOAuthEnv> {
   routes?: {
     events: string;
     oauth: { start: string; callback: string };
-    oidc: { start: string; callback: string };
+    oidc?: { start: string; callback: string };
   };
 }
 
@@ -71,7 +71,7 @@ export class SlackOAuthApp<E extends SlackOAuthEnv> extends SlackApp<E> {
     onFailure: OnFailure;
     onStateValidationError: OnStateValidationError;
   };
-  public oidc: {
+  public oidc?: {
     stateCookieName?: string;
     callback: OpenIDConnectCallback;
     onFailure: OnFailure;
@@ -80,7 +80,7 @@ export class SlackOAuthApp<E extends SlackOAuthEnv> extends SlackApp<E> {
   public routes: {
     events: string;
     oauth: { start: string; callback: string };
-    oidc: { start: string; callback: string };
+    oidc?: { start: string; callback: string };
   };
 
   constructor(options: SlackOAuthAppOptions<E>) {
@@ -99,13 +99,17 @@ export class SlackOAuthApp<E extends SlackOAuthEnv> extends SlackApp<E> {
       onStateValidationError:
         options.oauth?.onStateValidationError ?? defaultOnStateValidationError,
     };
-    this.oidc = {
-      stateCookieName: options.oauth?.stateCookieName ?? "slack-app-oidc-state",
-      onFailure: options.oauth?.onFailure ?? defaultOnFailure,
-      onStateValidationError:
-        options.oauth?.onStateValidationError ?? defaultOnStateValidationError,
-      callback: defaultOpenIDConnectCallback(this.env),
-    };
+    if (options.oidc) {
+      this.oidc = {
+        stateCookieName: options.oidc.stateCookieName ?? "slack-app-oidc-state",
+        onFailure: options.oidc.onFailure ?? defaultOnFailure,
+        onStateValidationError:
+          options.oidc.onStateValidationError ?? defaultOnStateValidationError,
+        callback: defaultOpenIDConnectCallback(this.env),
+      };
+    } else {
+      this.oidc = undefined;
+    }
     this.routes = options.routes
       ? options.routes
       : {
@@ -244,6 +248,9 @@ export class SlackOAuthApp<E extends SlackOAuthEnv> extends SlackApp<E> {
   }
 
   async handleOIDCStartRequest(request: Request): Promise<Response> {
+    if (!this.oidc) {
+      return new Response("Not found", { status: 404 });
+    }
     const stateValue = await this.stateStore.issueNewState();
     const authorizeUrl = generateOIDCAuthorizeUrl(stateValue, this.env);
     return new Response(renderStartPage(authorizeUrl), {
@@ -257,6 +264,9 @@ export class SlackOAuthApp<E extends SlackOAuthEnv> extends SlackApp<E> {
   }
 
   async handleOIDCCallbackRequest(request: Request): Promise<Response> {
+    if (!this.oidc || !this.routes.oidc) {
+      return new Response("Not found", { status: 404 });
+    }
     // State parameter validation
     await this.#validateStateParameter(
       request,
@@ -306,7 +316,11 @@ export class SlackOAuthApp<E extends SlackOAuthEnv> extends SlackApp<E> {
     if (queryState !== cookieState) {
       if (startPath === this.routes.oauth.start) {
         return await this.oauth.onStateValidationError(startPath, request);
-      } else if (startPath === this.routes.oidc.start) {
+      } else if (
+        this.oidc &&
+        this.routes.oidc &&
+        startPath === this.routes.oidc.start
+      ) {
         return await this.oidc.onStateValidationError(startPath, request);
       }
     }
