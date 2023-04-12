@@ -1,8 +1,8 @@
-import { TypesafeBlock } from "../utility/typesafe-blocks";
+import { AnyMessageBlock } from "./blocks";
 import { PlainTextField } from "./texts";
 
 export interface MessageAttachment {
-  blocks?: TypesafeBlock[];
+  blocks?: AnyMessageBlock[];
   fallback?: string;
   color?: "good" | "warning" | "danger" | string;
   pretext?: string;
