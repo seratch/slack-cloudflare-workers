@@ -1,7 +1,7 @@
 import { AnyMessageBlock } from "../block-kit/blocks";
 import { MessageAttachment } from "../block-kit/message-attachment";
 import { MessageMetadata } from "../block-kit/message-metadata";
-import { TextField } from "../block-kit/text-fields";
+import { AnyTextField } from "../block-kit/text-fields";
 import { ModalView } from "../block-kit/views";
 
 export interface MessageResponse {
@@ -40,11 +40,11 @@ export type ViewResponses =
 
 export interface Option {
   value: string;
-  text: TextField;
+  text: AnyTextField;
 }
 
 export interface OptionGroup {
-  label: TextField;
+  label: AnyTextField;
   options: Option[];
 }
 

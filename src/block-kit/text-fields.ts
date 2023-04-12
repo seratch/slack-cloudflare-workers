@@ -10,4 +10,4 @@ export interface MrkdwnTextField {
   verbatim?: boolean;
 }
 
-export type TextField = PlainTextField | MrkdwnTextField;
+export type AnyTextField = PlainTextField | MrkdwnTextField;

@@ -14,7 +14,7 @@ import {
   Timepicker,
   URLInput,
 } from "./block-elements";
-import { PlainTextField, TextField } from "./text-fields";
+import { PlainTextField, AnyTextField } from "./text-fields";
 
 // -----------------------------
 // Basic types
@@ -92,7 +92,7 @@ export interface ActionsBlock extends Block<"actions"> {
 
 export interface ContextBlock extends Block<"context"> {
   type: "context";
-  elements: (ImageElement | TextField)[];
+  elements: (ImageElement | AnyTextField)[];
 }
 
 export interface DividerBlock extends Block<"divider"> {
@@ -139,8 +139,8 @@ export interface InputBlock extends Block<"input"> {
 
 export interface SectionBlock extends Block<"section"> {
   type: "section";
-  text?: TextField;
-  fields?: TextField[];
+  text?: AnyTextField;
+  fields?: AnyTextField[];
   accessory?:
     | ImageElement
     | Button

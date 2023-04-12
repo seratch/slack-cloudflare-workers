@@ -1,8 +1,8 @@
-import { PlainTextField, TextField } from "./text-fields";
+import { PlainTextField, AnyTextField } from "./text-fields";
 
 export interface Confirm {
   title?: PlainTextField;
-  text: TextField;
+  text: AnyTextField;
   confirm?: PlainTextField;
   deny?: PlainTextField;
   style?: "primary" | "danger";
