@@ -2,6 +2,16 @@ export * from "./app";
 export * from "./app-env";
 export * from "./execution-context";
 
+export * from "./block-kit/block-elements";
+export * from "./block-kit/blocks";
+export * from "./block-kit/confirm";
+export * from "./block-kit/link-unfurls";
+export * from "./block-kit/message-attachment";
+export * from "./block-kit/message-metadata";
+export * from "./block-kit/options";
+export * from "./block-kit/texts";
+export * from "./block-kit/views";
+
 export * from "./client/api-client";
 export * from "./client/request";
 export * from "./client/response";

@@ -1,6 +1,7 @@
-import { MessageAttachment, MessageMetadata } from "@slack/types";
 import { ResponseUrlError } from "../errors";
-import { TypesafeBlock } from "./typesafe-blocks";
+import { AnyMessageBlock } from "../block-kit/blocks";
+import { MessageAttachment } from "../block-kit/message-attachment";
+import { MessageMetadata } from "../block-kit/message-metadata";
 
 export class ResponseUrlSender {
   #responseUrl: string;
@@ -27,7 +28,7 @@ export class ResponseUrlSender {
 export interface ResponseUrlParams {
   response_type?: "ephemeral" | "in_channel";
   text: string;
-  blocks?: TypesafeBlock[];
+  blocks?: AnyMessageBlock[];
   attachments?: MessageAttachment[];
   metadata?: MessageMetadata;
 }

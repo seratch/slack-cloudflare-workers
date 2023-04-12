@@ -1,11 +1,8 @@
-import {
-  MessageAttachment,
-  LinkUnfurls,
-  MessageMetadata,
-  ModalView,
-  HomeView,
-} from "@slack/types";
-import { TypesafeBlock } from "../utility/typesafe-blocks";
+import { AnyMessageBlock } from "../block-kit/blocks";
+import { LinkUnfurls } from "../block-kit/link-unfurls";
+import { MessageAttachment } from "../block-kit/message-attachment";
+import { MessageMetadata } from "../block-kit/message-metadata";
+import { ModalView, HomeTabView } from "../block-kit/views";
 
 export interface SlackAPIRequest {
   token?: string;
@@ -552,7 +549,7 @@ export interface ChatPostEphemeralRequest extends SlackAPIRequest {
   channel: string;
   text: string;
   user: string;
-  blocks?: TypesafeBlock[];
+  blocks?: AnyMessageBlock[];
   attachments?: MessageAttachment[];
   thread_ts?: string;
 
@@ -569,7 +566,7 @@ export interface ChatPostEphemeralRequest extends SlackAPIRequest {
 export interface ChatPostMessageRequest extends SlackAPIRequest {
   channel: string;
   text: string;
-  blocks?: TypesafeBlock[];
+  blocks?: AnyMessageBlock[];
   attachments?: MessageAttachment[];
   metadata?: MessageMetadata;
   thread_ts?: string;
@@ -592,7 +589,7 @@ export interface ChatScheduleMessageRequest extends SlackAPIRequest {
   channel: string;
   text: string;
   post_at: string | number;
-  blocks?: TypesafeBlock[];
+  blocks?: AnyMessageBlock[];
   attachments?: MessageAttachment[];
   thread_ts?: string;
   metadata?: MessageMetadata;
@@ -616,27 +613,12 @@ export interface ChatScheduledMessagesListRequest
 }
 // ChannelAndTS and SourceAndUnfurlID are used as either-or mixins for ChatUnfurlRequest
 interface ChannelAndTSRequest {
-  /**
-   * @description Channel ID of the message. Both `channel` and `ts` must be provided together, or `unfurl_id` and
-   * `source` must be provided together.
-   */
   channel: string;
-  /**
-   * @description Timestamp of the message to add unfurl behavior to.
-   */
   ts: string;
 }
 
 interface SourceAndUnfurlIDRequest {
-  /**
-   * @description The source of the link to unfurl. The source may either be `composer`, when the link is inside the
-   * message composer, or `conversations_history`, when the link has been posted to a conversation.
-   */
   source: "composer" | "conversations_history";
-  /**
-   * @description The ID of the link to unfurl. Both `unfurl_id` and `source` must be provided together, or `channel`
-   * and `ts` must be provided together.
-   */
   unfurl_id: string;
 }
 export type ChatUnfurlRequest = (
@@ -644,37 +626,17 @@ export type ChatUnfurlRequest = (
   | SourceAndUnfurlIDRequest
 ) &
   SlackAPIRequest & {
-    /**
-     * @description URL-encoded JSON map with keys set to URLs featured in the the message, pointing to their unfurl
-     * blocks or message attachments.
-     */
     unfurls: LinkUnfurls;
-    /**
-     * @description Provide a simply-formatted string to send as an ephemeral message to the user as invitation to
-     * authenticate further and enable full unfurling behavior. Provides two buttons, Not now or Never ask me again.
-     */
     user_auth_message?: string;
-    /**
-     * @description Set to `true` to indicate the user must install your Slack app to trigger unfurls for this domain.
-     * Defaults to `false`.
-     */
     user_auth_required?: boolean;
-    /**
-     * @description Send users to this custom URL where they will complete authentication in your app to fully trigger
-     * unfurling. Value should be properly URL-encoded.
-     */
     user_auth_url?: string;
-    /**
-     * @description Provide a JSON based array of structured blocks presented as URL-encoded string to send as an
-     * ephemeral message to the user as invitation to authenticate further and enable full unfurling behavior.
-     */
-    user_auth_blocks?: TypesafeBlock[];
+    user_auth_blocks?: AnyMessageBlock[];
   };
 export interface ChatUpdateRequest extends SlackAPIRequest {
   channel: string;
   text: string;
   ts: string;
-  blocks?: TypesafeBlock[];
+  blocks?: AnyMessageBlock[];
   attachments?: MessageAttachment[];
   metadata?: MessageMetadata;
   file_ids?: string[];
@@ -1257,7 +1219,7 @@ export interface ViewsPushRequest extends SlackAPIRequest {
 
 export interface ViewsPublishRequest extends SlackAPIRequest {
   user_id: string;
-  view: HomeView;
+  view: HomeTabView;
   hash?: string;
 }
 

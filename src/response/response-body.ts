@@ -1,16 +1,13 @@
-import {
-  MessageAttachment,
-  MessageMetadata,
-  ModalView,
-  MrkdwnElement,
-  PlainTextElement,
-} from "@slack/types";
-import { TypesafeBlock } from "../utility/typesafe-blocks";
+import { AnyMessageBlock } from "../block-kit/blocks";
+import { MessageAttachment } from "../block-kit/message-attachment";
+import { MessageMetadata } from "../block-kit/message-metadata";
+import { TextField } from "../block-kit/texts";
+import { ModalView } from "../block-kit/views";
 
 export interface MessageResponse {
   response_type?: "ephemeral" | "in_channel";
   text: string;
-  blocks?: TypesafeBlock[];
+  blocks?: AnyMessageBlock[];
   attachments?: MessageAttachment[];
   metadata?: MessageMetadata;
   thread_ts?: string;
@@ -43,11 +40,11 @@ export type ViewResponses =
 
 export interface Option {
   value: string;
-  text: PlainTextElement | MrkdwnElement;
+  text: TextField;
 }
 
 export interface OptionGroup {
-  label: PlainTextElement | MrkdwnElement;
+  label: TextField;
   options: Option[];
 }
 

@@ -1,5 +1,7 @@
-import { View, MessageAttachment, Block, MessageMetadata } from "@slack/types";
-import { TypesafeBlock } from "../../utility/typesafe-blocks";
+import { AnyMessageBlock } from "../../block-kit/blocks";
+import { MessageAttachment } from "../../block-kit/message-attachment";
+import { MessageMetadata } from "../../block-kit/message-metadata";
+import { HomeTabView } from "../../block-kit/views";
 
 export type SlackEvents =
   | AppRequestedEvent
@@ -181,7 +183,7 @@ export interface AppHomeOpenedEvent extends SlackEvent<"app_home_opened"> {
   user: string;
   channel: string;
   tab?: "home" | "messages";
-  view?: View;
+  view?: HomeTabView;
   event_ts: string;
 }
 
@@ -195,7 +197,7 @@ export interface AppMentionEvent extends SlackEvent<"app_mention"> {
   user?: string;
   text: string;
   attachments?: MessageAttachment[];
-  blocks?: TypesafeBlock[];
+  blocks?: AnyMessageBlock[];
   edited?: {
     user: string;
     ts: string;
@@ -1161,7 +1163,7 @@ export interface GenericMessageEvent extends SlackEvent<"message"> {
   thread_ts?: string;
   channel_type: ChannelTypes;
   attachments?: MessageAttachment[];
-  blocks?: TypesafeBlock[];
+  blocks?: AnyMessageBlock[];
   files?: File[];
   edited?: {
     user: string;
@@ -1198,7 +1200,7 @@ export interface BotMessageEvent extends SlackEvent<"message"> {
   // TODO: is a user really optional? likely for things like IncomingWebhook authored messages
   user?: string;
   attachments?: MessageAttachment[];
-  blocks?: TypesafeBlock[];
+  blocks?: AnyMessageBlock[];
   edited?: {
     user: string;
     ts: string;
@@ -1321,7 +1323,7 @@ export interface FileShareMessageEvent extends SlackEvent<"message"> {
   subtype: "file_share";
   text: string;
   attachments?: MessageAttachment[];
-  blocks?: TypesafeBlock[];
+  blocks?: AnyMessageBlock[];
   files?: File[];
   upload?: boolean;
   display_as_bot?: boolean;
@@ -1394,7 +1396,7 @@ export interface ThreadBroadcastMessageEvent extends SlackEvent<"message"> {
   event_ts: string;
   text: string;
   attachments?: MessageAttachment[];
-  blocks?: TypesafeBlock[];
+  blocks?: AnyMessageBlock[];
   user: string;
   ts: string;
   thread_ts?: string;
@@ -1475,7 +1477,7 @@ export interface PinnedMessageItem {
   bot_profile?: BotProfile;
   text?: string;
   attachments?: MessageAttachment[];
-  blocks?: TypesafeBlock[];
+  blocks?: AnyMessageBlock[];
   pinned_to?: string[];
   permalink: string;
 }

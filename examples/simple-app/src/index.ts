@@ -27,6 +27,15 @@ export default {
                 action_id: "button-action",
               },
             },
+            {
+              type: "context",
+              elements: [
+                {
+                  type: "plain_text",
+                  text: "This message is posted by an app running on Cloudflare Workers",
+                },
+              ],
+            },
           ],
         });
       })
@@ -38,9 +47,11 @@ export default {
         async () => {}, // complete this within 3 seconds
         async ({ context }) => {
           // You can do anything time-consuing tasks here!
-          await sleep(5);
-          if (context.respond) {
-            await context.respond({ text: "Thanks!" });
+          const { respond } = context;
+          if (respond) {
+            await respond({ text: "Now working on it ..." });
+            await sleep(5);
+            await respond({ text: "It's done :white_check_mark:" });
           }
         }
       )

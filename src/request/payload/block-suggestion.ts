@@ -1,4 +1,4 @@
-import { Option } from "@slack/types";
+import { Option } from "../../block-kit/options";
 import { DataSubmissionView } from "./view-objects";
 
 export interface BlockSuggestion {

@@ -1,13 +1,14 @@
-import { PlainTextElement } from "@slack/types";
-import { TypesafeBlock } from "../../utility/typesafe-blocks";
+import { AnyActionBlockElementType } from "../../block-kit/block-elements";
+import { AnyModalBlock } from "../../block-kit/blocks";
+import { PlainTextField } from "../../block-kit/texts";
 
 export interface ViewStateSelectedOption {
-  text: PlainTextElement;
+  text: PlainTextField;
   value: string;
 }
 
 export interface ViewStateValue {
-  type: string;
+  type: AnyActionBlockElementType;
   value?: string | null;
   selected_date?: string | null;
   selected_time?: string | null;
@@ -29,11 +30,11 @@ export interface DataSubmissionView {
   app_installed_team_id?: string;
   app_id: string | null;
   bot_id: string;
-  title: PlainTextElement;
+  title: PlainTextField;
   type: string;
-  blocks: TypesafeBlock[];
-  close: PlainTextElement | null;
-  submit: PlainTextElement | null;
+  blocks: AnyModalBlock[];
+  close: PlainTextField | null;
+  submit: PlainTextField | null;
   state: {
     values: {
       [blockId: string]: {
