@@ -1,6 +1,7 @@
 node_modules/
-scripts/
 tsconfig.json
 .prettierrc.json
 examples/
 src/
+docs/
+scripts/
