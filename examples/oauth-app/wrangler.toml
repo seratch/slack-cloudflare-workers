@@ -2,16 +2,10 @@ name = "oauth-app"
 main = "src/index.ts"
 compatibility_date = "2023-04-06"
 kv_namespaces = [
-  { binding = "INSTALLATIONS", id = "da0e68109d194f26a80e07ec01b980b5", preview_id = "d8082a74891442aa9d315985f067b870" },
-  { binding = "OAUTH_STATES", id = "314f55b2cc5f43bc802b0455829af955", preview_id = "c6c713d5e3184ef3a6f918da4c892ef7" },
+  { binding = "SLACK_INSTALLATIONS", id = "976f5703de1b44cdab3826d9025f43ad", preview_id = "68b91d924b9e45189e7562ac12950e63" },
+  { binding = "SLACK_OAUTH_STATES", id = "428a7013ffb14465b4935a13fffb3afb", preview_id = "1dd1494816ef4d998d7d47e6c27d53a2" },
 ]
 
 [vars]
-SLACK_LOGGING_LEVEL="DEBUG"
-SLACK_SIGNING_SECRET=""
-SLACK_CLIENT_ID=""
-SLACK_CLIENT_SECRET=""
-SLACK_REDIRECT_URI=""
 SLACK_BOT_SCOPES="commands,chat:write,app_mentions:read"
 SLACK_OIDC_SCOPES="openid,email,profile"
-SLACK_OIDC_REDIRECT_URI=""
