@@ -10,4 +10,4 @@ Key differences include:
 * _Lazy listener enabled_: [bolt-python's lazy listener feature](https://slack.dev/bolt-python/concepts#lazy-listeners) is provided out of the box
 * _Zero additional dependencies_: No other dependencies required beyond TypeScript types
 
-Check [our documents](./docs/index.md) for more details!
+Check [our documents](https://github.com/seratch/slack-cloudflare-workers/blob/main/docs/index.md) for more details!
