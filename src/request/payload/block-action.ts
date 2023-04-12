@@ -1,5 +1,5 @@
 import { Confirm } from "../../block-kit/confirm";
-import { Option } from "../../block-kit/options";
+import { AnyOption } from "../../block-kit/options";
 import { PlainTextField } from "../../block-kit/text-fields";
 import { DataSubmissionView, ViewStateValue } from "./view-objects";
 
@@ -70,7 +70,7 @@ export interface StaticSelectAction
     text: PlainTextField;
     value: string;
   };
-  initial_option?: Option;
+  initial_option?: AnyOption;
   placeholder?: PlainTextField;
   confirm?: Confirm;
 }
@@ -81,7 +81,7 @@ export interface MultiStaticSelectAction
     text: PlainTextField;
     value: string;
   }[];
-  initial_options?: Option[];
+  initial_options?: AnyOption[];
   placeholder?: PlainTextField;
   confirm?: Confirm;
 }
@@ -135,8 +135,8 @@ export interface MultiChannelsSelectAction
 
 export interface ExternalSelectAction
   extends BlockElementAction<"external_select"> {
-  selected_option?: Option;
-  initial_option?: Option;
+  selected_option?: AnyOption;
+  initial_option?: AnyOption;
   placeholder?: PlainTextField;
   min_query_length?: number;
   confirm?: Confirm;
@@ -144,8 +144,8 @@ export interface ExternalSelectAction
 
 export interface MultiExternalSelectAction
   extends BlockElementAction<"multi_external_select"> {
-  selected_options?: Option[];
-  initial_options?: Option[];
+  selected_options?: AnyOption[];
+  initial_options?: AnyOption[];
   placeholder?: PlainTextField;
   min_query_length?: number;
   confirm?: Confirm;
@@ -168,14 +168,14 @@ export interface DatepickerAction extends BlockElementAction<"datepicker"> {
 
 export interface RadioButtonsAction
   extends BlockElementAction<"radio_buttons"> {
-  selected_option: Option | null;
-  initial_option?: Option;
+  selected_option: AnyOption | null;
+  initial_option?: AnyOption;
   confirm?: Confirm;
 }
 
 export interface CheckboxesAction extends BlockElementAction<"checkboxes"> {
-  selected_options: Option[];
-  initial_options?: Option[];
+  selected_options: AnyOption[];
+  initial_options?: AnyOption[];
   confirm?: Confirm;
 }
 

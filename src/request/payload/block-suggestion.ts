@@ -1,4 +1,4 @@
-import { Option } from "../../block-kit/options";
+import { AnyOption } from "../../block-kit/options";
 import { DataSubmissionView } from "./view-objects";
 
 export interface BlockSuggestion {
@@ -33,7 +33,7 @@ export interface BlockSuggestion {
 }
 
 export interface BlockOptions {
-  options: Option[];
+  options: AnyOption[];
 }
 
 export interface OptionGroups<Options> {

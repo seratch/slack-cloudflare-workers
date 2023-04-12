@@ -14,4 +14,4 @@ export interface PlainTextOption {
   description?: PlainTextField;
 }
 
-export declare type Option = MrkdwnOption | PlainTextOption;
+export declare type AnyOption = MrkdwnOption | PlainTextOption;

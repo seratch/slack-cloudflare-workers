@@ -1,5 +1,5 @@
 import { Confirm } from "./confirm";
-import { Option, PlainTextOption } from "./options";
+import { AnyOption, PlainTextOption } from "./options";
 import { PlainTextField } from "./text-fields";
 
 // -----------------------------
@@ -250,8 +250,8 @@ export interface RadioButtons
     Confirmable,
     Focusable {
   type: "radio_buttons";
-  initial_option?: Option;
-  options: Option[];
+  initial_option?: AnyOption;
+  options: AnyOption[];
 }
 export interface DateTimepicker
   extends ActionBlockElement<"datetimepicker">,
@@ -267,8 +267,8 @@ export interface Checkboxes
     Confirmable,
     Focusable {
   type: "checkboxes";
-  initial_options?: Option[];
-  options: Option[];
+  initial_options?: AnyOption[];
+  options: AnyOption[];
 }
 export interface PlainTextInput
   extends ActionBlockElement<"plain_text_input">,
