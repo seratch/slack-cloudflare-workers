@@ -1,7 +1,7 @@
 import { AnyMessageBlock } from "../block-kit/blocks";
 import { MessageAttachment } from "../block-kit/message-attachment";
 import { MessageMetadata } from "../block-kit/message-metadata";
-import { TextField } from "../block-kit/texts";
+import { TextField } from "../block-kit/text-fields";
 import { ModalView } from "../block-kit/views";
 
 export interface MessageResponse {

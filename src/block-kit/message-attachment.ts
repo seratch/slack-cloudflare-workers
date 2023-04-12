@@ -1,5 +1,5 @@
 import { AnyMessageBlock } from "./blocks";
-import { PlainTextField } from "./texts";
+import { PlainTextField } from "./text-fields";
 
 export interface MessageAttachment {
   blocks?: AnyMessageBlock[];

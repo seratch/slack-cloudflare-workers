@@ -9,7 +9,7 @@ export * from "./block-kit/link-unfurls";
 export * from "./block-kit/message-attachment";
 export * from "./block-kit/message-metadata";
 export * from "./block-kit/options";
-export * from "./block-kit/texts";
+export * from "./block-kit/text-fields";
 export * from "./block-kit/views";
 
 export * from "./client/api-client";

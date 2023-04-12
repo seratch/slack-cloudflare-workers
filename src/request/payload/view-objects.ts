@@ -1,6 +1,6 @@
 import { AnyActionBlockElementType } from "../../block-kit/block-elements";
 import { AnyModalBlock } from "../../block-kit/blocks";
-import { PlainTextField } from "../../block-kit/texts";
+import { PlainTextField } from "../../block-kit/text-fields";
 
 export interface ViewStateSelectedOption {
   text: PlainTextField;

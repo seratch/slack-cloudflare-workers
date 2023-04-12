@@ -14,7 +14,7 @@ import {
   Timepicker,
   URLInput,
 } from "./block-elements";
-import { PlainTextField, TextField } from "./texts";
+import { PlainTextField, TextField } from "./text-fields";
 
 // -----------------------------
 // Basic types

@@ -1,6 +1,6 @@
 import { Confirm } from "../../block-kit/confirm";
 import { Option } from "../../block-kit/options";
-import { PlainTextField } from "../../block-kit/texts";
+import { PlainTextField } from "../../block-kit/text-fields";
 import { DataSubmissionView, ViewStateValue } from "./view-objects";
 
 export interface BlockAction<A extends BlockElementAction> {
