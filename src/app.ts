@@ -24,6 +24,7 @@ import { ResponseUrlSender } from "./utility/response-url-sender";
 import {
   builtBaseContext,
   SlackAppContext,
+  SlackAppContextWithChannelId,
   SlackAppContextWithRespond,
 } from "./context/context";
 import { PreAuthorizeMiddleware, Middleware } from "./middleware/middleware";
@@ -57,6 +58,7 @@ import {
 import { singleTeamAuthorize } from "./authorization/single-team-authorize";
 import { ExecutionContext } from "./execution-context";
 import { PayloadType } from "./request/payload-types";
+import { isPostedMessageEvent } from "./utility/message-events";
 
 export interface SlackAppOptions<E extends SlackAppEnv> {
   env: E;
@@ -199,12 +201,7 @@ export class SlackApp<E extends SlackAppEnv> {
       ) {
         return null;
       }
-      if (
-        body.event.subtype === undefined ||
-        body.event.subtype === "bot_message" ||
-        body.event.subtype === "thread_broadcast" ||
-        body.event.subtype === "file_share"
-      ) {
+      if (isPostedMessageEvent(body.event)) {
         let matched = true;
         if (pattern !== undefined) {
           if (typeof pattern === "string") {
@@ -539,6 +536,15 @@ export class SlackApp<E extends SlackAppEnv> {
         botUserId: authorizeResult.botUserId,
         userToken: authorizeResult.userToken,
       };
+      if (authorizedContext.channelId) {
+        const context = authorizedContext as SlackAppContextWithChannelId;
+        const client = new SlackAPIClient(context.botToken);
+        context.say = async (params) =>
+          await client.chat.postMessage({
+            channel: context.channelId,
+            ...params,
+          });
+      }
       if (authorizedContext.responseUrl) {
         const responseUrl = authorizedContext.responseUrl;
         (authorizedContext as SlackAppContextWithRespond).respond = async (
@@ -740,7 +746,10 @@ export type MessageEventPattern = string | RegExp | undefined;
 export type MessageEventRequest<
   E extends SlackAppEnv,
   ST extends string | undefined
-> = SlackRequest<E, Extract<MessageEvents, { subtype: ST }>>;
+> = SlackRequestWithChannelId<
+  E,
+  Extract<SlackEventsWithChannelId, { subtype: ST }>
+>;
 
 export type MessageEventSubtypes =
   | undefined

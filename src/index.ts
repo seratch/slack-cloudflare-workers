@@ -69,4 +69,5 @@ export * from "./response/response";
 export * from "./client/api-client";
 export * from "./utility/debug-logging";
 export * from "./utility/response-url-sender";
+export * from "./utility/message-events";
 export * from "./utility/kv";

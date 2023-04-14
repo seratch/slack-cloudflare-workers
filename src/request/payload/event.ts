@@ -9,7 +9,6 @@ export type SlackEvents =
   | AppMentionEvent
   | AppRateLimitedEvent
   | AppUninstalledEvent
-  | CallRejectedEvent
   | ChannelArchiveEvent
   | ChannelCreatedEvent
   | ChannelDeletedEvent
@@ -83,11 +82,13 @@ export type SlackEvents =
 
 // These union types may not be a complete set of events
 export type SlackEventsWithChannelId =
+  | AppHomeOpenedEvent
   | AppMentionEvent
-  | CallRejectedEvent
+  | AppUninstalledEvent
   | ChannelArchiveEvent
   | ChannelCreatedEvent
   | ChannelDeletedEvent
+  | ChannelIDChangedEvent
   | ChannelLeftEvent
   | ChannelRenameEvent
   | ChannelSharedEvent
@@ -105,13 +106,22 @@ export type SlackEventsWithChannelId =
   | IMCloseEvent
   | IMCreatedEvent
   | IMOpenEvent
+  | InviteRequestedEvent
   | LinkSharedEvent
   | MemberJoinedChannelEvent
   | MemberLeftChannelEvent
+  | MessageEvents
+  | MessageMetadataEvents
   | PinAddedEvent
   | PinRemovedEvent
-  | GenericMessageEvent
-  | MessageMetadataEvents;
+  | ReactionAddedEvent
+  | ReactionRemovedEvent
+  | SharedChannelInviteReceivedEvent
+  | SharedChannelInviteAcceptedEvent
+  | SharedChannelInviteApprovedEvent
+  | SharedChannelInviteDeclinedEvent
+  | StarAddedEvent
+  | StarRemovedEvent;
 
 export interface SlackEvent<Type extends string> {
   type: Type;
@@ -182,7 +192,7 @@ export interface AppHomeOpenedEvent extends SlackEvent<"app_home_opened"> {
   type: "app_home_opened";
   user: string;
   channel: string;
-  tab?: "home" | "messages";
+  tab: "home" | "messages";
   view?: HomeTabView;
   event_ts: string;
 }
@@ -218,14 +228,6 @@ export interface AppRateLimitedEvent extends SlackEvent<"app_rate_limited"> {
 
 export interface AppUninstalledEvent extends SlackEvent<"app_uninstalled"> {
   type: "app_uninstalled";
-}
-
-export interface CallRejectedEvent extends SlackEvent<"call_rejected"> {
-  type: "call_rejected";
-  call_id: string;
-  user_id: string;
-  channel_id: string;
-  external_unique_id: string;
 }
 
 export interface ChannelArchiveEvent extends SlackEvent<"channel_archive"> {
@@ -656,14 +658,14 @@ export interface SharedChannelInviteReceivedEvent
 export interface StarAddedEvent extends SlackEvent<"star_added"> {
   type: "star_added";
   user: string;
-  item: any; // TODO
+  item: StarItem;
   event_ts: string;
 }
 
 export interface StarRemovedEvent extends SlackEvent<"star_removed"> {
   type: "star_removed";
   user: string;
-  item: any; // TODO
+  item: StarItem;
   event_ts: string;
 }
 
@@ -1158,7 +1160,7 @@ export interface GenericMessageEvent extends SlackEvent<"message"> {
   user: string;
   bot_id?: string;
   bot_profile?: BotProfile;
-  text?: string;
+  text: string;
   ts: string;
   thread_ts?: string;
   channel_type: ChannelTypes;
@@ -1467,33 +1469,13 @@ export interface BotProfile {
   deleted: boolean;
 }
 
-export interface PinnedMessageItem {
-  client_msg_id?: string;
-  type: string;
-  app_id?: string;
-  team?: string;
-  user: string;
-  bot_id?: string;
-  bot_profile?: BotProfile;
-  text?: string;
-  attachments?: MessageAttachment[];
-  blocks?: AnyMessageBlock[];
-  pinned_to?: string[];
-  permalink: string;
-}
-
-export interface PinnedFileItem {
-  id: string;
-  // TODO: Add all other possible properties here
-}
-
 export interface PinnedItem {
   type: string;
   channel: string;
   created_by: string;
   created: number;
-  message?: PinnedMessageItem;
-  file?: PinnedFileItem;
+  message?: MessageItem;
+  file?: FileItem;
 }
 
 export interface SharedChannelTeamItem {
@@ -1526,6 +1508,7 @@ export interface SharedChannelUserItem {
     image_512: string;
   };
 }
+
 export interface SharedChannelInviteItem {
   id: string;
   date_created: number;
@@ -1584,4 +1567,365 @@ export interface ReactionFileItem {
   type: "file";
   channel: string;
   file: string;
+}
+
+export interface StarItem {
+  date_create: number;
+  type: string;
+  channel?: string;
+  file?: FileItem;
+  message?: MessageItem;
+  comment?: {
+    channel?: string;
+    comment?: string;
+    created?: number;
+    id?: string;
+    is_intro?: boolean;
+    is_starred?: boolean;
+    num_stars?: number;
+    timestamp?: number;
+    user?: string;
+  };
+}
+
+export interface FileItem {
+  alt_txt?: string;
+  app_id?: string;
+  app_name?: string;
+  bot_id?: string;
+  cc?: EmailAddress[];
+  channel_actions_count?: number;
+  channel_actions_ts?: string;
+  channels?: string[];
+  comments_count?: number;
+  converted_pdf?: string;
+  created: number;
+  deanimate?: string;
+  deanimate_gif?: string;
+  display_as_bot?: boolean;
+  duration_ms?: number;
+  edit_link?: string;
+  editable?: boolean;
+  editor?: string;
+  external_id?: string;
+  external_type?: string;
+  external_url?: string;
+  file_access?: string;
+  filetype: string;
+  from?: EmailAddress[];
+  groups?: string[];
+  has_more?: boolean;
+  has_more_shares?: boolean;
+  has_rich_preview?: boolean;
+  headers?: EmailHeaders;
+  hls?: string;
+  hls_embed?: string;
+  id?: string;
+  image_exif_rotation?: number;
+  ims?: string[];
+  initial_comment?: Comment;
+  is_external?: boolean;
+  is_public?: boolean;
+  is_starred?: boolean;
+  last_editor?: string;
+  lines?: number;
+  lines_more?: number;
+  media_display_type?: string;
+  media_progress?: SlackVideoMediaProgress;
+  mimetype?: string;
+  mode?: string;
+  mp4?: string;
+  name: string;
+  non_owner_editable?: boolean;
+  num_stars?: number;
+  original_attachment_count?: number;
+  original_h?: string;
+  original_w?: string;
+  permalink: string;
+  permalink_public?: string;
+  pinned_to?: string[];
+  pjpeg?: string;
+  plain_text?: string;
+  pretty_type?: string;
+  preview?: string;
+  preview_highlight?: string;
+  preview_is_truncated?: boolean;
+  preview_plain_text?: string;
+  public_url_shared?: boolean;
+  reactions?: Reaction[];
+  sent_to_self?: boolean;
+  shares?: FileShares;
+  simplified_html?: string;
+  size?: number;
+  source_team?: string;
+  subject?: string;
+  subtype?: string;
+  thumb_1024?: string;
+  thumb_1024_gif?: string;
+  thumb_1024_h?: string;
+  thumb_1024_w?: string;
+  thumb_160?: string;
+  thumb_160_gif?: string;
+  thumb_160_h?: string;
+  thumb_160_w?: string;
+  thumb_360?: string;
+  thumb_360_gif?: string;
+  thumb_360_h?: string;
+  thumb_360_w?: string;
+  thumb_480?: string;
+  thumb_480_gif?: string;
+  thumb_480_h?: string;
+  thumb_480_w?: string;
+  thumb_64?: string;
+  thumb_64_gif?: string;
+  thumb_64_h?: string;
+  thumb_64_w?: string;
+  thumb_720?: string;
+  thumb_720_gif?: string;
+  thumb_720_h?: string;
+  thumb_720_w?: string;
+  thumb_80?: string;
+  thumb_800?: string;
+  thumb_800_gif?: string;
+  thumb_800_h?: string;
+  thumb_800_w?: string;
+  thumb_80_gif?: string;
+  thumb_80_h?: string;
+  thumb_80_w?: string;
+  thumb_960?: string;
+  thumb_960_gif?: string;
+  thumb_960_h?: string;
+  thumb_960_w?: string;
+  thumb_gif?: string;
+  thumb_pdf?: string;
+  thumb_pdf_h?: string;
+  thumb_pdf_w?: string;
+  thumb_tiny?: string;
+  thumb_video?: string;
+  thumb_video_h?: number;
+  thumb_video_w?: number;
+  timestamp?: number;
+  title?: string;
+  to?: EmailAddress[];
+  transcription?: FileTranscription;
+  updated?: number;
+  url_private: string;
+  url_private_download: string;
+  user: string;
+  user_team: string;
+  username: string;
+  vtt?: string;
+}
+
+export interface EmailAddress {
+  address: string;
+  name: string;
+  original: string;
+}
+
+export interface EmailHeaders {
+  date: string;
+  in_reply_to: string;
+  message_id: string;
+  reply_to: string;
+}
+
+export interface SlackVideoMediaProgress {
+  duration_ms: number;
+  max_offset_ms: number;
+  offset_ms: number;
+}
+
+export interface Reaction {
+  count: number;
+  name: string;
+  url: string;
+  users: string[];
+}
+
+export interface FileShares {
+  private?: { [key: string]: ShareDetails[] };
+  public?: { [key: string]: ShareDetails[] };
+}
+
+export interface ShareDetails {
+  share_user_id: string;
+  team_id: string;
+  channel_name: string;
+  ts: string;
+  latest_reply?: string;
+  reply_count?: number;
+  reply_users?: string[];
+  reply_users_count?: number;
+  thread_ts?: string;
+}
+
+export interface FileTranscription {
+  locale: string;
+  status: string;
+}
+
+export interface MessageItem {
+  attachments?: MessageAttachment[];
+  blocks?: AnyMessageBlock[];
+  bot_id?: string;
+  bot_profile?: BotProfile;
+  client_msg_id: string;
+  display_as_bot?: boolean;
+  edited?: MessageEdited;
+  files?: FileElement[];
+  inviter?: string;
+  is_locked?: boolean;
+  is_starred?: boolean;
+  last_read?: string;
+  latest_reply?: string;
+  permalink: string;
+  reactions?: Reaction[];
+  reply_count?: number;
+  reply_users?: string[];
+  reply_users_count?: number;
+  subscribed?: boolean;
+  subtype?: string;
+  team: string;
+  text: string;
+  thread_ts?: string;
+  ts: string;
+  type: string;
+  upload?: boolean;
+  user: string;
+  username: string;
+}
+
+export interface MessageEdited {
+  ts: string;
+  user: string;
+}
+
+export interface FileElement {
+  alt_txt?: string;
+  app_id?: string;
+  app_name?: string;
+  bot_id?: string;
+  cc?: EmailAddress[];
+  channel_actions_count?: number;
+  channel_actions_ts?: string;
+  channels?: string[];
+  comments_count?: number;
+  converted_pdf?: string;
+  created?: number;
+  deanimate?: string;
+  deanimate_gif?: string;
+  display_as_bot?: boolean;
+  duration_ms?: number;
+  edit_link?: string;
+  editable?: boolean;
+  editor?: string;
+  external_id?: string;
+  external_type?: string;
+  external_url?: string;
+  file_access?: string;
+  filetype?: string;
+  from?: EmailAddress[];
+  groups?: string[];
+  has_more?: boolean;
+  has_more_shares?: boolean;
+  has_rich_preview?: boolean;
+  headers?: Headers;
+  hls?: string;
+  hls_embed?: string;
+  id?: string;
+  image_exif_rotation?: number;
+  ims?: string[];
+  initial_comment?: Comment;
+  is_external: boolean;
+  is_public: boolean;
+  is_starred?: boolean;
+  last_editor?: string;
+  lines?: number;
+  lines_more?: number;
+  media_display_type?: string;
+  media_progress?: SlackVideoMediaProgress;
+  mimetype: string;
+  mode?: string;
+  mp4?: string;
+  name: string;
+  non_owner_editable?: boolean;
+  num_stars?: number;
+  original_attachment_count?: number;
+  original_h?: string;
+  original_w?: string;
+  permalink: string;
+  permalink_public?: string;
+  pinned_to?: string[];
+  pjpeg?: string;
+  plain_text?: string;
+  pretty_type?: string;
+  preview?: string;
+  preview_highlight?: string;
+  preview_is_truncated?: boolean;
+  preview_plain_text?: string;
+  public_url_shared?: boolean;
+  reactions?: Reaction[];
+  sent_to_self?: boolean;
+  shares?: FileShares;
+  simplified_html?: string;
+  size?: number;
+  source_team?: string;
+  subject?: string;
+  subtype?: string;
+  thumb_1024?: string;
+  thumb_1024_gif?: string;
+  thumb_1024_h?: string;
+  thumb_1024_w?: string;
+  thumb_160?: string;
+  thumb_160_gif?: string;
+  thumb_160_h?: string;
+  thumb_160_w?: string;
+  thumb_360?: string;
+  thumb_360_gif?: string;
+  thumb_360_h?: string;
+  thumb_360_w?: string;
+  thumb_480?: string;
+  thumb_480_gif?: string;
+  thumb_480_h?: string;
+  thumb_480_w?: string;
+  thumb_64?: string;
+  thumb_64_gif?: string;
+  thumb_64_h?: string;
+  thumb_64_w?: string;
+  thumb_720?: string;
+  thumb_720_gif?: string;
+  thumb_720_h?: string;
+  thumb_720_w?: string;
+  thumb_80?: string;
+  thumb_800?: string;
+  thumb_800_gif?: string;
+  thumb_800_h?: string;
+  thumb_800_w?: string;
+  thumb_80_gif?: string;
+  thumb_80_h?: string;
+  thumb_80_w?: string;
+  thumb_960?: string;
+  thumb_960_gif?: string;
+  thumb_960_h?: string;
+  thumb_960_w?: string;
+  thumb_gif?: string;
+  thumb_pdf?: string;
+  thumb_pdf_h?: string;
+  thumb_pdf_w?: string;
+  thumb_tiny?: string;
+  thumb_video?: string;
+  thumb_video_h?: number;
+  thumb_video_w?: number;
+  timestamp: number;
+  title: string;
+  to?: EmailAddress[];
+  transcription?: FileTranscription;
+  updated?: number;
+  url_private: string;
+  url_private_download: string;
+  user: string;
+  user_team: string;
+  username: string;
+  vtt?: string;
 }

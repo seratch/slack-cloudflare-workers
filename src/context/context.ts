@@ -1,5 +1,7 @@
 import { AuthorizeResult } from "../authorization/authorize-result";
 import { SlackAPIClient } from "../client/api-client";
+import { ChatPostMessageResponse } from "../client/generated-response";
+import { ChatPostMessageRequest } from "../client/request";
 import { ResponseUrlParams } from "../utility/response-url-sender";
 
 export interface PreAuthorizeSlackAppContext {
@@ -28,6 +30,9 @@ export type SlackAppContext = {
 
 export type SlackAppContextWithChannelId = {
   channelId: string;
+  say: (
+    params: Omit<ChatPostMessageRequest, "channel">
+  ) => Promise<ChatPostMessageResponse>;
 } & SlackAppContext;
 
 export type SlackAppContextWithRespond = {

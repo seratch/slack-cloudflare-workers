@@ -3,7 +3,7 @@
 If you haven't set up your project yet, please go through the steps [here](./index.md) first. With the project set up, it's time to dive into the code. Open `src/index.ts` and modify the source code as follows:
 
 ```typescript
-import { SlackApp, SlackAppEnv } from "slack-cloudflare-workers";
+import { SlackApp, SlackAppEnv, isPostedMessageEvent } from "slack-cloudflare-workers";
 
 export default {
   async fetch(
@@ -44,8 +44,13 @@ export default {
           ],
         });
       })
+      .message("Hello", async ({ context }) => {
+        await context.say({ text: "Hey!" });
+      })
       .event("message", async ({ payload }) => {
-        console.log(`New message: ${payload.text}`);
+        if (isPostedMessageEvent(payload)) {
+          console.log(`New message: ${payload.text}`);
+        }
       })
       .action(
         "button-action",

@@ -1,4 +1,8 @@
-import { SlackApp, SlackAppEnv } from "../../../src/index";
+import {
+  SlackApp,
+  SlackAppEnv,
+  isPostedMessageEvent,
+} from "../../../src/index";
 
 export default {
   async fetch(
@@ -39,8 +43,13 @@ export default {
           ],
         });
       })
+      .message("Hello", async ({ context }) => {
+        await context.say({ text: "Hey!" });
+      })
       .event("message", async ({ payload }) => {
-        console.log(`New message: ${payload.text}`);
+        if (isPostedMessageEvent(payload)) {
+          console.log(`New message: ${payload.text}`);
+        }
       })
       .action(
         "button-action",
