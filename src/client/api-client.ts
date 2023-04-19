@@ -465,8 +465,11 @@ export class SlackAPIClient {
       headers,
       body,
     });
-    const result: SlackAPIResponse =
-      (await response.json()) as SlackAPIResponse;
+    const responseBody = await response.json();
+    const result: SlackAPIResponse = {
+      ...responseBody,
+      headers: response.headers,
+    } as SlackAPIResponse;
     if (isDebugLogEnabled(this.#env)) {
       console.log(`Slack API response (${name}): ${JSON.stringify(result)}}`);
     }
@@ -647,6 +650,10 @@ export class SlackAPIClient {
         AdminConversationsLookupRequest,
         AdminConversationsLookupResponse
       >(this, "admin.conversations.lookup"),
+      search: this.bindApiCall<
+        AdminConversationsSearchRequest,
+        AdminConversationsSearchResponse
+      >(this, "admin.conversations.search"),
       setConversationPrefs: this.bindApiCall<
         AdminConversationsSetConversationPrefsRequest,
         AdminConversationsSetConversationPrefsResponse
