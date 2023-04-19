@@ -46,12 +46,14 @@ export interface SlackOAuthAppOptions<E extends SlackOAuthEnv> {
     afterInstallation?: AfterInstallation;
     onFailure?: OnFailure;
     onStateValidationError?: OnStateValidationError;
+    redirectUri?: string;
   };
   oidc?: {
     stateCookieName?: string;
     callback: OpenIDConnectCallback;
     onFailure?: OnFailure;
     onStateValidationError?: OnStateValidationError;
+    redirectUri?: string;
   };
   routes?: {
     events: string;
@@ -70,12 +72,14 @@ export class SlackOAuthApp<E extends SlackOAuthEnv> extends SlackApp<E> {
     afterInstallation?: AfterInstallation;
     onFailure: OnFailure;
     onStateValidationError: OnStateValidationError;
+    redirectUri?: string;
   };
   public oidc?: {
     stateCookieName?: string;
     callback: OpenIDConnectCallback;
     onFailure: OnFailure;
     onStateValidationError: OnStateValidationError;
+    redirectUri?: string;
   };
   public routes: {
     events: string;
@@ -98,6 +102,7 @@ export class SlackOAuthApp<E extends SlackOAuthEnv> extends SlackApp<E> {
       onFailure: options.oauth?.onFailure ?? defaultOnFailure,
       onStateValidationError:
         options.oauth?.onStateValidationError ?? defaultOnStateValidationError,
+      redirectUri: options.oauth?.redirectUri ?? this.env.SLACK_REDIRECT_URI,
     };
     if (options.oidc) {
       this.oidc = {
@@ -106,6 +111,8 @@ export class SlackOAuthApp<E extends SlackOAuthEnv> extends SlackApp<E> {
         onStateValidationError:
           options.oidc.onStateValidationError ?? defaultOnStateValidationError,
         callback: defaultOpenIDConnectCallback(this.env),
+        redirectUri:
+          options.oidc.redirectUri ?? this.env.SLACK_OIDC_REDIRECT_URI,
       };
     } else {
       this.oidc = undefined;
@@ -193,7 +200,7 @@ export class SlackOAuthApp<E extends SlackOAuthEnv> extends SlackApp<E> {
       oauthAccess = await client.oauth.v2.access({
         client_id: this.env.SLACK_CLIENT_ID,
         client_secret: this.env.SLACK_CLIENT_SECRET,
-        redirect_uri: this.env.SLACK_REDIRECT_URI,
+        redirect_uri: this.oauth.redirectUri,
         code,
       });
     } catch (e) {
@@ -291,7 +298,7 @@ export class SlackOAuthApp<E extends SlackOAuthEnv> extends SlackApp<E> {
         await client.openid.connect.token({
           client_id: this.env.SLACK_CLIENT_ID,
           client_secret: this.env.SLACK_CLIENT_SECRET,
-          redirect_uri: this.env.SLACK_OIDC_REDIRECT_URI,
+          redirect_uri: this.oidc.redirectUri,
           code,
         });
       return await this.oidc.callback(apiResponse, request);
