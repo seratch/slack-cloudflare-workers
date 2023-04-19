@@ -193,6 +193,7 @@ export class SlackOAuthApp<E extends SlackOAuthEnv> extends SlackApp<E> {
       oauthAccess = await client.oauth.v2.access({
         client_id: this.env.SLACK_CLIENT_ID,
         client_secret: this.env.SLACK_CLIENT_SECRET,
+        redirect_uri: this.env.SLACK_REDIRECT_URI,
         code,
       });
     } catch (e) {
