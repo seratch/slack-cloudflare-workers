@@ -29,6 +29,8 @@ export interface Usergroup {
   prefs?: Prefs;
   team_id?: string;
   updated_by?: string;
+  user_count?: number;
+  users?: string[];
 }
 
 export interface Prefs {

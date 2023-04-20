@@ -65,6 +65,10 @@ Dir.glob(__dir__ + '/../tmp/java-slack-sdk/json-logs/samples/api/*').sort.each d
       next
     elsif filename == "oauth.token"
       next
+    elsif filename.start_with? "rtm."
+      next
+    elsif filename.start_with? "files.comments."
+      next
     elsif filename.start_with? "dialog."
       next
     elsif filename.start_with? "calls."
