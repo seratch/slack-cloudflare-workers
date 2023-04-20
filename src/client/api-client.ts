@@ -134,7 +134,6 @@ import {
   DndSetSnoozeRequest,
   DndTeamInfoRequest,
   EmojiListRequest,
-  FilesCommentsDeleteRequest,
   FilesCompleteUploadExternalRequest,
   FilesDeleteRequest,
   FilesGetUploadURLExternalRequest,
@@ -157,8 +156,6 @@ import {
   PinsAddRequest,
   PinsListRequest,
   PinsRemoveRequest,
-  RTMConnectRequest,
-  RTMStartRequest,
   ReactionsAddRequest,
   ReactionsGetRequest,
   ReactionsListRequest,
@@ -343,7 +340,6 @@ import {
   FilesUploadResponse,
   FilesGetUploadURLExternalResponse,
   FilesCompleteUploadExternalResponse,
-  FilesCommentsDeleteResponse,
   FilesRemoteInfoResponse,
   FilesRemoteListResponse,
   FilesRemoteAddResponse,
@@ -367,8 +363,6 @@ import {
   RemindersDeleteResponse,
   RemindersInfoResponse,
   RemindersListResponse,
-  RtmConnectResponse,
-  RtmStartResponse,
   SearchAllResponse,
   SearchFilesResponse,
   SearchMessagesResponse,
@@ -1135,12 +1129,6 @@ export class SlackAPIClient {
       FilesCompleteUploadExternalRequest,
       FilesCompleteUploadExternalResponse
     >(this, "files.completeUploadExternal"),
-    comments: {
-      delete: this.bindApiCall<
-        FilesCommentsDeleteRequest,
-        FilesCommentsDeleteResponse
-      >(this, "files.comments.delete"),
-    },
     remote: {
       info: this.bindApiCall<FilesRemoteInfoRequest, FilesRemoteInfoResponse>(
         this,
@@ -1253,17 +1241,6 @@ export class SlackAPIClient {
     list: this.bindApiCall<RemindersListRequest, RemindersListResponse>(
       this,
       "reminders.list"
-    ),
-  };
-
-  public readonly rtm = {
-    connect: this.bindApiCall<RTMConnectRequest, RtmConnectResponse>(
-      this,
-      "rtm.connect"
-    ),
-    start: this.bindApiCall<RTMStartRequest, RtmStartResponse>(
-      this,
-      "rtm.start"
     ),
   };
 
