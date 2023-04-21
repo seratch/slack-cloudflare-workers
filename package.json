@@ -1,6 +1,6 @@
 {
   "name": "slack-cloudflare-workers",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Slack app development framework for Cloudflare Workers",
   "main": "dist/index.js",
   "scripts": {
