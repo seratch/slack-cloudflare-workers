@@ -74,8 +74,9 @@ Then, create a new file named `.dev.vars` and include the valid variables:
 SLACK_SIGNING_SECRET=...
 SLACK_CLIENT_ID=...
 SLACK_CLIENT_SECRET=...
-
+SLACK_BOT_SCOPES=chat:write,app_mentions:read
 # Optional
+SLACK_USER_SCOPES=search:read
 SLACK_REDIRECT_URI=https://your-domain.ngrok.io/slack/oauth_redirect
 SLACK_OIDC_REDIRECT_URI=https://your-domain.ngrok.io/slack/login/callback
 ```
@@ -97,7 +98,9 @@ wrangler publish
 wrangler secret put SLACK_SIGNING_SECRET
 wrangler secret put SLACK_CLIENT_ID
 wrangler secret put SLACK_CLIENT_SECRET
-
+wrangler secret put SLACK_BOT_SCOPES
+# Optional: this is necessary only when you need to do something on behalf of users
+wrangler secret put SLACK_USER_SCOPES
 # Optional: this is necessary when you have multiple redirect URIs
 wrangler secret put SLACK_REDIRECT_URI
 # Optional: this is necessary only when you enable "Sign in with Slack (OpenID Connect)"
