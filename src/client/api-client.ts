@@ -443,6 +443,9 @@ export class SlackAPIClient {
       if (typeof value === "object") {
         _params[key] = JSON.stringify(value);
       }
+      if (value === undefined || value === null) {
+        delete _params[key];
+      }
     }
     const headers: Record<string, string> = {
       "Content-Type": "application/x-www-form-urlencoded",
