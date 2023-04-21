@@ -15,6 +15,7 @@ export type SlackOAuthEnv = SlackAppEnv & {
   SLACK_REDIRECT_URI?: string;
   SLACK_OIDC_SCOPES?: string;
   SLACK_OIDC_REDIRECT_URI?: string;
+  SLACK_USER_TOKEN_RESOLUTION?: "installer" | "actor";
 };
 
 export type SlackOIDCEnv = SlackAppEnv & {

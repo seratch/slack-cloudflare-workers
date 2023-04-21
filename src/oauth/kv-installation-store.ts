@@ -1,4 +1,4 @@
-import { AuthorizeError, TokenRotationError } from "../errors";
+import { AuthorizeError } from "../errors";
 import { SlackAPIClient } from "../client/api-client";
 import { AuthTestResponse } from "../client/generated-response";
 import { Installation } from "./installation";
@@ -81,6 +81,18 @@ export class KVInstallationStore<E extends SlackOAuthEnv>
 
         const botClient = new SlackAPIClient(bot?.bot_token, this.#env);
         const botAuthTest: AuthTestResponse = await botClient.auth.test();
+        const botScopes =
+          botAuthTest.headers.get("x-oauth-scopes")?.split(",") ??
+          bot?.bot_scopes ??
+          [];
+
+        const userQuery: InstallationStoreQuery = {};
+        Object.assign(userQuery, query);
+        if (this.#env.SLACK_USER_TOKEN_RESOLUTION !== "installer") {
+          userQuery.enterpriseId = req.context.actorEnterpriseId;
+          userQuery.teamId = req.context.actorTeamId;
+          userQuery.userId = req.context.actorUserId;
+        }
         const user = await this.findUserInstallation(query);
         if (user && user.user_refresh_token) {
           const maybeRefreshed = await this.#tokenRotator.performRotation(user);
@@ -88,10 +100,6 @@ export class KVInstallationStore<E extends SlackOAuthEnv>
             await this.save(maybeRefreshed);
           }
         }
-        const botScopes =
-          botAuthTest.headers.get("x-oauth-scopes")?.split(",") ??
-          bot?.bot_scopes ??
-          [];
 
         return {
           enterpriseId: bot?.enterprise_id,
