@@ -44,7 +44,9 @@ export type SlackAppContextWithOptionalRespond = {
   respond?: (params: ResponseUrlParams) => Promise<Response>;
 } & SlackAppContext;
 
-export function builtBaseContext(body: any): PreAuthorizeSlackAppContext {
+export function builtBaseContext(
+  body: Record<string, any>
+): PreAuthorizeSlackAppContext {
   return {
     isEnterpriseinstall: extractIsEnterpriseInstall(body),
     enterpriseId: extractEnterpriseId(body),
@@ -61,7 +63,9 @@ export function builtBaseContext(body: any): PreAuthorizeSlackAppContext {
   };
 }
 
-export function extractIsEnterpriseInstall(body: any): boolean | undefined {
+export function extractIsEnterpriseInstall(
+  body: Record<string, any>
+): boolean | undefined {
   if (body.authorizations && body.authorizations.length > 0) {
     return body.authorizations[0].is_enterprise_install;
   } else if (body.is_enterprise_install) {
@@ -74,7 +78,9 @@ export function extractIsEnterpriseInstall(body: any): boolean | undefined {
   return undefined;
 }
 
-export function extractEnterpriseId(body: any): string | undefined {
+export function extractEnterpriseId(
+  body: Record<string, any>
+): string | undefined {
   if (body.enterprise) {
     if (typeof body.enterprise === "string") {
       return body.enterprise;
@@ -97,7 +103,7 @@ export function extractEnterpriseId(body: any): string | undefined {
   return undefined;
 }
 
-export function extractTeamId(body: any): string | undefined {
+export function extractTeamId(body: Record<string, any>): string | undefined {
   if (body.view && body.view.app_installed_team_id) {
     // view_submission payloads can have `view.app_installed_team_id`
     // when a modal view that was opened in a different workspace via some operations inside a Slack Connect channel.
@@ -126,7 +132,7 @@ export function extractTeamId(body: any): string | undefined {
   return undefined;
 }
 
-export function extractUserId(body: any): string | undefined {
+export function extractUserId(body: Record<string, any>): string | undefined {
   if (body.user) {
     if (typeof body.user === "string") {
       return body.user;
@@ -146,7 +152,9 @@ export function extractUserId(body: any): string | undefined {
   return undefined;
 }
 
-export function extractActorEnterpriseId(body: any): string | undefined {
+export function extractActorEnterpriseId(
+  body: Record<string, any>
+): string | undefined {
   if (body.is_ext_shared_channel) {
     if (body.type === "event_callback") {
       const eventTeamId = body.event?.user_team || body.event?.team;
@@ -160,7 +168,9 @@ export function extractActorEnterpriseId(body: any): string | undefined {
   return extractEnterpriseId(body);
 }
 
-export function extractActorTeamId(body: any): string | undefined {
+export function extractActorTeamId(
+  body: Record<string, any>
+): string | undefined {
   if (body.is_ext_shared_channel) {
     if (body.type === "event_callback") {
       const eventType = body.event.type;
@@ -207,7 +217,9 @@ export function extractActorTeamId(body: any): string | undefined {
   return extractTeamId(body);
 }
 
-export function extractActorUserId(body: any): string | undefined {
+export function extractActorUserId(
+  body: Record<string, any>
+): string | undefined {
   if (body.is_ext_shared_channel) {
     if (body.type === "event_callback") {
       if (body.event) {
@@ -224,7 +236,9 @@ export function extractActorUserId(body: any): string | undefined {
   return extractUserId(body);
 }
 
-export function extractResponseUrl(body: any): string | undefined {
+export function extractResponseUrl(
+  body: Record<string, any>
+): string | undefined {
   if (body.response_url) {
     return body.response_url;
   } else if (body.response_urls && body.response_urls.length > 0) {
@@ -233,7 +247,9 @@ export function extractResponseUrl(body: any): string | undefined {
   return undefined;
 }
 
-export function extractChannelId(body: any): string | undefined {
+export function extractChannelId(
+  body: Record<string, any>
+): string | undefined {
   if (body.channel) {
     if (typeof body.channel === "string") {
       return body.channel;

@@ -88,6 +88,10 @@ export class KVInstallationStore<E extends SlackOAuthEnv>
             await this.save(maybeRefreshed);
           }
         }
+        const botScopes =
+          botAuthTest.headers.get("x-oauth-scopes")?.split(",") ??
+          bot?.bot_scopes ??
+          [];
 
         return {
           enterpriseId: bot?.enterprise_id,
@@ -96,7 +100,7 @@ export class KVInstallationStore<E extends SlackOAuthEnv>
           botId: botAuthTest.bot_id!,
           botUserId: botAuthTest.user_id!,
           botToken: bot?.bot_token!,
-          botScopes: bot?.bot_scopes,
+          botScopes,
 
           userId: user ? user.user_id : undefined,
           userToken: user?.user_token,

@@ -4,7 +4,7 @@ export interface AuthorizeResult {
   botId: string;
   botUserId: string;
   botToken: string;
-  botScopes?: string[];
+  botScopes: string[];
   userId?: string;
   userToken?: string;
   userScopes?: string[];

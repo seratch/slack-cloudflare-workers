@@ -1,7 +1,7 @@
 export async function parseRequestBody(
   requestHeaders: Headers,
   requestBody: string
-): Promise<any> {
+): Promise<Record<string, any>> {
   const contentType = requestHeaders.get("content-type");
   if (
     contentType?.startsWith("application/json") ||

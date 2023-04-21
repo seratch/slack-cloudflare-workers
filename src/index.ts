@@ -38,6 +38,7 @@ export * from "./context/context";
 export * from "./oauth-app";
 export * from "./oauth/authorize-url-generator";
 export * from "./oauth/callback";
+export * from "./oauth/escape-html";
 export * from "./oauth/installation";
 export * from "./oauth/installation-store";
 export * from "./oauth/kv-installation-store";

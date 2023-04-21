@@ -121,9 +121,7 @@ export class SlackApp<E extends SlackAppEnv> {
     this.routes = { events: options.routes?.events };
   }
 
-  middlewareBeforeAuthorize(
-    middleware: PreAuthorizeMiddleware<E>
-  ): SlackApp<E> {
+  beforeAuthorize(middleware: PreAuthorizeMiddleware<E>): SlackApp<E> {
     this.preAuthorizeMiddleware.push(middleware);
     return this;
   }
@@ -464,8 +462,8 @@ export class SlackApp<E extends SlackAppEnv> {
   ): Promise<Response> {
     // If the routes.events is missing, any URLs can work for handing requests from Slack
     if (this.routes.events) {
-      const url = new URL(request.url);
-      if (url.pathname !== this.routes.events) {
+      const { pathname } = new URL(request.url);
+      if (pathname !== this.routes.events) {
         return new Response("Not found", { status: 404 });
       }
     }
@@ -474,14 +472,14 @@ export class SlackApp<E extends SlackAppEnv> {
     // Called .text() on an HTTP body which does not appear to be text ..
     const blobRequestBody = await request.blob();
     // We can safely assume the incoming request body is always text data
-    const requestBody = await blobRequestBody.text();
+    const rawBody: string = await blobRequestBody.text();
 
     // For Request URL verification
-    if (requestBody.includes("ssl_check=")) {
+    if (rawBody.includes("ssl_check=")) {
       // Slack does not send the x-slack-signature header for this pattern.
       // Thus, we need to check the pattern before verifying a request.
-      const params = new URLSearchParams(requestBody);
-      if (params.get("ssl_check") === "1" && params.get("token")) {
+      const bodyParams = new URLSearchParams(rawBody);
+      if (bodyParams.get("ssl_check") === "1" && bodyParams.get("token")) {
         return new Response("", { status: 200 });
       }
     }
@@ -491,10 +489,13 @@ export class SlackApp<E extends SlackAppEnv> {
       await verifySlackRequest(
         this.env.SLACK_SIGNING_SECRET,
         request.headers,
-        requestBody
+        rawBody
       )
     ) {
-      const body = await parseRequestBody(request.headers, requestBody);
+      const body: Record<string, any> = await parseRequestBody(
+        request.headers,
+        rawBody
+      );
       let retryNum: number | undefined = undefined;
       try {
         const retryNumHeader = request.headers.get("x-slack-retry-num");
@@ -508,11 +509,11 @@ export class SlackApp<E extends SlackAppEnv> {
         request.headers.get("x-slack-retry-reason") ?? undefined;
       const preAuthorizeRequest: PreAuthorizeSlackMiddlwareRequest<E> = {
         body,
+        rawBody,
         retryNum,
         retryReason,
         context: builtBaseContext(body),
         env: this.env,
-        rawBody: requestBody,
         headers: request.headers,
       };
       if (isDebugLogEnabled(this.env)) {
@@ -565,6 +566,8 @@ export class SlackApp<E extends SlackAppEnv> {
         }
       }
 
+      const payload = body as SlackRequestBody;
+
       if (body.type === PayloadType.EventsAPI) {
         // Events API
         const slackRequest: SlackRequest<E, SlackEvent<string>> = {
@@ -572,7 +575,7 @@ export class SlackApp<E extends SlackAppEnv> {
           ...baseRequest,
         };
         for (const matcher of this.#events) {
-          const handler = matcher(body);
+          const handler = matcher(payload);
           if (handler) {
             ctx.waitUntil(handler.lazy(slackRequest));
             const slackResponse = await handler.ack(slackRequest);
@@ -587,11 +590,11 @@ export class SlackApp<E extends SlackAppEnv> {
       } else if (!body.type && body.command) {
         // Slash commands
         const slackRequest: SlackRequest<E, SlashCommand> = {
-          payload: body,
+          payload: body as SlashCommand,
           ...baseRequest,
         };
         for (const matcher of this.#slashCommands) {
-          const handler = matcher(body);
+          const handler = matcher(payload);
           if (handler) {
             ctx.waitUntil(handler.lazy(slackRequest));
             const slackResponse = await handler.ack(slackRequest);
@@ -606,11 +609,11 @@ export class SlackApp<E extends SlackAppEnv> {
       } else if (body.type === PayloadType.GlobalShortcut) {
         // Global shortcuts
         const slackRequest: SlackRequest<E, GlobalShortcut> = {
-          payload: body,
+          payload: body as GlobalShortcut,
           ...baseRequest,
         };
         for (const matcher of this.#globalShorcuts) {
-          const handler = matcher(body);
+          const handler = matcher(payload);
           if (handler) {
             ctx.waitUntil(handler.lazy(slackRequest));
             const slackResponse = await handler.ack(slackRequest);
@@ -625,11 +628,11 @@ export class SlackApp<E extends SlackAppEnv> {
       } else if (body.type === PayloadType.MessageShortcut) {
         // Message shortcuts
         const slackRequest: SlackRequest<E, MessageShortcut> = {
-          payload: body,
+          payload: body as MessageShortcut,
           ...baseRequest,
         };
         for (const matcher of this.#messageShorcuts) {
-          const handler = matcher(body);
+          const handler = matcher(payload);
           if (handler) {
             ctx.waitUntil(handler.lazy(slackRequest));
             const slackResponse = await handler.ack(slackRequest);
@@ -644,11 +647,11 @@ export class SlackApp<E extends SlackAppEnv> {
       } else if (body.type === PayloadType.BlockAction) {
         // Block actions
         const slackRequest: SlackRequest<E, BlockAction<any>> = {
-          payload: body,
+          payload: body as BlockAction<any>,
           ...baseRequest,
         };
         for (const matcher of this.#blockActions) {
-          const handler = matcher(body);
+          const handler = matcher(payload);
           if (handler) {
             ctx.waitUntil(handler.lazy(slackRequest));
             const slackResponse = await handler.ack(slackRequest);
@@ -663,11 +666,11 @@ export class SlackApp<E extends SlackAppEnv> {
       } else if (body.type === PayloadType.BlockSuggestion) {
         // Block suggestions
         const slackRequest: SlackRequest<E, BlockSuggestion> = {
-          payload: body,
+          payload: body as BlockSuggestion,
           ...baseRequest,
         };
         for (const matcher of this.#blockSuggestions) {
-          const handler = matcher(body);
+          const handler = matcher(payload);
           if (handler) {
             // Note that the only way to respond to a block_suggestion request
             // is to send an HTTP response with options/option_groups.
@@ -684,11 +687,11 @@ export class SlackApp<E extends SlackAppEnv> {
       } else if (body.type === PayloadType.ViewSubmission) {
         // View submissions
         const slackRequest: SlackRequest<E, ViewSubmission> = {
-          payload: body,
+          payload: body as ViewSubmission,
           ...baseRequest,
         };
         for (const matcher of this.#viewSubmissions) {
-          const handler = matcher(body);
+          const handler = matcher(payload);
           if (handler) {
             ctx.waitUntil(handler.lazy(slackRequest));
             const slackResponse = await handler.ack(slackRequest);
@@ -703,11 +706,11 @@ export class SlackApp<E extends SlackAppEnv> {
       } else if (body.type === PayloadType.ViewClosed) {
         // View closed
         const slackRequest: SlackRequest<E, ViewClosed> = {
-          payload: body,
+          payload: body as ViewClosed,
           ...baseRequest,
         };
         for (const matcher of this.#viewClosed) {
-          const handler = matcher(body);
+          const handler = matcher(payload);
           if (handler) {
             ctx.waitUntil(handler.lazy(slackRequest));
             const slackResponse = await handler.ack(slackRequest);
