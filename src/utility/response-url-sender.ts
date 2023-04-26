@@ -1,7 +1,9 @@
 import { ResponseUrlError } from "../errors";
-import { AnyMessageBlock } from "../block-kit/blocks";
-import { MessageAttachment } from "../block-kit/message-attachment";
-import { MessageMetadata } from "../block-kit/message-metadata";
+import {
+  AnyMessageBlock,
+  MessageAttachment,
+  MessageMetadata,
+} from "slack-web-api-client";
 
 export class ResponseUrlSender {
   #responseUrl: string;

@@ -1,7 +1,7 @@
 import {
   OpenIDConnectTokenResponse,
   OpenIDConnectUserInfoResponse,
-} from "../client/generated-response";
+} from "slack-web-api-client";
 
 export interface Login {
   enterprise_id?: string;

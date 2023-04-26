@@ -1,4 +1,4 @@
-import { AnyOption } from "../../block-kit/options";
+import { AnyOption } from "slack-web-api-client";
 import { DataSubmissionView } from "./view-objects";
 
 export interface BlockSuggestion {

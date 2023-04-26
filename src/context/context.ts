@@ -1,7 +1,9 @@
 import { AuthorizeResult } from "../authorization/authorize-result";
-import { SlackAPIClient } from "../client/api-client";
-import { ChatPostMessageResponse } from "../client/generated-response";
-import { ChatPostMessageRequest } from "../client/request";
+import {
+  SlackAPIClient,
+  ChatPostMessageRequest,
+  ChatPostMessageResponse,
+} from "slack-web-api-client";
 import { ResponseUrlParams } from "../utility/response-url-sender";
 
 export interface PreAuthorizeSlackAppContext {

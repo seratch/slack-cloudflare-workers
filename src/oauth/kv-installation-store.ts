@@ -1,6 +1,9 @@
 import { AuthorizeError } from "../errors";
-import { SlackAPIClient } from "../client/api-client";
-import { AuthTestResponse } from "../client/generated-response";
+import {
+  SlackAPIClient,
+  AuthTestResponse,
+  TokenRotator,
+} from "slack-web-api-client";
 import { Installation } from "./installation";
 import { SlackOAuthEnv } from "../app-env";
 import {
@@ -9,7 +12,6 @@ import {
 } from "./installation-store";
 import { Authorize } from "../authorization/authorize";
 import { KV } from "../utility/kv";
-import { TokenRotator } from "../client/token-rotator";
 
 export class KVInstallationStore<E extends SlackOAuthEnv>
   implements InstallationStore<E>
@@ -21,7 +23,10 @@ export class KVInstallationStore<E extends SlackOAuthEnv>
   constructor(env: E, namespace: KV) {
     this.#env = env;
     this.#storage = namespace;
-    this.#tokenRotator = new TokenRotator(env);
+    this.#tokenRotator = new TokenRotator({
+      clientId: env.SLACK_CLIENT_ID,
+      clientSecret: env.SLACK_CLIENT_SECRET,
+    });
   }
 
   async save(
@@ -73,13 +78,24 @@ export class KVInstallationStore<E extends SlackOAuthEnv>
       try {
         const bot = await this.findBotInstallation(query);
         if (bot && bot.bot_refresh_token) {
-          const maybeRefreshed = await this.#tokenRotator.performRotation(bot);
-          if (maybeRefreshed) {
-            await this.save(maybeRefreshed);
+          const maybeRefreshed = await this.#tokenRotator.performRotation({
+            bot: {
+              access_token: bot.bot_token!,
+              refresh_token: bot.bot_refresh_token!,
+              token_expires_at: bot.bot_token_expires_at!,
+            },
+          });
+          if (maybeRefreshed && maybeRefreshed.bot) {
+            bot.bot_token = maybeRefreshed.bot.access_token;
+            bot.bot_refresh_token = maybeRefreshed.bot.refresh_token;
+            bot.bot_token_expires_at = maybeRefreshed.bot.token_expires_at;
+            await this.save(bot);
           }
         }
 
-        const botClient = new SlackAPIClient(bot?.bot_token, this.#env);
+        const botClient = new SlackAPIClient(bot?.bot_token, {
+          logLevel: this.#env.SLACK_LOGGING_LEVEL,
+        });
         const botAuthTest: AuthTestResponse = await botClient.auth.test();
         const botScopes =
           botAuthTest.headers.get("x-oauth-scopes")?.split(",") ??
@@ -95,9 +111,18 @@ export class KVInstallationStore<E extends SlackOAuthEnv>
         }
         const user = await this.findUserInstallation(query);
         if (user && user.user_refresh_token) {
-          const maybeRefreshed = await this.#tokenRotator.performRotation(user);
-          if (maybeRefreshed) {
-            await this.save(maybeRefreshed);
+          const maybeRefreshed = await this.#tokenRotator.performRotation({
+            user: {
+              access_token: user.user_token!,
+              refresh_token: user.user_refresh_token!,
+              token_expires_at: user.user_token_expires_at!,
+            },
+          });
+          if (maybeRefreshed && maybeRefreshed.user) {
+            user.user_token = maybeRefreshed.user.access_token;
+            user.user_refresh_token = maybeRefreshed.user.refresh_token;
+            user.user_token_expires_at = maybeRefreshed.user.token_expires_at;
+            await this.save(user);
           }
         }
 

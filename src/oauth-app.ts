@@ -9,7 +9,11 @@ import {
 } from "./oauth/oauth-page-renderer";
 import { generateAuthorizeUrl } from "./oauth/authorize-url-generator";
 import { parse as parseCookie } from "cookie";
-import { SlackAPIClient } from "./client/api-client";
+import {
+  SlackAPIClient,
+  OAuthV2AccessResponse,
+  OpenIDConnectTokenResponse,
+} from "slack-web-api-client";
 import { toInstallation } from "./oauth/installation";
 import {
   AfterInstallation,
@@ -23,10 +27,6 @@ import {
   OpenIDConnectCallback,
   defaultOpenIDConnectCallback,
 } from "./oidc/callback";
-import {
-  OAuthV2AccessResponse,
-  OpenIDConnectTokenResponse,
-} from "./client/generated-response";
 import { generateOIDCAuthorizeUrl } from "./oidc/authorize-url-generator";
 import {
   InstallationError,
@@ -193,7 +193,9 @@ export class SlackOAuthApp<E extends SlackOAuthEnv> extends SlackApp<E> {
       );
     }
 
-    const client = new SlackAPIClient(undefined, this.env);
+    const client = new SlackAPIClient(undefined, {
+      logLevel: this.env.SLACK_LOGGING_LEVEL,
+    });
     let oauthAccess: OAuthV2AccessResponse | undefined;
     try {
       // Execute the installation process
@@ -293,7 +295,9 @@ export class SlackOAuthApp<E extends SlackOAuthEnv> extends SlackApp<E> {
     }
 
     try {
-      const client = new SlackAPIClient(undefined, this.env);
+      const client = new SlackAPIClient(undefined, {
+        logLevel: this.env.SLACK_LOGGING_LEVEL,
+      });
       const apiResponse: OpenIDConnectTokenResponse =
         await client.openid.connect.token({
           client_id: this.env.SLACK_CLIENT_ID,

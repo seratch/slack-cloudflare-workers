@@ -1,6 +1,9 @@
-import { AuthorizeError, SlackAPIError } from "../errors";
-import { SlackAPIClient } from "../client/api-client";
-import { AuthTestResponse } from "../client/generated-response";
+import { AuthorizeError } from "../errors";
+import {
+  SlackAPIClient,
+  AuthTestResponse,
+  SlackAPIError,
+} from "slack-web-api-client";
 import { Authorize } from "./authorize";
 
 export const singleTeamAuthorize: Authorize = async (req) => {

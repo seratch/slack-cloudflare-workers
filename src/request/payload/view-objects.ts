@@ -1,6 +1,8 @@
-import { AnyActionBlockElementType } from "../../block-kit/block-elements";
-import { AnyModalBlock } from "../../block-kit/blocks";
-import { PlainTextField } from "../../block-kit/text-fields";
+import {
+  AnyActionBlockElementType,
+  AnyModalBlock,
+  PlainTextField,
+} from "slack-web-api-client";
 
 export interface ViewStateSelectedOption {
   text: PlainTextField;

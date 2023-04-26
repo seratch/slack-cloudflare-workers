@@ -1,6 +1,4 @@
-import { Confirm } from "../../block-kit/confirm";
-import { AnyOption } from "../../block-kit/options";
-import { PlainTextField } from "../../block-kit/text-fields";
+import { Confirm, AnyOption, PlainTextField } from "slack-web-api-client";
 import { DataSubmissionView, ViewStateValue } from "./view-objects";
 
 export interface BlockAction<A extends BlockElementAction> {

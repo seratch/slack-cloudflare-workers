@@ -19,7 +19,7 @@ import {
   MessageEvents,
   SlackEventsWithChannelId,
 } from "./request/payload/event";
-import { SlackAPIClient } from "./client/api-client";
+import { SlackAPIClient } from "slack-web-api-client";
 import { ResponseUrlSender } from "./utility/response-url-sender";
 import {
   builtBaseContext,
@@ -28,7 +28,7 @@ import {
   SlackAppContextWithRespond,
 } from "./context/context";
 import { PreAuthorizeMiddleware, Middleware } from "./middleware/middleware";
-import { isDebugLogEnabled, prettyPrint } from "./utility/debug-logging";
+import { isDebugLogEnabled, prettyPrint } from "slack-web-api-client";
 import { Authorize } from "./authorization/authorize";
 import { AuthorizeResult } from "./authorization/authorize-result";
 import {
@@ -116,7 +116,9 @@ export class SlackApp<E extends SlackAppEnv> {
       );
     }
     this.env = options.env;
-    this.client = new SlackAPIClient(options.env.SLACK_BOT_TOKEN, this.env);
+    this.client = new SlackAPIClient(options.env.SLACK_BOT_TOKEN, {
+      logLevel: this.env.SLACK_LOGGING_LEVEL,
+    });
     this.authorize = options.authorize ?? singleTeamAuthorize;
     this.routes = { events: options.routes?.events };
   }
@@ -516,7 +518,7 @@ export class SlackApp<E extends SlackAppEnv> {
         env: this.env,
         headers: request.headers,
       };
-      if (isDebugLogEnabled(this.env)) {
+      if (isDebugLogEnabled(this.env.SLACK_LOGGING_LEVEL)) {
         console.log(`*** Received request body***\n ${prettyPrint(body)}`);
       }
       for (const middlware of this.preAuthorizeMiddleware) {
@@ -531,7 +533,9 @@ export class SlackApp<E extends SlackAppEnv> {
       const authorizedContext: SlackAppContext = {
         ...preAuthorizeRequest.context,
         authorizeResult,
-        client: new SlackAPIClient(authorizeResult.botToken, this.env),
+        client: new SlackAPIClient(authorizeResult.botToken, {
+          logLevel: this.env.SLACK_LOGGING_LEVEL,
+        }),
         botToken: authorizeResult.botToken,
         botId: authorizeResult.botId,
         botUserId: authorizeResult.botUserId,
@@ -579,7 +583,7 @@ export class SlackApp<E extends SlackAppEnv> {
           if (handler) {
             ctx.waitUntil(handler.lazy(slackRequest));
             const slackResponse = await handler.ack(slackRequest);
-            if (isDebugLogEnabled(this.env)) {
+            if (isDebugLogEnabled(this.env.SLACK_LOGGING_LEVEL)) {
               console.log(
                 `*** Slack response ***\n${prettyPrint(slackResponse)}`
               );
@@ -598,7 +602,7 @@ export class SlackApp<E extends SlackAppEnv> {
           if (handler) {
             ctx.waitUntil(handler.lazy(slackRequest));
             const slackResponse = await handler.ack(slackRequest);
-            if (isDebugLogEnabled(this.env)) {
+            if (isDebugLogEnabled(this.env.SLACK_LOGGING_LEVEL)) {
               console.log(
                 `*** Slack response ***\n${prettyPrint(slackResponse)}`
               );
@@ -617,7 +621,7 @@ export class SlackApp<E extends SlackAppEnv> {
           if (handler) {
             ctx.waitUntil(handler.lazy(slackRequest));
             const slackResponse = await handler.ack(slackRequest);
-            if (isDebugLogEnabled(this.env)) {
+            if (isDebugLogEnabled(this.env.SLACK_LOGGING_LEVEL)) {
               console.log(
                 `*** Slack response ***\n${prettyPrint(slackResponse)}`
               );
@@ -636,7 +640,7 @@ export class SlackApp<E extends SlackAppEnv> {
           if (handler) {
             ctx.waitUntil(handler.lazy(slackRequest));
             const slackResponse = await handler.ack(slackRequest);
-            if (isDebugLogEnabled(this.env)) {
+            if (isDebugLogEnabled(this.env.SLACK_LOGGING_LEVEL)) {
               console.log(
                 `*** Slack response ***\n${prettyPrint(slackResponse)}`
               );
@@ -655,7 +659,7 @@ export class SlackApp<E extends SlackAppEnv> {
           if (handler) {
             ctx.waitUntil(handler.lazy(slackRequest));
             const slackResponse = await handler.ack(slackRequest);
-            if (isDebugLogEnabled(this.env)) {
+            if (isDebugLogEnabled(this.env.SLACK_LOGGING_LEVEL)) {
               console.log(
                 `*** Slack response ***\n${prettyPrint(slackResponse)}`
               );
@@ -676,7 +680,7 @@ export class SlackApp<E extends SlackAppEnv> {
             // is to send an HTTP response with options/option_groups.
             // Thus, we don't support lazy handlers for this pattern.
             const slackResponse = await handler.ack(slackRequest);
-            if (isDebugLogEnabled(this.env)) {
+            if (isDebugLogEnabled(this.env.SLACK_LOGGING_LEVEL)) {
               console.log(
                 `*** Slack response ***\n${prettyPrint(slackResponse)}`
               );
@@ -695,7 +699,7 @@ export class SlackApp<E extends SlackAppEnv> {
           if (handler) {
             ctx.waitUntil(handler.lazy(slackRequest));
             const slackResponse = await handler.ack(slackRequest);
-            if (isDebugLogEnabled(this.env)) {
+            if (isDebugLogEnabled(this.env.SLACK_LOGGING_LEVEL)) {
               console.log(
                 `*** Slack response ***\n${prettyPrint(slackResponse)}`
               );
@@ -714,7 +718,7 @@ export class SlackApp<E extends SlackAppEnv> {
           if (handler) {
             ctx.waitUntil(handler.lazy(slackRequest));
             const slackResponse = await handler.ack(slackRequest);
-            if (isDebugLogEnabled(this.env)) {
+            if (isDebugLogEnabled(this.env.SLACK_LOGGING_LEVEL)) {
               console.log(
                 `*** Slack response ***\n${prettyPrint(slackResponse)}`
               );

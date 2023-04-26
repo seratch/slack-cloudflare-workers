@@ -1,4 +1,4 @@
-import { OAuthV2AccessResponse } from "../client/generated-response";
+import { OAuthV2AccessResponse } from "slack-web-api-client";
 
 export interface Installation {
   app_id: string;

@@ -1,7 +1,9 @@
-import { AnyMessageBlock } from "../../block-kit/blocks";
-import { MessageAttachment } from "../../block-kit/message-attachment";
-import { MessageMetadata } from "../../block-kit/message-metadata";
-import { HomeTabView } from "../../block-kit/views";
+import {
+  AnyMessageBlock,
+  MessageAttachment,
+  MessageMetadata,
+  HomeTabView,
+} from "slack-web-api-client";
 
 export type SlackEvents =
   | AppRequestedEvent
