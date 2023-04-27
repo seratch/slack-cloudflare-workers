@@ -125,10 +125,16 @@ export class KVInstallationStore<E extends SlackOAuthEnv>
             await this.save(user);
           }
         }
+        let userAuthTest: AuthTestResponse | undefined = undefined;
+        if (user) {
+          userAuthTest = await botClient.auth.test({ token: user.user_token });
+        }
 
         return {
           enterpriseId: bot?.enterprise_id,
           teamId: bot?.team_id,
+          team: botAuthTest.team,
+          url: botAuthTest.url,
 
           botId: botAuthTest.bot_id!,
           botUserId: botAuthTest.user_id!,
@@ -136,6 +142,7 @@ export class KVInstallationStore<E extends SlackOAuthEnv>
           botScopes,
 
           userId: user ? user.user_id : undefined,
+          user: userAuthTest?.user,
           userToken: user?.user_token,
           userScopes: user?.user_scopes,
         };

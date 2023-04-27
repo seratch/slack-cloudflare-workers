@@ -17,9 +17,12 @@ export const singleTeamAuthorize: Authorize = async (req) => {
       botToken,
       enterpriseId: response.enterprise_id,
       teamId: response.team_id,
+      team: response.team,
+      url: response.url,
       botId: response.bot_id!,
       botUserId: response.user_id!,
       userId: response.user_id,
+      user: response.user,
       botScopes: scopes.split(","),
       userToken: undefined, // As mentioned above, user tokens are not supported in this module
       userScopes: undefined, // As mentioned above, user tokens are not supported in this module

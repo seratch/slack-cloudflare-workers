@@ -16,7 +16,6 @@ import { toCompleteResponse } from "./response/response";
 import {
   SlackEvent,
   SlackEvents,
-  MessageEvents,
   SlackEventsWithChannelId,
 } from "./request/payload/event";
 import { SlackAPIClient } from "slack-web-api-client";
