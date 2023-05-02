@@ -1,5 +1,5 @@
-import { KV } from "../utility/kv";
-import { StateStore } from "./state-store";
+import { KV } from "./kv";
+import { StateStore } from "slack-edge";
 
 export class KVStateStore implements StateStore {
   #storage: KV;

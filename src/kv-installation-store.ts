@@ -1,17 +1,17 @@
-import { AuthorizeError } from "../errors";
 import {
   SlackAPIClient,
   AuthTestResponse,
   TokenRotator,
 } from "slack-web-api-client";
-import { Installation } from "./installation";
-import { SlackOAuthEnv } from "../app-env";
 import {
+  Authorize,
+  AuthorizeError,
+  Installation,
+  SlackOAuthEnv,
   InstallationStore,
   InstallationStoreQuery,
-} from "./installation-store";
-import { Authorize } from "../authorization/authorize";
-import { KV } from "../utility/kv";
+} from "slack-edge";
+import { KV } from "./kv";
 
 export class KVInstallationStore<E extends SlackOAuthEnv>
   implements InstallationStore<E>
