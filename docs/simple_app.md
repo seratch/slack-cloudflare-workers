@@ -120,11 +120,13 @@ SLACK_BOT_TOKEN=xoxb-...
 SLACK_LOGGING_LEVEL=DEBUG
 ```
 
+When you run `wrangler dev --port 3000`, your app process spins up, and it starts handling HTTP requests at `http://localhost:3000/slack/events`.
+
 Now, it's time to run the app using the [ngrok](https://ngrok.com/) proxy.
 
 ```bash
 npm start
-ngrok http 8787 --subdomain your-domain
+ngrok http 3000 --subdomain your-domain
 ```
 
 Did the app work for you? :tada: Congratulations! Your first Slack app built with Cloudflare Workers is now up and running! Add more handlers to the app to help your teammates become even more productive!
@@ -137,4 +139,4 @@ wrangler secret put SLACK_SIGNING_SECRET
 wrangler secret put SLACK_BOT_TOKEN
 ```
 
-Refer to [Cloudflware's documents](https://developers.cloudflare.com/workers/platform/deployments/) for details.
+If you need more information about Cloudflare app development, please refer to [Cloudflware's documents](https://developers.cloudflare.com/workers/platform/deployments/).
