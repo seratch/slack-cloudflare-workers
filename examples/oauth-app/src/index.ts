@@ -8,7 +8,7 @@ import {
   defaultOpenIDConnectCallback,
 } from "../../../src/index";
 
-export interface Env extends SlackOAuthAndOIDCEnv {
+type Env = SlackOAuthAndOIDCEnv & {
   SLACK_INSTALLATIONS: KV;
   SLACK_OAUTH_STATES: KV;
 }

@@ -3,12 +3,12 @@
 If you haven't set up your project yet, please go through the steps [here](./index.md) first. With the project set up, it's time to dive into the code. Open `src/index.ts` and modify the source code as follows:
 
 ```typescript
-import { SlackApp, SlackAppEnv, isPostedMessageEvent } from "slack-cloudflare-workers";
+import { SlackApp, SlackEdgeAppEnv, isPostedMessageEvent } from "slack-cloudflare-workers";
 
 export default {
   async fetch(
     request: Request,
-    env: SlackAppEnv,
+    env: SlackEdgeAppEnv,
     ctx: ExecutionContext
   ): Promise<Response> {
     const app = new SlackApp({ env })

@@ -12,7 +12,7 @@ import {
   defaultOpenIDConnectCallback, // optional
 } from "slack-cloudflare-workers";
 
-export interface Env extends SlackOAuthAndOIDCEnv {
+type Env = SlackOAuthAndOIDCEnv & {
   SLACK_INSTALLATIONS: KV;
   SLACK_OAUTH_STATES: KV;
 }

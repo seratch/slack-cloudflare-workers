@@ -1,13 +1,13 @@
 import {
   SlackApp,
-  SlackAppEnv,
+  SlackEdgeAppEnv,
   isPostedMessageEvent,
 } from "../../../src/index";
 
 export default {
   async fetch(
     request: Request,
-    env: SlackAppEnv,
+    env: SlackEdgeAppEnv,
     ctx: ExecutionContext
   ): Promise<Response> {
     const app = new SlackApp({ env })
