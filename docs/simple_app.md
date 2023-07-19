@@ -122,11 +122,11 @@ SLACK_LOGGING_LEVEL=DEBUG
 
 When you run `wrangler dev --port 3000`, your app process spins up, and it starts handling HTTP requests at `http://localhost:3000/slack/events`.
 
-Now, it's time to run the app using the [ngrok](https://ngrok.com/) proxy.
+Now, it's time to run the app using the [Cloudflare Tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/install-and-setup/tunnel-guide/local/) proxy. Once the tunnel is connected to your local app, a public URL like `https://system-guam-mpg-adequate.trycloudflare.com` should be available to use for Slack's Request URLs.
 
 ```bash
-npm start
-ngrok http 3000 --subdomain your-domain
+brew install cloudflare/cloudflare/cloudflared
+cloudflared tunnel --url http://localhost:3000
 ```
 
 Did the app work for you? :tada: Congratulations! Your first Slack app built with Cloudflare Workers is now up and running! Add more handlers to the app to help your teammates become even more productive!
