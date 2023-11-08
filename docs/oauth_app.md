@@ -29,7 +29,7 @@ export default {
       stateStore: new KVStateStore(env.SLACK_OAUTH_STATES),
       oidc: { // optional
         callback: async (token, req) => {
-          // perhaps, you may want to save the result and display a web page or redirect the user to somewhere else
+          // you can save the result, and then either display a webpage or redirect the user
           const handler = defaultOpenIDConnectCallback(env);
           return await handler(token, req);
         },

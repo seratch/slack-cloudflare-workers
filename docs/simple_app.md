@@ -12,9 +12,9 @@ export default {
     ctx: ExecutionContext
   ): Promise<Response> {
     const app = new SlackApp({ env })
-      // when the pattern matches, the framework automatically acknowledges the request
+      // When the pattern matches, the framework automatically acknowledges the request
       .event("app_mention", async ({ context }) => {
-        // You can do anything time-consuing tasks here!
+        // You can do any time-consuming tasks here!
         await context.client.chat.postMessage({
           channel: context.channelId,
           text: `:wave: <@${context.userId}> what's up?`,
@@ -54,9 +54,9 @@ export default {
       })
       .action(
         "button-action",
-        async () => {}, // complete this within 3 seconds
+        async () => {}, // Mus complete this within 3 seconds
         async ({ context }) => {
-          // You can do anything time-consuing tasks here!
+          // You can do any time-consuming tasks here!
           const { respond } = context;
           if (respond) {
             await respond({ text: "Now working on it ..." });
@@ -67,19 +67,19 @@ export default {
       )
       .command(
         "/hello-cf-workers",
-        async () => "Thanks!", // complete this within 3 seconds
+        async () => "Thanks!", // Must complete this within 3 seconds
         async ({ context }) => {
-          // You can do anything time-consuing tasks here!
+          // You can do any time-consuming tasks here!
           await context.respond({ text: "What's up?" });
         }
       )
       .shortcut(
         "hey-cf-workers",
-        async () => {}, // complete this within 3 seconds
+        async () => {}, // Must complete this within 3 seconds
         async ({ context, payload }) => {
-          // You can do anything time-consuing tasks here!
+          // You can do any time-consuming tasks here!
           await context.client.views.open({
-            // trigger_id still needs to be used within 3 seconds
+            // The trigger_id needs to be used within 3 seconds
             trigger_id: payload.trigger_id,
             view: {
               type: "modal",
@@ -94,7 +94,7 @@ export default {
       )
       .viewSubmission(
         "modal",
-        // respond within 3 seconds to update/close the opening modal
+        // Must respond within 3 seconds to update/close the opening modal
         async () => {
           return { response_action: "clear" };
         },
