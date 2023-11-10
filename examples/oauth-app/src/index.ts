@@ -11,13 +11,13 @@ import {
 type Env = SlackOAuthAndOIDCEnv & {
   SLACK_INSTALLATIONS: KV;
   SLACK_OAUTH_STATES: KV;
-}
+};
 
 export default {
   async fetch(
     request: Request,
     env: Env,
-    ctx: ExecutionContext
+    ctx: ExecutionContext,
   ): Promise<Response> {
     const app = new SlackOAuthApp({
       env,

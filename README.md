@@ -5,7 +5,7 @@
 The **slack-cloudflare-workers** library is a Slack app development framework designed specifically for **Cloudflare Workers**. This framework draws significant inspiration from Slack's [Bolt framework](https://api.slack.com/tools/bolt), but its design does not strictly follow the [bolt-js](https://github.com/slackapi/bolt-js) blueprint.
 
 ```bash
-npm i slack-cloudflare-workers
+npm i slack-cloudflare-workers@latest
 ```
 
 Key differences include:

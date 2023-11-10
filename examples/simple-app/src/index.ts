@@ -8,7 +8,7 @@ export default {
   async fetch(
     request: Request,
     env: SlackEdgeAppEnv,
-    ctx: ExecutionContext
+    ctx: ExecutionContext,
   ): Promise<Response> {
     const app = new SlackApp({ env })
       // when the pattern matches, the framework automatically acknowledges the request
@@ -62,7 +62,7 @@ export default {
             await sleep(5);
             await respond({ text: "It's done :white_check_mark:" });
           }
-        }
+        },
       )
       .command(
         "/hello-cf-workers",
@@ -70,7 +70,7 @@ export default {
         async ({ context }) => {
           // You can do anything time-consuing tasks here!
           await context.respond({ text: "What's up?" });
-        }
+        },
       )
       .shortcut(
         "hey-cf-workers",
@@ -89,9 +89,9 @@ export default {
               blocks: [],
             },
           });
-        }
+        },
       )
-      .shortcut(
+      .messageShortcut(
         "cf-workers-message",
         async () => {}, // complete this within 3 seconds
         async ({ context, payload }) => {
@@ -108,7 +108,7 @@ export default {
               blocks: [],
             },
           });
-        }
+        },
       )
       .viewSubmission(
         "modal",
@@ -119,7 +119,7 @@ export default {
         async (req) => {
           // Except updating the modal view using response_action,
           // you can asynchronously do any tasks here!
-        }
+        },
       );
     return await app.run(request, ctx);
   },

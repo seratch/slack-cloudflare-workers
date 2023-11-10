@@ -9,7 +9,7 @@ export type KV = {
     options: {
       expiration?: number; // seconds since epoch
       expirationTtl?: number; // seconds from now
-    }
+    },
   ): Promise<void>;
 
   get(key: string): Promise<string | undefined>;
@@ -26,7 +26,7 @@ export class MemoryKV implements KV {
   async putWithExpiration(
     key: string,
     value: string,
-    options: { expiration?: number; expirationTtl?: number }
+    options: { expiration?: number; expirationTtl?: number },
   ): Promise<void> {
     this.#data[key] = value;
     // TODO: implement the expiration

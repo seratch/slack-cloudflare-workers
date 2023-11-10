@@ -31,23 +31,23 @@ export class KVInstallationStore<E extends SlackOAuthEnv>
 
   async save(
     installation: Installation,
-    request: Request | undefined = undefined
+    request: Request | undefined = undefined,
   ) {
     await this.#storage.put(
       toBotInstallationKey(this.#env.SLACK_CLIENT_ID, installation),
-      JSON.stringify(installation)
+      JSON.stringify(installation),
     );
     await this.#storage.put(
       toUserInstallationKey(this.#env.SLACK_CLIENT_ID, installation),
-      JSON.stringify(installation)
+      JSON.stringify(installation),
     );
   }
 
   async findBotInstallation(
-    query: InstallationStoreQuery
+    query: InstallationStoreQuery,
   ): Promise<Installation | undefined> {
     const storedString = await this.#storage.get(
-      toBotInstallationQuery(this.#env.SLACK_CLIENT_ID, query)
+      toBotInstallationQuery(this.#env.SLACK_CLIENT_ID, query),
     );
     if (storedString) {
       return JSON.parse(storedString);
@@ -56,10 +56,10 @@ export class KVInstallationStore<E extends SlackOAuthEnv>
   }
 
   async findUserInstallation(
-    query: InstallationStoreQuery
+    query: InstallationStoreQuery,
   ): Promise<Installation | undefined> {
     const storedString = await this.#storage.get(
-      toUserInstallationQuery(this.#env.SLACK_CLIENT_ID, query)
+      toUserInstallationQuery(this.#env.SLACK_CLIENT_ID, query),
     );
     if (storedString) {
       return JSON.parse(storedString);
@@ -148,7 +148,7 @@ export class KVInstallationStore<E extends SlackOAuthEnv>
         };
       } catch (e) {
         throw new AuthorizeError(
-          `Failed to authorize (error: ${e}, query: ${JSON.stringify(query)})`
+          `Failed to authorize (error: ${e}, query: ${JSON.stringify(query)})`,
         );
       }
     };
@@ -157,7 +157,7 @@ export class KVInstallationStore<E extends SlackOAuthEnv>
 
 export function toBotInstallationQuery(
   clientId: string,
-  q: InstallationStoreQuery
+  q: InstallationStoreQuery,
 ): string {
   const e = q.enterpriseId ? q.enterpriseId : "_";
   const t = q.teamId ? q.teamId : "_";
@@ -166,7 +166,7 @@ export function toBotInstallationQuery(
 
 export function toUserInstallationQuery(
   clientId: string,
-  q: InstallationStoreQuery
+  q: InstallationStoreQuery,
 ): string {
   const e = q.enterpriseId ? q.enterpriseId : "_";
   const t = q.teamId ? q.teamId : "_";
@@ -176,7 +176,7 @@ export function toUserInstallationQuery(
 
 export function toBotInstallationKey(
   clientId: string,
-  installation: Installation
+  installation: Installation,
 ): string {
   const e = installation.enterprise_id ?? "_";
   const t = installation.team_id ?? "_";
@@ -185,7 +185,7 @@ export function toBotInstallationKey(
 
 export function toUserInstallationKey(
   clientId: string,
-  installation: Installation
+  installation: Installation,
 ): string {
   const e = installation.enterprise_id ?? "_";
   const t = installation.team_id ?? "_";
