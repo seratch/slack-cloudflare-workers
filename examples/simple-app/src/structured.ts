@@ -1,6 +1,6 @@
 // If you want to use this code instead of index.ts, edit ./wrangler.toml
 
-import { SlackApp, SlackEdgeAppEnv, noopLazyHandler } from "../../../src/index";
+import { SlackApp, SlackEdgeAppEnv } from "../../../src/index";
 import {
   ackCommand,
   ackModalSubmission,
@@ -27,7 +27,7 @@ export default {
       .event("message", otherMessages)
       .action(
         "button-action",
-        noopLazyHandler, // complete this within 3 seconds
+        noopAckHandler, // complete this within 3 seconds
         asyncButtonResponse,
       )
       .command(
@@ -37,12 +37,12 @@ export default {
       )
       .shortcut(
         "hey-cf-workers",
-        noopLazyHandler, // complete this within 3 seconds
+        noopAckHandler, // complete this within 3 seconds
         asyncShortcutResponse,
       )
       .messageShortcut(
         "cf-workers-message",
-        noopLazyHandler, // complete this within 3 seconds
+        noopAckHandler, // complete this within 3 seconds
         asyncMessageShortcut,
       )
       .viewSubmission(
@@ -54,3 +54,5 @@ export default {
     return await app.run(request, ctx);
   },
 };
+
+const noopAckHandler = async () => {};

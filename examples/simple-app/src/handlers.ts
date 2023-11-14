@@ -4,8 +4,6 @@ import {
   MessageEventLazyHandler,
   MessageShortcutLazyHandler,
   ShortcutLazyHandler,
-  SlackApp,
-  SlackEdgeAppEnv,
   SlashCommandAckHandler,
   SlashCommandLazyHandler,
   ViewSubmissionAckHandler,
