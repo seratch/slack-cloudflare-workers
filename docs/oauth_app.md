@@ -95,7 +95,7 @@ Did the app work for you? :tada: Congratulations! Your first Slack app built wit
 Once you finish working on the app development, now you can deploy the app to Cloudflare infrastructure.
 
 ```bash
-wrangler publish
+wrangler deploy
 
 wrangler secret put SLACK_SIGNING_SECRET
 wrangler secret put SLACK_CLIENT_ID
