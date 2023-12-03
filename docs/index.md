@@ -6,16 +6,16 @@ The **slack-cloudflare-workers** library is a Slack app development framework de
 
 Key differences include:
 
-* _TypeScript focused_: Enhances type safety and clarifies typings for developers
-* _Lazy listener enabled_: [bolt-python's lazy listener feature](https://slack.dev/bolt-python/concepts#lazy-listeners) is provided out of the box
-* _Zero additional dependencies_: No other dependencies required beyond TypeScript types
+* **TypeScript focused**: Enhances type safety and clarifies typings for developers
+* **Lazy listener enabled**: [bolt-python's lazy listener feature](https://slack.dev/bolt-python/concepts#lazy-listeners) is provided out of the box
+* **Zero additional dependencies**: No other dependencies required beyond TypeScript types
 
 ## Getting Started
 
 Let's begin by using a Cloudflare Workers project template to kickstart our project:
 
 ```bash
-npm install -g wrangler
+npm install -g wrangler@latest
 npx wrangler generate my-slack-app
 ```
 
@@ -47,7 +47,7 @@ Next, you can integrate the slack-cloudflare-workers library to your project by 
 
 ```bash
 cd my-slack-app
-npm i slack-cloudflare-workers
+npm i slack-cloudflare-workers@latest
 ```
 
 When you build a Slack app, there are two types. The next steps can be different depending on which type of app you want to build:
