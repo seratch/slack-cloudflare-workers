@@ -10,8 +10,8 @@ npm i slack-cloudflare-workers@latest
 
 Key differences include:
 
-* _TypeScript focused_: Enhances type safety and clarifies typings for developers
-* _Lazy listener enabled_: [bolt-python's lazy listener feature](https://slack.dev/bolt-python/concepts#lazy-listeners) is provided out of the box
-* _Zero additional dependencies_: No other dependencies required beyond TypeScript types and our foundation module [slack-edge](https://github.com/seratch/slack-edge)
+* **TypeScript focused**: Enhances type safety and clarifies typings for developers
+* **Lazy listener enabled**: [bolt-python's lazy listener feature](https://slack.dev/bolt-python/concepts#lazy-listeners) is provided out of the box
+* **Zero additional dependencies**: No other dependencies required beyond TypeScript types and our foundation module [slack-edge](https://github.com/seratch/slack-edge)
 
 Check [our documents](https://github.com/seratch/slack-cloudflare-workers/blob/main/docs/index.md) for more details!
