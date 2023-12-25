@@ -1,0 +1,42 @@
+lockfileVersion: '6.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+dependencies:
+  slack-edge:
+    specifier: ^0.8.5
+    version: 0.8.5
+
+devDependencies:
+  prettier:
+    specifier: ^3.1.1
+    version: 3.1.1
+  typescript:
+    specifier: ^5.3.3
+    version: 5.3.3
+
+packages:
+
+  /prettier@3.1.1:
+    resolution: {integrity: sha512-22UbSzg8luF4UuZtzgiUOfcGM8s4tjBv6dJRT7j275NXsy2jb4aJa4NNveul5x4eqlF1wuhuR2RElK71RvmVaw==}
+    engines: {node: '>=14'}
+    hasBin: true
+    dev: true
+
+  /slack-edge@0.8.5:
+    resolution: {integrity: sha512-dUj3iRc0TdLjXVHK4RZFbkgG0M3P+ZI1oEluYV1zuKVBAMidYJ758rbtA8gZKJRAAJ1j/9Jhwk4Ad3dTvUcwzQ==}
+    dependencies:
+      slack-web-api-client: 0.7.4
+    dev: false
+
+  /slack-web-api-client@0.7.4:
+    resolution: {integrity: sha512-heGu/dNp2vzIDuGMJh9Pu7fziS0oxSp9AsDxt+pQh3vmWggQBBwjLKWHVCkzCz5dXVNVPzqH2HnRH2KIdCNBjg==}
+    dev: false
+
+  /typescript@5.3.3:
+    resolution: {integrity: sha512-pXWcraxM0uxAS+tN0AG/BF2TyqmHO014Z070UsJ+pFvYuRSq8KH8DmWpnbXe0pEPDHXZV3FcAbJkijJ5oNEnWw==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+    dev: true
