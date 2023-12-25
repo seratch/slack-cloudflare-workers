@@ -1,15 +1,13 @@
 import {
-  SlackAPIClient,
   AuthTestResponse,
-  TokenRotator,
-} from "slack-web-api-client";
-import {
   Authorize,
   AuthorizeError,
   Installation,
-  SlackOAuthEnv,
   InstallationStore,
   InstallationStoreQuery,
+  SlackAPIClient,
+  SlackOAuthEnv,
+  TokenRotator,
 } from "slack-edge";
 import { KV } from "./kv";
 
