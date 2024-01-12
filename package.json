@@ -27,10 +27,10 @@
   },
   "homepage": "https://github.com/seratch/slack-cloudflare-workers#readme",
   "dependencies": {
-    "slack-edge": "^0.8.5"
+    "slack-edge": "^0.9.0"
   },
   "devDependencies": {
-    "prettier": "^3.1.1",
+    "prettier": "^3.2.1",
     "typescript": "^5.3.3"
   }
 }
