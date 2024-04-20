@@ -68,7 +68,7 @@ export class KVInstallationStore<E extends SlackOAuthEnv>
   toAuthorize(): Authorize<E> {
     return async (req) => {
       const query: InstallationStoreQuery = {
-        isEnterpriseInstall: req.context.isEnterpriseinstall,
+        isEnterpriseInstall: req.context.isEnterpriseInstall,
         enterpriseId: req.context.enterpriseId,
         teamId: req.context.teamId,
         userId: req.context.userId,
