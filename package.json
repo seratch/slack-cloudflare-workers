@@ -1,6 +1,6 @@
 {
   "name": "slack-cloudflare-workers",
-  "version": "0.12.0",
+  "version": "0.12.1",
   "description": "Slack app development framework for Cloudflare Workers",
   "main": "dist/index.js",
   "scripts": {
@@ -27,10 +27,10 @@
   },
   "homepage": "https://github.com/seratch/slack-cloudflare-workers#readme",
   "dependencies": {
-    "slack-edge": "^0.12.0"
+    "slack-edge": "^0.12.1"
   },
   "devDependencies": {
-    "prettier": "^3.2.5",
-    "typescript": "^5.4.3"
+    "prettier": "^3.3.2",
+    "typescript": "^5.4.5"
   }
 }
