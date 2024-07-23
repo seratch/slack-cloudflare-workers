@@ -7,3 +7,4 @@ docs/
 scripts/
 tmp/
 .github/
+biome.json

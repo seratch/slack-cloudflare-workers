@@ -11,9 +11,7 @@ import {
 } from "slack-edge";
 import { KV } from "./kv";
 
-export class KVInstallationStore<E extends SlackOAuthEnv>
-  implements InstallationStore<E>
-{
+export class KVInstallationStore<E extends SlackOAuthEnv> implements InstallationStore<E> {
   #env: E;
   #storage: KV;
   #tokenRotator: TokenRotator;
@@ -27,42 +25,51 @@ export class KVInstallationStore<E extends SlackOAuthEnv>
     });
   }
 
-  async save(
-    installation: Installation,
-    request: Request | undefined = undefined,
-  ) {
-    await this.#storage.put(
-      toBotInstallationKey(this.#env.SLACK_CLIENT_ID, installation),
-      JSON.stringify(installation),
-    );
-    await this.#storage.put(
-      toUserInstallationKey(this.#env.SLACK_CLIENT_ID, installation),
-      JSON.stringify(installation),
-    );
+  async save(installation: Installation, request: Request | undefined = undefined) {
+    await this.#storage.put(toBotInstallationKey(this.#env.SLACK_CLIENT_ID, installation), JSON.stringify(installation));
+    await this.#storage.put(toUserInstallationKey(this.#env.SLACK_CLIENT_ID, installation), JSON.stringify(installation));
   }
 
-  async findBotInstallation(
-    query: InstallationStoreQuery,
-  ): Promise<Installation | undefined> {
-    const storedString = await this.#storage.get(
-      toBotInstallationQuery(this.#env.SLACK_CLIENT_ID, query),
-    );
+  async findBotInstallation(query: InstallationStoreQuery): Promise<Installation | undefined> {
+    const storedString = await this.#storage.get(toBotInstallationQuery(this.#env.SLACK_CLIENT_ID, query));
     if (storedString) {
       return JSON.parse(storedString);
     }
     return undefined;
   }
 
-  async findUserInstallation(
-    query: InstallationStoreQuery,
-  ): Promise<Installation | undefined> {
-    const storedString = await this.#storage.get(
-      toUserInstallationQuery(this.#env.SLACK_CLIENT_ID, query),
-    );
+  async findUserInstallation(query: InstallationStoreQuery): Promise<Installation | undefined> {
+    const storedString = await this.#storage.get(toUserInstallationQuery(this.#env.SLACK_CLIENT_ID, query));
     if (storedString) {
       return JSON.parse(storedString);
     }
     return undefined;
+  }
+
+  async deleteBotInstallation(query: InstallationStoreQuery): Promise<void> {
+    await this.#storage.delete(toBotInstallationQuery(this.#env.SLACK_CLIENT_ID, query));
+  }
+  async deleteUserInstallation(query: InstallationStoreQuery): Promise<void> {
+    await this.#storage.delete(toUserInstallationQuery(this.#env.SLACK_CLIENT_ID, query));
+  }
+  async deleteAll(query: InstallationStoreQuery): Promise<void> {
+    const clientId = this.#env.SLACK_CLIENT_ID;
+    if (!query.enterpriseId && !query.teamId) {
+      return; // for safety
+    }
+    const e = query.enterpriseId ? query.enterpriseId : "_";
+    const prefix = query.teamId ? `${clientId}/${e}:${query.teamId}` : `${clientId}/${e}:`;
+    var keys: string[] = [];
+    const first = await this.#storage.list({ prefix: prefix });
+    keys = keys.concat(first.keys.map((k) => k.name));
+    var cursor: string | undefined = first.cursor;
+    while (cursor) {
+      const response = await this.#storage.list({ prefix: prefix });
+      keys = keys.concat(response.keys.map((k) => k.name));
+    }
+    for (const key of keys) {
+      await this.#storage.delete(key);
+    }
   }
 
   toAuthorize(): Authorize<E> {
@@ -95,10 +102,7 @@ export class KVInstallationStore<E extends SlackOAuthEnv>
           logLevel: this.#env.SLACK_LOGGING_LEVEL,
         });
         const botAuthTest: AuthTestResponse = await botClient.auth.test();
-        const botScopes =
-          botAuthTest.headers.get("x-oauth-scopes")?.split(",") ??
-          bot?.bot_scopes ??
-          [];
+        const botScopes = botAuthTest.headers.get("x-oauth-scopes")?.split(",") ?? bot?.bot_scopes ?? [];
 
         const userQuery: InstallationStoreQuery = {};
         Object.assign(userQuery, query);
@@ -145,46 +149,32 @@ export class KVInstallationStore<E extends SlackOAuthEnv>
           userScopes: user?.user_scopes,
         };
       } catch (e) {
-        throw new AuthorizeError(
-          `Failed to authorize (error: ${e}, query: ${JSON.stringify(query)})`,
-        );
+        throw new AuthorizeError(`Failed to authorize (error: ${e}, query: ${JSON.stringify(query)})`);
       }
     };
   }
 }
 
-export function toBotInstallationQuery(
-  clientId: string,
-  q: InstallationStoreQuery,
-): string {
+export function toBotInstallationQuery(clientId: string, q: InstallationStoreQuery): string {
   const e = q.enterpriseId ? q.enterpriseId : "_";
   const t = q.teamId ? q.teamId : "_";
   return `${clientId}/${e}:${t}`;
 }
 
-export function toUserInstallationQuery(
-  clientId: string,
-  q: InstallationStoreQuery,
-): string {
+export function toUserInstallationQuery(clientId: string, q: InstallationStoreQuery): string {
   const e = q.enterpriseId ? q.enterpriseId : "_";
   const t = q.teamId ? q.teamId : "_";
   const u = q.userId ? q.userId : "_";
   return `${clientId}/${e}:${t}:${u}`;
 }
 
-export function toBotInstallationKey(
-  clientId: string,
-  installation: Installation,
-): string {
+export function toBotInstallationKey(clientId: string, installation: Installation): string {
   const e = installation.enterprise_id ?? "_";
   const t = installation.team_id ?? "_";
   return `${clientId}/${e}:${t}`;
 }
 
-export function toUserInstallationKey(
-  clientId: string,
-  installation: Installation,
-): string {
+export function toUserInstallationKey(clientId: string, installation: Installation): string {
   const e = installation.enterprise_id ?? "_";
   const t = installation.team_id ?? "_";
   const u = installation.user_id ?? "_";

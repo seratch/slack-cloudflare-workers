@@ -14,11 +14,7 @@ type Env = SlackOAuthAndOIDCEnv & {
 };
 
 export default {
-  async fetch(
-    request: Request,
-    env: Env,
-    ctx: ExecutionContext,
-  ): Promise<Response> {
+  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const app = new SlackOAuthApp({
       env,
       installationStore: new KVInstallationStore(env, env.SLACK_INSTALLATIONS),

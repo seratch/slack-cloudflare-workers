@@ -1,4 +1,5 @@
 export type KV = {
+  // https://developers.cloudflare.com/kv/api/
   // we use only string for the value
 
   put(key: string, value: string): Promise<void>;
@@ -15,6 +16,16 @@ export type KV = {
   get(key: string): Promise<string | undefined>;
 
   delete(key: string): Promise<void>;
+
+  list(args: { prefix?: string; limit?: number; cursor?: string }): Promise<{
+    keys: {
+      name: string;
+      expiration?: number;
+      metadata?: Record<string, string>;
+    }[];
+    list_complete: boolean;
+    cursor?: string;
+  }>;
 };
 
 export class MemoryKV implements KV {
@@ -23,11 +34,7 @@ export class MemoryKV implements KV {
   async put(key: string, value: string): Promise<void> {
     this.#data[key] = value;
   }
-  async putWithExpiration(
-    key: string,
-    value: string,
-    options: { expiration?: number; expirationTtl?: number },
-  ): Promise<void> {
+  async putWithExpiration(key: string, value: string, options: { expiration?: number; expirationTtl?: number }): Promise<void> {
     this.#data[key] = value;
     // TODO: implement the expiration
   }
@@ -37,5 +44,24 @@ export class MemoryKV implements KV {
 
   async delete(key: string): Promise<void> {
     delete this.#data[key];
+  }
+
+  async list(args: {
+    prefix?: string;
+    limit?: number;
+    cursor?: string;
+  }): Promise<{
+    keys: {
+      name: string;
+      expiration?: number;
+      metadata?: Record<string, string>;
+    }[];
+    list_complete: boolean;
+    cursor?: string;
+  }> {
+    const keys = Object.keys(this.#data).map((name) => {
+      return { name };
+    });
+    return { keys, list_complete: true };
   }
 }

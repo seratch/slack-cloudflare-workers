@@ -11,9 +11,7 @@ import {
   isPostedMessageEvent,
 } from "../../../src/index";
 
-export const appMention: EventLazyHandler<"app_mention"> = async ({
-  context,
-}) => {
+export const appMention: EventLazyHandler<"app_mention"> = async ({ context }) => {
   // You can do anything time-consuing tasks here!
   await context.client.chat.postMessage({
     channel: context.channelId,
@@ -49,17 +47,13 @@ export const helloMessage: MessageEventLazyHandler = async ({ context }) => {
   await context.say({ text: "Hey!" });
 };
 
-export const otherMessages: EventLazyHandler<"message"> = async ({
-  payload,
-}) => {
+export const otherMessages: EventLazyHandler<"message"> = async ({ payload }) => {
   if (isPostedMessageEvent(payload)) {
     console.log(`New message: ${payload.text}`);
   }
 };
 
-export const asyncButtonResponse: BlockActionLazyHandler<"button"> = async ({
-  context,
-}) => {
+export const asyncButtonResponse: BlockActionLazyHandler<"button"> = async ({ context }) => {
   // You can do anything time-consuing tasks here!
   const { respond } = context;
   const sleep = (seconds: number) => {
@@ -73,17 +67,12 @@ export const asyncButtonResponse: BlockActionLazyHandler<"button"> = async ({
 };
 
 export const ackCommand: SlashCommandAckHandler = async () => "Thanks!";
-export const asyncCommandResponse: SlashCommandLazyHandler = async ({
-  context,
-}) => {
+export const asyncCommandResponse: SlashCommandLazyHandler = async ({ context }) => {
   // You can do anything time-consuing tasks here!
   await context.respond({ text: "What's up?" });
 };
 
-export const asyncShortcutResponse: ShortcutLazyHandler = async ({
-  context,
-  payload,
-}) => {
+export const asyncShortcutResponse: ShortcutLazyHandler = async ({ context, payload }) => {
   // You can do anything time-consuing tasks here!
   await context.client.views.open({
     // trigger_id still needs to be used within 3 seconds
@@ -99,10 +88,7 @@ export const asyncShortcutResponse: ShortcutLazyHandler = async ({
   });
 };
 
-export const asyncMessageShortcut: MessageShortcutLazyHandler = async ({
-  context,
-  payload,
-}) => {
+export const asyncMessageShortcut: MessageShortcutLazyHandler = async ({ context, payload }) => {
   // You can do anything time-consuing tasks here!
   await context.client.views.open({
     // trigger_id still needs to be used within 3 seconds

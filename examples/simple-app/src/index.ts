@@ -1,15 +1,7 @@
-import {
-  SlackApp,
-  SlackEdgeAppEnv,
-  isPostedMessageEvent,
-} from "../../../src/index";
+import { SlackApp, SlackEdgeAppEnv, isPostedMessageEvent } from "../../../src/index";
 
 export default {
-  async fetch(
-    request: Request,
-    env: SlackEdgeAppEnv,
-    ctx: ExecutionContext,
-  ): Promise<Response> {
+  async fetch(request: Request, env: SlackEdgeAppEnv, ctx: ExecutionContext): Promise<Response> {
     const app = new SlackApp({ env })
       // when the pattern matches, the framework automatically acknowledges the request
       .event("app_mention", async ({ context }) => {
