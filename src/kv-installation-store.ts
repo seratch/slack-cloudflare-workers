@@ -60,11 +60,11 @@ export class KVInstallationStore<E extends SlackOAuthEnv> implements Installatio
     const e = query.enterpriseId ? query.enterpriseId : "_";
     const prefix = query.teamId ? `${clientId}/${e}:${query.teamId}` : `${clientId}/${e}:`;
     var keys: string[] = [];
-    const first = await this.#storage.list({ prefix: prefix });
+    const first = await this.#storage.list({ prefix });
     keys = keys.concat(first.keys.map((k) => k.name));
     var cursor: string | undefined = first.cursor;
     while (cursor) {
-      const response = await this.#storage.list({ prefix: prefix });
+      const response = await this.#storage.list({ prefix, cursor });
       keys = keys.concat(response.keys.map((k) => k.name));
     }
     for (const key of keys) {
