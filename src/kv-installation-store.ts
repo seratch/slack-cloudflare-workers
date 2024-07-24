@@ -157,26 +157,26 @@ export class KVInstallationStore<E extends SlackOAuthEnv> implements Installatio
 
 export function toBotInstallationQuery(clientId: string, q: InstallationStoreQuery): string {
   const e = q.enterpriseId ? q.enterpriseId : "_";
-  const t = q.teamId ? q.teamId : "_";
+  const t = q.teamId && !q.isEnterpriseInstall ? q.teamId : "_";
   return `${clientId}/${e}:${t}`;
 }
 
 export function toUserInstallationQuery(clientId: string, q: InstallationStoreQuery): string {
   const e = q.enterpriseId ? q.enterpriseId : "_";
-  const t = q.teamId ? q.teamId : "_";
+  const t = q.teamId && !q.isEnterpriseInstall ? q.teamId : "_";
   const u = q.userId ? q.userId : "_";
   return `${clientId}/${e}:${t}:${u}`;
 }
 
 export function toBotInstallationKey(clientId: string, installation: Installation): string {
   const e = installation.enterprise_id ?? "_";
-  const t = installation.team_id ?? "_";
+  const t = installation.team_id && !installation.is_enterprise_install ? installation.team_id : "_";
   return `${clientId}/${e}:${t}`;
 }
 
 export function toUserInstallationKey(clientId: string, installation: Installation): string {
   const e = installation.enterprise_id ?? "_";
-  const t = installation.team_id ?? "_";
+  const t = installation.team_id && !installation.is_enterprise_install ? installation.team_id : "_";
   const u = installation.user_id ?? "_";
   return `${clientId}/${e}:${t}:${u}`;
 }
