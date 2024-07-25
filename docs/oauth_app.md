@@ -51,12 +51,12 @@ First off, let's start by creating KV namespaces:
 
 ```bash
 # For published app
-wrangler kv:namespace create SLACK_INSTALLATIONS
-wrangler kv:namespace create SLACK_OAUTH_STATES
+wrangler kv namespace create SLACK_INSTALLATIONS
+wrangler kv namespace create SLACK_OAUTH_STATES
 
 # For local development
-wrangler kv:namespace create SLACK_INSTALLATIONS --preview
-wrangler kv:namespace create SLACK_OAUTH_STATES --preview
+wrangler kv namespace create SLACK_INSTALLATIONS --preview
+wrangler kv namespace create SLACK_OAUTH_STATES --preview
 ```
 
 Add these namespaces with their IDs and preview IDs to `wrangler.toml`:
