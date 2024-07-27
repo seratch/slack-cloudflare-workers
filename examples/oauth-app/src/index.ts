@@ -2,15 +2,15 @@ import {
   ExecutionContext,
   SlackOAuthApp,
   KVInstallationStore,
-  KV,
   KVStateStore,
   SlackOAuthAndOIDCEnv,
   defaultOpenIDConnectCallback,
 } from "../../../src/index";
+import { KVNamespace } from "@cloudflare/workers-types";
 
 type Env = SlackOAuthAndOIDCEnv & {
-  SLACK_INSTALLATIONS: KV;
-  SLACK_OAUTH_STATES: KV;
+  SLACK_INSTALLATIONS: KVNamespace;
+  SLACK_OAUTH_STATES: KVNamespace;
 };
 
 export default {
@@ -20,9 +20,9 @@ export default {
       installationStore: new KVInstallationStore(env, env.SLACK_INSTALLATIONS),
       stateStore: new KVStateStore(env.SLACK_OAUTH_STATES),
       oidc: {
-        callback: async (token, req) => {
-          const handler = defaultOpenIDConnectCallback(env);
-          return await handler(token, req);
+        callback: async (args) => {
+          const handler = defaultOpenIDConnectCallback;
+          return await handler(args);
         },
       },
     })

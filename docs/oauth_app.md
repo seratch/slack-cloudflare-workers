@@ -3,18 +3,18 @@
 If you haven't set up your project yet, please go through the steps [here](./index.md) first. With the project set up, it's time to dive into the code. Open `src/index.ts` and modify the source code as follows:
 
 ```typescript
+import { KVNamespace } from "@cloudflare/workers-types";
 import {
   SlackOAuthApp,
   KVInstallationStore,
-  KV,
   KVStateStore,
   SlackOAuthAndOIDCEnv,
   defaultOpenIDConnectCallback, // optional
 } from "slack-cloudflare-workers";
 
 type Env = SlackOAuthAndOIDCEnv & {
-  SLACK_INSTALLATIONS: KV;
-  SLACK_OAUTH_STATES: KV;
+  SLACK_INSTALLATIONS: KVNamespace;
+  SLACK_OAUTH_STATES: KVNamespace;
 }
 
 export default {
@@ -27,13 +27,6 @@ export default {
       env,
       installationStore: new KVInstallationStore(env, env.SLACK_INSTALLATIONS),
       stateStore: new KVStateStore(env.SLACK_OAUTH_STATES),
-      oidc: { // optional
-        callback: async (token, req) => {
-          // you can save the result, and then either display a webpage or redirect the user
-          const handler = defaultOpenIDConnectCallback(env);
-          return await handler(token, req);
-        },
-      },
     }).event("app_mention", async ({ context }) => {
       await context.client.chat.postMessage({
         channel: context.channelId,
