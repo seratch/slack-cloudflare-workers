@@ -1,10 +1,10 @@
-import { KV } from "./kv";
 import { StateStore } from "slack-edge";
+import { KVNamespace } from "@cloudflare/workers-types";
 
 export class KVStateStore implements StateStore {
-  #storage: KV;
+  #storage: KVNamespace;
 
-  constructor(namespace: KV) {
+  constructor(namespace: KVNamespace) {
     this.#storage = namespace;
   }
 

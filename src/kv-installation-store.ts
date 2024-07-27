@@ -1,3 +1,4 @@
+import { KVNamespace, KVNamespaceListResult } from "@cloudflare/workers-types";
 import {
   AuthTestResponse,
   Authorize,
@@ -9,14 +10,13 @@ import {
   SlackOAuthEnv,
   TokenRotator,
 } from "slack-edge";
-import { KV } from "./kv";
 
 export class KVInstallationStore<E extends SlackOAuthEnv> implements InstallationStore<E> {
   #env: E;
-  #storage: KV;
+  #storage: KVNamespace;
   #tokenRotator: TokenRotator;
 
-  constructor(env: E, namespace: KV) {
+  constructor(env: E, namespace: KVNamespace) {
     this.#env = env;
     this.#storage = namespace;
     this.#tokenRotator = new TokenRotator({
@@ -62,10 +62,13 @@ export class KVInstallationStore<E extends SlackOAuthEnv> implements Installatio
     var keys: string[] = [];
     const first = await this.#storage.list({ prefix });
     keys = keys.concat(first.keys.map((k) => k.name));
-    var cursor: string | undefined = first.cursor;
-    while (cursor) {
-      const response = await this.#storage.list({ prefix, cursor });
-      keys = keys.concat(response.keys.map((k) => k.name));
+    if (!first.list_complete) {
+      var cursor: string | undefined = first.cursor;
+      while (cursor) {
+        const response: KVNamespaceListResult<unknown, string> = await this.#storage.list({ prefix, cursor });
+        keys = keys.concat(response.keys.map((k) => k.name));
+        cursor = response.list_complete ? undefined : response.cursor;
+      }
     }
     for (const key of keys) {
       await this.#storage.delete(key);
